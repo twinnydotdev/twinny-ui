@@ -1,0 +1,4 @@
+website/node_modules
+website/db.sqlite3
+backend/models
+.git
