@@ -1,4 +1,4 @@
-import { registerEmailAddress } from '$lib/service/registrations.service.js'
+import { registerEmailAddress } from '$lib/service/registrations.service'
 
 export const actions = {
   register: async ({ request }: { request: Request }) => {
