@@ -1,7 +1,6 @@
 import i18n from 'sveltekit-i18n'
 import languages from './languages.json'
 
-/** @type {import('sveltekit-i18n').Config} */
 const config = {
   translations: {
     en: { languages }

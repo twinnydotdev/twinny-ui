@@ -10,7 +10,7 @@ export async function registerEmailAddress(request: Request) {
   return await new Promise((resolve, reject) => {
     try {
       db.get('SELECT * FROM subscribers WHERE email = ?', [emailAddress], (err, subscriber) => {
-        if (subscriber) return reject()
+        if (err || subscriber) return reject()
         db.prepare('INSERT INTO subscribers (email) VALUES (?)', [emailAddress]).run(
           emailAddress,
           () => {
