@@ -8,3 +8,5 @@ CREATE TABLE IF NOT EXISTS subscribers (
   timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
   email TEXT
 );
+
+INSERT INTO migrations (timestamp) VALUES ('2019-07-15 14:46:38');

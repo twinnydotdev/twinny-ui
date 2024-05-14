@@ -1,12 +1,19 @@
 {
+  "about": "about",
+  "build": "I try to build things that people find useful. Including twinny!",
+  "contact": "Contact me now at",
   "docs": "docs",
   "download": "Install extension",
   "github": "github",
-  "rjmacarthy": "👋",
-  "sponsor": "☕️ Sponsor",
-  "subscribe_label": "Subscribe to the newsletter",
+  "hey": "Hello! The name's Richard Macarthy",
+  "looking": "Looking for someone to help implement your business solution? ",
+  "rjmacarthy": "rjmacarthy.xyz",
+  "rjmacarthyxyz": " rjmacarthy.xyz",
+  "subscribe_label": "Subscribe for updates",
   "subscribe_placeholder": "Your email address",
   "subscribe": "Subscribe",
   "subtitle": "The free and private AI extension for Visual Studio Code.",
-  "title": "twinny"
+  "thanks": "Thanks for subscribing!",
+  "title": "twinny",
+  "whoops": "Whoops! something went wrong..."
 }

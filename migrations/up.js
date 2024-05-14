@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const db = new sqlite3.Database('db.sqlite')
+const db = new sqlite3.Database('sqlite.db')
 
 db.exec(fs.readFileSync(path.join(__dirname, 'seed.sql')).toString())
 

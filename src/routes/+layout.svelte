@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_DOCS, URL_GITHUB, URL_X } from '$lib/const'
+  import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_RJMACARTHy } from '$lib/const'
   import { t } from '$lib/translations'
   import '../app.postcss'
 </script>
@@ -10,27 +10,31 @@
 </svelte:head>
 
 <template lang="pug">
-  div(class="p-6 text-gray-300")
+  div(class="flex h-[100vh] w-[100vw] flex-col p-6 text-gray-300")
     header(class=`
         flex
         justify-between
         items-center
         px-4 py-2
       `)
-      h1(class="text-xl font-bold flex-grow")
-        a(href="/" class="hover:underlin") {$t('common.title')}
-      a(class="hover:text-whit ml-4"
-        href="{URL_GITHUB}"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-      ) {$t('common.github')}
-      a(class="hover:text-white ml-4"
-        href="{URL_DOCS}"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-      ) {$t('common.docs')}
+      a(href="/")
+        h1(class="text-xl font-bold flex-grow select-none") {$t('common.title')}
+      div
+        a(class="ml-4"
+          href="/about"
+        ) {$t('common.about')}
+        a(class="ml-4"
+          href="{URL_GITHUB}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+        ) {$t('common.github')}
+        a(class="ml-4"
+          href="{URL_DOCS}"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+        ) {$t('common.docs')}
     div(class="flex grow flex-col items-center justify-center pb-20")
       slot
-    div(class="flex justify-end text-white")
-      a(href="{URL_X}" target="_blank" rel="noopener noreferrer nofollow") {$t('common.rjmacarthy')}
+    footer(class="flex justify-end")
+      a(href="{URL_RJMACARTHy}" target="_blank" rel="noopener noreferrer nofollow") {$t('common.rjmacarthy')}
 </template>
