@@ -14,7 +14,7 @@
       class='h-32 w-auto mx-auto flex-shrink-0 mt-24 brightness-200 contrast-200'
       src='{logo}'
     )
-    h1(class=`
+    h2(class=`
       flex font-medium
       grow items-center justify-center
       pt-10 pb-4
