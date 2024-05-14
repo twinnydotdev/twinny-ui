@@ -14,7 +14,7 @@ const config = {
     })
   ],
   compilerOptions: {
-    dev: !process.env.DEVELOPMENT
+    dev: process.env.DEVELOPMENT
   },
   kit: {
     adapter: adapter()
