@@ -3,7 +3,7 @@
   "build": "I try to build things that people find useful. Including twinny!",
   "contact": "Contact me now at",
   "docs": "docs",
-  "download": "Install extension",
+  "download": "Install twinny",
   "github": "github",
   "hey": "Hello! The name's Richard Macarthy",
   "looking": "Looking for someone to help implement your business solution? ",
@@ -14,6 +14,7 @@
   "subscribe": "Subscribe",
   "subtitle": "The free and private AI extension for Visual Studio Code.",
   "thanks": "Thanks for subscribing!",
+  "missing": "Looks like you forgot to enter your email address.",
   "title": "twinny",
-  "whoops": "Whoops! something went wrong..."
+  "error": "Whoops! something went wrong..."
 }

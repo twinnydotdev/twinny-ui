@@ -1,27 +1,12 @@
-import { db } from '$lib/database'
-import { fail, json } from '@sveltejs/kit'
+import { registerEmailAddress } from '$lib/service/registrations.service.js'
 
-/** @type {import('./$types').Actions} */
 export const actions = {
-  default: async ({ request }) => {
-    const data = await request.formData()
-    const email = data.get('email') as string
-    if (!email) {
-      return fail(400, { missing: true })
+  register: async ({ request }) => {
+    try {
+      await registerEmailAddress(request)
+      return { success: true }
+    } catch (e) {
+      return e
     }
-    return await new Promise((resolve) => {
-      db.get('SELECT * FROM subscribers WHERE email = ?', [email], (err, subscriber) => {
-        if (subscriber) {
-          return resolve({ success: false })
-        }
-        try {
-          db.prepare('INSERT INTO subscribers (email) VALUES (?)', [email]).run(email, () => {
-            return resolve({ success: true  })
-          })
-        } catch {
-          return resolve({ success: false })
-        }
-      })
-    })
   }
 }
