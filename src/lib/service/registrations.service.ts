@@ -6,7 +6,7 @@ export async function registerEmailAddress(request: Request) {
   const formData = await request.formData()
   const emailAddress = formData.get('email') as string
   const emalValid = getEmailValid(emailAddress)
-  if (!emailAddress || !emalValid) return fail(400)
+  if (!emailAddress || !emalValid) throw fail(400)
   return await new Promise((resolve, reject) => {
     try {
       db.get('SELECT * FROM subscribers WHERE email = ?', [emailAddress], (err, subscriber) => {
