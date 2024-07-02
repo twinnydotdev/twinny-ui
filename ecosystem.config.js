@@ -6,7 +6,7 @@ module.exports = {
     autorestart: true,
     env: {
         PORT: 3003,
-        ENV_PATH: "./.env",
+        ENV_PATH: ".env",
     }
   }]
 }
