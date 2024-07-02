@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_RJMACARTHy } from '$lib/const'
+  import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_RJMACARTHY } from '$lib/const'
   import { t } from '$lib/translations'
   import '../app.postcss'
 </script>
@@ -10,7 +10,7 @@
 </svelte:head>
 
 <template lang="pug">
-  div(class='flex h-[100vh] w-[100vw] flex-col p-6 text-gray-300')
+  div(class='flex h-[100vh] flex-col p-6 text-gray-300')
     header(class=`
         flex
         justify-between
@@ -31,7 +31,7 @@
           rel='noopener noreferrer nofollow'
         ) {$t('common.docs')}
         a(class='ml-4'
-          href='{URL_DOCS}'
+          href='{URL_RJMACARTHY}'
           target='_blank'
           rel='noopener noreferrer nofollow'
         ) {$t('common.contact')}
