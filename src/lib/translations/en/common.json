@@ -2,7 +2,7 @@
   "about": "about",
   "contact": "contact",
   "docs": "docs",
-  "download": "Install twinny",
+  "install": "Install twinny",
   "error": "Whoops! something went wrong...",
   "github": "github",
   "missing": "Looks like you forgot to enter your email address.",

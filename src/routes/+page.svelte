@@ -24,7 +24,7 @@
   `) {$t('common.subtitle')}
     div(class='flex grow gap-3 items-center justify-center pb-10')
       a(href='{URL_VSCODE_MARKETPLACE}' target='_blank' rel='noreferrer noopener')
-        Button(buttonText="{$t('common.download')}")
+        Button(buttonText="{$t('common.install')}")
     hr(class='w-full border-stone-600 mb-6')
     div(class='flex flex-col gap-3 items-center justify-center')
       p(class='text-center font-bold  my-1') {$t('common.subscribe_label')}
