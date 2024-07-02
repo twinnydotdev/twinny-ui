@@ -30,8 +30,11 @@
           target='_blank'
           rel='noopener noreferrer nofollow'
         ) {$t('common.docs')}
+        a(class='ml-4'
+          href='{URL_DOCS}'
+          target='_blank'
+          rel='noopener noreferrer nofollow'
+        ) {$t('common.contact')}
     div(class='flex grow flex-col items-center justify-center pb-20')
       slot
-    footer(class='flex justify-end')
-      a(href='{URL_RJMACARTHy}' target='_blank' rel='noopener noreferrer nofollow') {$t('common.rjmacarthy')}
 </template>
