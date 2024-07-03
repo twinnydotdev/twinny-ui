@@ -1,8 +1,3 @@
-<script lang="ts">
-  import Button from '$lib/components/button.svelte'
-  import { t } from '$lib/translations'
-</script>
-
 <template lang="pug">
   div(class='flex justify-center')
     pre
