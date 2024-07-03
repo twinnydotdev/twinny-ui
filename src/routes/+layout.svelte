@@ -30,11 +30,24 @@
           target='_blank'
           rel='noopener noreferrer nofollow'
         ) {$t('common.docs')}
-        a(class='ml-4'
-          href='{URL_RJMACARTHY}'
-          target='_blank'
-          rel='noopener noreferrer nofollow'
-        ) {$t('common.contact')}
+
     div(class='flex grow flex-col items-center justify-center pb-20')
       slot
+    footer(class=`
+      flex
+      justify-between
+      items-center
+      w-full
+      px-4 py-2
+    `)
+      a(
+        href='/sponsor'
+      )
+        span.text-red-500.mr-1 🖤
+        span {$t('common.sponsor')}
+      a(
+        href='{URL_RJMACARTHY}'
+        target='_blank'
+        rel='noopener noreferrer nofollow'
+      ) {$t('common.contact')}
 </template>
