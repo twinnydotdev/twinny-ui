@@ -31,7 +31,7 @@
           rel='noopener noreferrer nofollow'
         ) {$t('common.docs')}
 
-    div(class='flex grow flex-col items-center justify-center pb-20')
+    div(class='flex grow flex-col items-center justify-center')
       slot
     footer(class=`
       flex
