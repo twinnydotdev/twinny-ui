@@ -23,6 +23,7 @@
     "@sveltejs/adapter-auto": "^3.2.2",
     "@sveltejs/adapter-node": "^5.2.0",
     "@sveltejs/kit": "^2.5.18",
+    "@types/gtag.js": "^0.0.20",
     "@types/lodash": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
@@ -44,9 +45,9 @@
   },
   "type": "module",
   "dependencies": {
-    "sqlite3": "^5.1.7",
     "dotenv": "^16.4.5",
     "pug": "^3.0.3",
+    "sqlite3": "^5.1.7",
     "sveltekit-i18n": "^2.4.2"
   }
 }

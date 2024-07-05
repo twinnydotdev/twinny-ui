@@ -1,6 +1,7 @@
 <script lang="ts">
   import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_RJMACARTHY } from '$lib/const'
   import { t } from '$lib/translations'
+  import Analytics from '$lib/analytics/index.svelte'
   import '../app.postcss'
 </script>
 
@@ -10,6 +11,7 @@
 </svelte:head>
 
 <template lang="pug">
+  Analytics
   div(class='flex h-[100vh] flex-col p-6 text-gray-300')
     header(class=`
         flex
