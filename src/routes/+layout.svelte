@@ -22,12 +22,15 @@
       a(href='/')
         h1(class='text-xl font-bold flex-grow select-none') {$t('common.title')}
       div
-        a(class='ml-4'
+        a(class='ml-3'
+          href='/symmetry'
+        ) {$t('common.symmetry')}
+        a(class='ml-3'
           href='{URL_GITHUB}'
           target='_blank'
           rel='noopener noreferrer nofollow'
         ) {$t('common.github')}
-        a(class='ml-4'
+        a(class='ml-3'
           href='{URL_DOCS}'
           target='_blank'
           rel='noopener noreferrer nofollow'
