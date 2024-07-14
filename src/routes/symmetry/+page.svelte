@@ -5,11 +5,12 @@
 
 <template lang="pug">
   div(class='flex justify-center flex-col items-center gap-3')
-    h2(class=`
-      text-3xl
-      flex-grow
-      select-none
-    `) {$t('common.symmetry')}
+    a(href='https://github.com/twinnydotdev/symmetry' target='_blank' rel='noopener noreferrer nofollow')
+      h2(class=`
+        text-3xl
+        flex-grow
+        select-none
+      `) {$t('common.symmetry')}
     div
       p(class=`
         mt-4
