@@ -1,6 +1,9 @@
 <script lang="ts">
   import { t } from '$lib/translations'
   import Register from '$lib/components/register.svelte'
+  import Passage from '$lib/components/passage.svelte'
+  const chapter1 = $t('common.chapter2').split('\n')
+  const chapter2 = $t('common.chapter2').split('\n')
 </script>
 
 <template lang="pug">
@@ -12,13 +15,9 @@
         select-none
       `) {$t('common.symmetry')}
     div
-      p(class=`
-        mt-4
-        text-gray-400
-        max-w-screen-lg
-        text-xl
-        leading-normal
-        text-justify
-      `) {$t('common.passage')}
-    Register
+      Passage(paragraphs="{chapter1}" passageTitle="{$t('common.chapter1_title')}")
+      p.text-center.my-8 ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧
+      Passage(paragraphs="{chapter2}" passageTitle="{$t('common.chapter2_title')}")
+    div.mt-3
+      Register
 </template>
