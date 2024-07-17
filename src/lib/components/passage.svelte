@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let paragraphs: string = ''  // Provide a default value
-  export let passageTitle: string = ''  // Provide a default value
+  export let paragraphs: string = ''
+  export let passageTitle: string = ''
 </script>
 
 <template lang="pug">
