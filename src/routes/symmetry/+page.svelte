@@ -2,7 +2,7 @@
   import { t } from '$lib/translations'
   import Register from '$lib/components/register.svelte'
   import Passage from '$lib/components/passage.svelte'
-  const chapter1 = $t('common.chapter2').split('\n')
+  const chapter1 = $t('common.chapter1').split('\n')
   const chapter2 = $t('common.chapter2').split('\n')
 </script>
 
