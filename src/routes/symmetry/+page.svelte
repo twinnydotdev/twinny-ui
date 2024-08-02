@@ -12,10 +12,6 @@
   onMount(() => {
     ws = new WebSocket('ws://127.0.0.1:4005')
 
-    ws.onopen = () => {
-      console.log('WebSocket connected')
-    }
-
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       activePeers = data.activePeers
@@ -25,10 +21,6 @@
 
     ws.onerror = (error) => {
       console.error('WebSocket error:', error)
-    }
-
-    ws.onclose = () => {
-      console.log('WebSocket disconnected')
     }
   })
 
