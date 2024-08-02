@@ -12,7 +12,7 @@
 
 <template lang="pug">
   Analytics
-  div(class='flex h-[100vh] flex-col p-6 text-gray-300')
+  div(class='flex h-[100vh] flex-col p-2 text-gray-300')
     header(class=`
         flex
         justify-between

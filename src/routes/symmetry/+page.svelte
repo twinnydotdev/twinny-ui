@@ -32,19 +32,18 @@
 </script>
 
 <template lang="pug">
-div(class="min-h-screen flex flex-col items-center ")
-  div(class="p-6")
+div(class="min-h-screen flex flex-col items-center p-4")
+  div(class="w-full max-w-4xl")
     h2(class="text-3xl font-bold") {$t('common.symmetry')}
     p(class="py-6") {$t('common.symmetry_description')}
     p(class="pb-6")
       span {$t('common.symmetry_learn_more')}
-      span(class="ml-1")
-        a(href='{URL_SYMMETRY_CLIENT}' class="text-rose-500" target="_blank") {$t('common.check_out_the_code')}
+      a(href='{URL_SYMMETRY_CLIENT}' class="text-rose-500 ml-1" target="_blank") {$t('common.check_out_the_code')}
     p(class="pb-6")
       a(href='{URL_SYMMETRY_DOCS}' class="text-rose-500" target="_blank") {$t('common.read_symmetry_documentation')}
     div(class="mb-6")
       h3(class="text-xl font-semibold mb-4") {$t('common.active_connections')}
-      div(class="grid grid-cols-2 gap-4")
+      div(class="grid grid-cols-1 sm:grid-cols-2 gap-4")
         div(class="bg-stone-800 p-4 rounded-md")
           p(class="text-sm font-medium") {$t('common.active_peers')}
           p(class="text-2xl font-bold") {activePeers}
@@ -54,22 +53,22 @@ div(class="min-h-screen flex flex-col items-center ")
     div(class="mb-6")
       h3(class="text-xl font-semibold mb-4") {$t('common.providers')}
       div(class="overflow-x-auto")
-        table(class="min-w-full bg-stone-800 rounded-lg overflow-hidden")
+        table(class="w-full bg-stone-800 rounded-lg overflow-hidden")
           thead(class="bg-stone-700")
             tr
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.model')}
-              th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.name')}
-              th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.online')}
-              th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.public')}
-              th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.data_collected')}
+              th(class="px-4 py-2 text-left text-sm font-semibold sm:table-cell") {$t('common.name')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden md:table-cell") {$t('common.online')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.public')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden xl:table-cell") {$t('common.data_collected')}
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.last_seen')}
           tbody
-          +each('peers as peer')
+            +each('peers as peer')
               tr(class="border-t border-stone-700")
                 td(class="px-4 py-2") {peer.model_name}
-                td(class="px-4 py-2") {peer.name || 'N/A'}
-                td(class="px-4 py-2") {peer.online ? $t('common.yes') : $t('common.no')}
-                td(class="px-4 py-2") {peer.public ? $t('common.yes') : $t('common.no')}
-                td(class="px-4 py-2") {peer.dataCollectionEnabled ? $t('common.yes') : $t('common.no')}
+                td(class="px-4 py-2 sm:table-cell") {peer.name || 'N/A'}
+                td(class="px-4 py-2 hidden md:table-cell") {peer.online ? $t('common.yes') : $t('common.no')}
+                td(class="px-4 py-2 hidden lg:table-cell") {peer.public ? $t('common.yes') : $t('common.no')}
+                td(class="px-4 py-2 hidden xl:table-cell") {peer.dataCollectionEnabled ? $t('common.yes') : $t('common.no')}
                 td(class="px-4 py-2") {new Date(peer.last_seen).toLocaleString()}
 </template>
