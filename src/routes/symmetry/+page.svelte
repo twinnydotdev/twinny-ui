@@ -10,7 +10,7 @@
   let peers: any[] = []
 
   onMount(() => {
-    ws = new WebSocket('ws://127.0.0.1:4005')
+    ws = new WebSocket('wss://127.0.0.1:4005')
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
