@@ -42,8 +42,8 @@ div(class="min-h-screen flex flex-col items-center p-4")
     h3(class="text-xl font-semibold mb-4") {$t('common.become_a_provider')}
     p(class="pb-2 font-medium mt-2")
       span {$t('common.become_a_provider_description')}
-      a(href='{URL_SYMMETRY_DOCS}' class="text-rose-500 ml-1" target="_blank") {$t('common.read_symmetry_documentation')}
-    div(class="mb-6")
+      a(href='{URL_SYMMETRY_CLIENT}' class="text-rose-500 ml-1" target="_blank") {$t('common.symmetry_installation')}
+    div(class="mb-6 mt-2")
       h3(class="text-xl font-semibold mb-4") {$t('common.active_connections')}
       div(class="grid grid-cols-1 sm:grid-cols-2 gap-4")
         div(class="bg-stone-800 p-4 rounded-md")
