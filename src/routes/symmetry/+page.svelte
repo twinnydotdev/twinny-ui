@@ -39,8 +39,10 @@ div(class="min-h-screen flex flex-col items-center p-4")
     p(class="pb-6")
       span {$t('common.symmetry_learn_more')}
       a(href='{URL_SYMMETRY_CLIENT}' class="text-rose-500 ml-1" target="_blank") {$t('common.check_out_the_code')}
-    p(class="pb-6")
-      a(href='{URL_SYMMETRY_DOCS}' class="text-rose-500" target="_blank") {$t('common.read_symmetry_documentation')}
+    h3(class="text-xl font-semibold mb-4") {$t('common.become_a_provider')}
+    p(class="pb-2 font-medium mt-2")
+      span {$t('common.become_a_provider_description')}
+      a(href='{URL_SYMMETRY_DOCS}' class="text-rose-500 ml-1" target="_blank") {$t('common.read_symmetry_documentation')}
     div(class="mb-6")
       h3(class="text-xl font-semibold mb-4") {$t('common.active_connections')}
       div(class="grid grid-cols-1 sm:grid-cols-2 gap-4")
@@ -60,6 +62,7 @@ div(class="min-h-screen flex flex-col items-center p-4")
               th(class="px-4 py-2 text-left text-sm font-semibold sm:table-cell") {$t('common.name')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden md:table-cell") {$t('common.online')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.public')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.provider')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden xl:table-cell") {$t('common.data_collected')}
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.last_seen')}
           tbody
@@ -69,6 +72,7 @@ div(class="min-h-screen flex flex-col items-center p-4")
                 td(class="px-4 py-2 sm:table-cell") {peer.name || 'N/A'}
                 td(class="px-4 py-2 hidden md:table-cell") {peer.online ? $t('common.yes') : $t('common.no')}
                 td(class="px-4 py-2 hidden lg:table-cell") {peer.public ? $t('common.yes') : $t('common.no')}
+                td(class="px-4 py-2 hidden lg:table-cell") {peer.provider || 'unknown'}
                 td(class="px-4 py-2 hidden xl:table-cell") {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
                 td(class="px-4 py-2") {new Date(peer.last_seen).toLocaleString()}
 </template>
