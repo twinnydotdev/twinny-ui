@@ -2,7 +2,7 @@
   import { t } from '$lib/translations'
   import Register from '$lib/components/register.svelte'
   import { onMount, onDestroy } from 'svelte'
-  import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE, URL_SYMMETRY_DOCS } from '$lib/const'
+  import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE, URL_SYMMETRY_DOCS, URL_SYMMETRY_SERVER } from '$lib/const'
 
   let ws: WebSocket
   let activePeers = 0
@@ -41,7 +41,7 @@ div(class="min-h-screen flex flex-col items-center p-4")
       a(href='{URL_SYMMETRY_CORE}' class="text-rose-500 ml-1" target="_blank") {$t('common.check_out_the_code_client')}
     p(class="pb-6")
       span {$t('common.symmetry_server_learn_more')}
-      a(href='{URL_SYMMETRY_CORE}' class="text-rose-500 ml-1" target="_blank") {$t('common.check_out_the_code_server')}
+      a(href='{URL_SYMMETRY_SERVER}' class="text-rose-500 ml-1" target="_blank") {$t('common.check_out_the_code_server')}
     h3(class="text-xl font-semibold mb-4") {$t('common.become_a_provider')}
     p(class="pb-2 font-medium mt-2")
       span {$t('common.become_a_provider_description')}
