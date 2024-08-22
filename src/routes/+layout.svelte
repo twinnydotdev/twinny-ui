@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_RJMACARTHY } from '$lib/const'
+  import { URL_DOCS, URL_GITHUB, URL_VSCODE_MARKETPLACE, URL_TWINNYDOTDEV } from '$lib/const'
   import { t } from '$lib/translations'
   import Analytics from '$lib/analytics/index.svelte'
   import '../app.postcss'
@@ -51,7 +51,7 @@
         span.text-red-500.mr-1 🖤
         span {$t('common.sponsor')}
       a(
-        href='{URL_RJMACARTHY}'
+        href='{URL_TWINNYDOTDEV}'
         target='_blank'
         rel='noopener noreferrer nofollow'
       ) {$t('common.contact')}
