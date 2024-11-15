@@ -66,19 +66,17 @@ div(class="min-h-screen flex flex-col items-center p-4")
             tr
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.model')}
               th(class="px-4 py-2 text-left text-sm font-semibold sm:table-cell") {$t('common.name')}
-              th(class="px-4 py-2 text-left text-sm font-semibold hidden md:table-cell") {$t('common.online')}
-              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.public')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.provider')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden xl:table-cell") {$t('common.data_collected')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.points')}
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.joined')}
           tbody
             +each('peers as peer')
               tr(class="border-t border-stone-700")
                 td(class="px-4 py-2") {peer.model_name}
                 td(class="px-4 py-2 sm:table-cell") {peer.name || 'N/A'}
-                td(class="px-4 py-2 hidden md:table-cell") {peer.online ? $t('common.yes') : $t('common.no')}
-                td(class="px-4 py-2 hidden lg:table-cell") {peer.public ? $t('common.yes') : $t('common.no')}
                 td(class="px-4 py-2 hidden lg:table-cell") {peer.provider || 'unknown'}
                 td(class="px-4 py-2 hidden xl:table-cell") {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
+                td(class="px-4 py-2 hidden lg:table-cell") {points}
                 td(class="px-4 py-2") {new Date(peer.last_seen).toLocaleString()}
 </template>
