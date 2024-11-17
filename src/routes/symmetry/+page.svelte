@@ -93,6 +93,6 @@ div(class="min-h-screen flex flex-col items-center p-4")
                 td(class="px-4 py-2 sm:table-cell") {peer.online ? 'online' : '-'}
                 td(class="px-4 py-2 hidden lg:table-cell") {peer.provider || 'unknown'}
                 td(class="px-4 py-2 hidden xl:table-cell") {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
-                td(class="px-4 py-2 hidden lg:table-cell") {peer.points}
+                td(class="px-4 py-2 hidden lg:table-cell") {peer.points || 0}
                 td(class="px-4 py-2 hidden lg:table-cel") {new Date(peer.last_seen).toLocaleString()}
 </template>
