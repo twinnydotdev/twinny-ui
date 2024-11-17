@@ -3,11 +3,24 @@
   import Register from '$lib/components/register.svelte'
   import { onMount, onDestroy } from 'svelte'
   import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE, URL_SYMMETRY_DOCS, URL_SYMMETRY_SERVER } from '$lib/const'
+  import type { Peer } from 'symmetry-core'
 
   let ws: WebSocket
   let activePeers = 0
   let activeModels = 0
   let peers: any[] = []
+
+  const sortPeers = (peers: any): any => {
+    return [...peers].sort((a, b) => {
+      if (a.online !== b.online) {
+        return b.online - a.online;
+      }
+
+      const pointsA = a.points ?? 0;
+      const pointsB = b.points ?? 0;
+      return pointsB - pointsA;
+    });
+  };
 
   onMount(() => {
     ws = new WebSocket('wss://twinny.dev/ws')
@@ -16,7 +29,8 @@
       const data = JSON.parse(event.data)
       activePeers = data.activePeers
       activeModels = data.activeModels
-      peers = data.allPeers || []
+      peers = sortPeers(data.allPeers)
+      console.log(peers)
     }
 
     ws.onerror = (error) => {
@@ -69,14 +83,16 @@ div(class="min-h-screen flex flex-col items-center p-4")
               th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.provider')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden xl:table-cell") {$t('common.data_collected')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.points')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.online')}
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.joined')}
           tbody
             +each('peers as peer')
               tr(class="border-t border-stone-700")
                 td(class="px-4 py-2") {peer.model_name}
                 td(class="px-4 py-2 sm:table-cell") {peer.name || 'N/A'}
+                td(class="px-4 py-2 sm:table-cell") {peer.online ? 'online' : '-'}
                 td(class="px-4 py-2 hidden lg:table-cell") {peer.provider || 'unknown'}
                 td(class="px-4 py-2 hidden xl:table-cell") {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
                 td(class="px-4 py-2 hidden lg:table-cell") {peer.points}
-                td(class="px-4 py-2") {new Date(peer.last_seen).toLocaleString()}
+                td(class="px-4 py-2 hidden lg:table-cel") {new Date(peer.last_seen).toLocaleString()}
 </template>
