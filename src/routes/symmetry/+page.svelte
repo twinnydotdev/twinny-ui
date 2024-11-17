@@ -80,10 +80,11 @@ div(class="min-h-screen flex flex-col items-center p-4")
             tr
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.model')}
               th(class="px-4 py-2 text-left text-sm font-semibold sm:table-cell") {$t('common.name')}
-              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.provider')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.online')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden xl:table-cell") {$t('common.data_collected')}
               th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.points')}
-              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.online')}
+              th(class="px-4 py-2 text-left text-sm font-semibold hidden lg:table-cell") {$t('common.provider')}
+
               th(class="px-4 py-2 text-left text-sm font-semibold") {$t('common.joined')}
           tbody
             +each('peers as peer')
