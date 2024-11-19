@@ -126,6 +126,18 @@
               <td class="px-2 py-3">
                 <span class="font-medium">{peer.points || 0}</span>
               </td>
+              <td class="px-2 py-3">
+                <span class="font-medium">
+                  {#if peer.online}
+                    <a class="text-green-500" href="/chat?model={peer.model_name}">
+                      Chat
+                    </a>
+                  {/if}
+                  {#if !peer.online}
+                    Offline
+                  {/if}
+                </span>
+              </td>
             </tr>
           {/each}
         </tbody>

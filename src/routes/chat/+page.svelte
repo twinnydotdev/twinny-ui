@@ -1,6 +1,7 @@
 <script lang="ts">
   import SvelteMarkdown from 'svelte-markdown'
   import { page } from '$app/stores'
+  import { onMount } from 'svelte'
   let completion = $state('')
   let message = $state('')
   let messages = $state<Array<{ role: string; content: string }>>([])
@@ -27,20 +28,20 @@
     if (!message) return
     try {
       messages = [...messages, { role: 'user', content: message }]
-      const response = await fetch('/v1/chat/completions', {
+      const response = await fetch('https://twinny.dev/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           sessionRequest: { modelName: model },
           data: {
-            messages,
+            messages
           }
         })
       })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        messages.push({ role: 'assistant', content: `Error: ${JSON.stringify(errorData.error)}` });
+        const errorData = await response.json()
+        messages.push({ role: 'assistant', content: `Error: ${JSON.stringify(errorData)}` })
       }
 
       if (!response.body) return
@@ -118,6 +119,10 @@
       streamChat()
     }
   }
+
+  onMount(() => {
+    inputRef.focus()
+  })
 </script>
 
 <div
@@ -148,12 +153,12 @@
         bind:this={inputRef}
         bind:value={message}
         onkeydown={handleKeyDown}
-        placeholder="Type a message..."
-        class="w-full p-2 pr-16 rounded-sm bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[60px] max-h-40"
+        placeholder="How can twinny help you today?"
+        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-40"
       ></textarea>
       <button
         onclick={streamChat}
-        class="absolute bottom-6 right-3 px-4 py-2 text-white"
+        class="absolute bottom-9 right-3 px-4 py-2 text-white"
         aria-label="Send"
       >
         <svg
