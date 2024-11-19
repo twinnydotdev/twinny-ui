@@ -105,6 +105,7 @@
               >{$t('common.provider')}</th
             >
             <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.points')}</th>
+            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.chat')}</th>
           </tr>
         </thead>
         <tbody>
