@@ -22,7 +22,7 @@
     "@playwright/test": "^1.45.0",
     "@sveltejs/adapter-auto": "^3.2.2",
     "@sveltejs/adapter-node": "^5.2.0",
-    "@sveltejs/kit": "^2.5.27",
+    "@sveltejs/kit": "^2.8.1",
     "@types/gtag.js": "^0.0.20",
     "@types/lodash": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
