@@ -1,11 +1,13 @@
 import { registerEmailAddress } from '$lib/service/registrations.service'
+import type { Actions } from '@sveltejs/kit'
 
 export const actions = {
-  register: async ({ request }: { request: Request }) => {
+  register: async ({ request }) => {
     try {
-      return await registerEmailAddress(request)
+      const result = await registerEmailAddress(request)
+      return result // { success: true } or { error: true }
     } catch (e) {
-      return e
+      return { error: true }
     }
   }
-}
+} satisfies Actions
