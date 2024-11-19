@@ -49,6 +49,12 @@
     "dotenv": "^16.4.5",
     "sqlite3": "^5.1.7",
     "svelte-html": "^0.0.0",
+    "svelte-markdown": "^0.4.1",
     "sveltekit-i18n": "^2.4.2"
+  },
+  "overrides": {
+    "svelte-markdown": {
+      "svelte": "^5.0.0"
+    }
   }
 }

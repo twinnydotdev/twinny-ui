@@ -3,6 +3,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE } from '$lib/const'
   import { getShortId } from '$lib/utils'
+  import Button from '$lib/components/button.svelte'
 
   let ws: WebSocket
   let activePeers = $state(0)
@@ -62,12 +63,6 @@
           <p class="text-sm font-medium mb-2">{$t('common.active_models')}</p>
           <p class="text-3xl font-bold">{activeModels}</p>
         </div>
-      </div>
-    </div>
-
-    <div class="mb-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-2xl font-semibold">{$t('common.providers')}</h3>
       </div>
     </div>
 
