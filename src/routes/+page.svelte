@@ -23,6 +23,11 @@
     <a href={URL_VSCODE_MARKETPLACE} target="_blank" rel="noreferrer noopener">
       <Button buttonText={$t('common.install')} />
     </a>
+    <a href="/symmetry" target="_blank" rel="noreferrer noopener">
+      <button class="font-bold py-3 px-6 rounded transition-all duration-200 bg-stone-500">
+        {$t('common.symmetry')} / {$t('common.chat')}
+      </button>
+    </a>
   </div>
   <hr class="w-full border-stone-600 mb-6" />
   <p class="text-center font-bold my-1">{$t('common.subscribe_label')}</p>

@@ -1,8 +1,14 @@
 <script lang="ts">
-  import SvelteMarkdown from 'svelte-markdown'
   import { page } from '$app/stores'
+  import { Marked } from 'marked'
+  import { markedHighlight } from 'marked-highlight'
+  import hljs from 'highlight.js'
   import { onMount } from 'svelte'
+  import { t } from '$lib/translations'
+  import { Motion } from 'svelte-motion'
+
   let completion = $state('')
+  let opacity = $state(0)
   let message = $state('')
   let messages = $state<Array<{ role: string; content: string }>>([])
   let chatContainer: HTMLDivElement
@@ -72,7 +78,7 @@
           .filter((msg) => msg !== null)
 
         for (const message of streamMessages) {
-          if (!message?.choices.length) continue
+          if (!message?.choices?.length) continue
 
           const choice = message.choices[0]
           if (!choice) continue
@@ -121,52 +127,121 @@
     }
   }
 
+  function processMarkdown(content: string) {
+    const marked = new Marked(
+      markedHighlight({
+        emptyLangClass: 'hljs',
+        langPrefix: 'hljs language-',
+        highlight(code, lang) {
+          const language = hljs.getLanguage(lang) ? lang : 'auto'
+          console.log(lang)
+          return hljs.highlight(code, { language }).value
+        }
+      })
+    )
+    return marked.parse(content)
+  }
+
+  function newChat() {
+    message = ''
+    messages = []
+    inputRef.focus()
+  }
+
   onMount(() => {
     inputRef.focus()
+  })
+
+  $effect(() => {
+    message
+    inputRef.style.height = '0px'
+    const scrollHeight = inputRef.scrollHeight
+    inputRef.style.height = `${scrollHeight + 5}px`
   })
 </script>
 
 <div
   class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
-  {#if !messages.length && !completion}
-    <div class="text-center text-white mt-56 font-semibold">
-      <svg class="h-20 w-auto mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="6" fill="white" />
-        <path d="M32 26L18 18" stroke="white" stroke-width="2" />
-        <path d="M32 26L46 18" stroke="white" stroke-width="2" />
-        <path d="M32 38L18 46" stroke="white" stroke-width="2" />
-        <path d="M32 38L46 46" stroke="white" stroke-width="2" />
-        <circle cx="18" cy="18" r="4" fill="white" />
-        <circle cx="46" cy="18" r="4" fill="white" />
-        <circle cx="18" cy="46" r="4" fill="white" />
-        <circle cx="46" cy="46" r="4" fill="white" />
-        <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
-        <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
-      </svg>
-      <p>
-        This is a chat interface powered by Symmetry - a network that connects users to AI. Your
-        messages are sent to a central server which uses peer-to-peer networking to communicate with
-        AI providers. Once processed, responses flow back through the same path to reach you here.
-      </p>
+  <Motion animate={{ opacity }} transition={{ duration: 3 }} let:motion>
+    <div class="opacity-0">HEY</div>
+  </Motion>
+  {#if messages.length}
+    <div class="flex justify-between my-2 w-full">
+      <button
+        onclick={newChat}
+        class="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 py-2 order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
+        data-state="closed"
+        aria-label={$t('common.new_chat')}
+        title={$t('common.new_chat')}
+        ><svg
+          height="16"
+          stroke-linejoin="round"
+          viewBox="0 0 16 16"
+          width="16"
+          style="color:currentcolor"
+          ><path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8.75 1.75V1H7.25V1.75V6.75H2.25H1.5V8.25H2.25H7.25V13.25V14H8.75V13.25V8.25H13.75H14.5V6.75H13.75H8.75V1.75Z"
+            fill="currentColor"
+          ></path></svg
+        >
+      </button>
     </div>
   {/if}
+  {#if !messages.length && !completion}
+    <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
+      <div class="opacity-0 text-center text-white mt-56" use:motion>
+        <svg
+          class="h-20 w-auto mx-auto mb-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 64 64"
+        >
+          <circle cx="32" cy="32" r="6" fill="white" />
+          <path d="M32 26L18 18" stroke="white" stroke-width="2" />
+          <path d="M32 26L46 18" stroke="white" stroke-width="2" />
+          <path d="M32 38L18 46" stroke="white" stroke-width="2" />
+          <path d="M32 38L46 46" stroke="white" stroke-width="2" />
+          <circle cx="18" cy="18" r="4" fill="white" />
+          <circle cx="46" cy="18" r="4" fill="white" />
+          <circle cx="18" cy="46" r="4" fill="white" />
+          <circle cx="46" cy="46" r="4" fill="white" />
+          <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
+          <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
+        </svg>
+
+        <p>
+          {$t('common.this_interface')}
+        </p>
+      </div>
+    </Motion>
+  {/if}
+
   <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
     {#each messages as msg}
-      <div
-        class={`p-4 rounded-lg ${msg.role === 'user' ? 'bg-stone-800 ml-12' : 'bg-stone-700 mr-12'}`}
+      <Motion
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        let:motion
       >
-        <div class="text-wrap text-white whitespace-pre-wrap">
-          <SvelteMarkdown source={msg.content} />
+        <div use:motion class={`w-full flex justify-end ${msg.role === 'user' ? 'opacity-0' : ''}`}>
+          <div
+            class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
+          >
+            {@html processMarkdown(msg.content)}
+          </div>
         </div>
-      </div>
+      </Motion>
     {/each}
     {#if completion}
-      <div class="bg-stone-700 p-4 rounded-lg mr-12">
-        <div class="text-wrap text-white whitespace-pre-wrap">
-          <SvelteMarkdown source={completion} />
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.5 }} let:motion>
+        <div use:motion class="p-2">
+          <div class="text-wrap text-white chat-content">
+            {@html processMarkdown(completion)}
+          </div>
         </div>
-      </div>
+      </Motion>
     {/if}
   </div>
 
@@ -177,11 +252,11 @@
         bind:value={message}
         onkeydown={handleKeyDown}
         placeholder="How can twinny help you today?"
-        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-40"
+        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-80"
       ></textarea>
       <button
         onclick={streamChat}
-        class="absolute bottom-9 right-3 px-4 py-2 text-white"
+        class="absolute bottom-16 right-3 px-4 py-2 text-white"
         aria-label="Send"
       >
         <svg
@@ -199,6 +274,113 @@
           <path d="M22 2L15 22L11 13L2 9L22 2z" />
         </svg>
       </button>
+      <small class="flex justify-end text-stone-400 pr-2 pb-3 text-xs"> v0.1 alpha </small>
     </div>
   </div>
 </div>
+
+<style>
+  :global(.chat-content) {
+    /* Code blocks */
+    :global(pre) {
+      background: #171717;
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      overflow-x: auto;
+    }
+
+    :global(pre code) {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      tab-size: 4;
+    }
+
+    /* Syntax highlighting colors */
+    :global(.hljs-keyword) {
+      color: #eb6f92;
+    } /* love */
+    :global(.hljs-string) {
+      color: #f6c177;
+    } /* gold */
+    :global(.hljs-comment) {
+      color: #6e6a86;
+    } /* muted */
+    :global(.hljs-function) {
+      color: #9ccfd8;
+    } /* foam */
+    :global(.hljs-number) {
+      color: #c4a7e7;
+    } /* iris */
+    :global(.hljs-class) {
+      color: #31748f;
+    } /* pine */
+    :global(.hljs-title) {
+      color: #ebbcba;
+    } /* rose */
+
+    /* Add some margin to the code container */
+    :global(pre code.hljs) {
+      display: block;
+      padding: 0.5rem;
+    }
+
+    /* Headers */
+    :global(h1) {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    :global(h2) {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    :global(h3) {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Paragraphs */
+    :global(p) {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Inline code */
+    :global(code:not(pre code)) {
+      background: #1f1d2e;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+    }
+
+    /* Lists */
+    :global(ul),
+    :global(ol) {
+      margin: 0 0 0 1.5rem;
+    }
+
+    :global(li) {
+      margin: 0;
+      line-height: 1.6;
+      list-style: disc;
+    }
+
+    /* Links */
+    :global(a) {
+      color: #9ccfd8;
+      text-decoration: none;
+      border-bottom: 1px solid #9ccfd8;
+    }
+
+    :global(a:hover) {
+      opacity: 0.8;
+    }
+  }
+</style>

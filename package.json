@@ -37,6 +37,7 @@
     "prettier-plugin-svelte": "^3.2.8",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
+    "svelte-motion": "^0.12.2",
     "svelte-preprocess": "^6.0.1",
     "tailwindcss": "^3.4.4",
     "tslib": "^2.6.3",
@@ -47,9 +48,11 @@
   "type": "module",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "highlight.js": "^11.10.0",
+    "marked": "^15.0.1",
+    "marked-highlight": "^2.2.1",
     "sqlite3": "^5.1.7",
     "svelte-html": "^0.0.0",
-    "svelte-markdown": "^0.4.1",
     "sveltekit-i18n": "^2.4.2"
   },
   "overrides": {

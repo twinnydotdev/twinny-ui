@@ -51,6 +51,13 @@
 
 <div>
   <div>
+    <div class="border-b border-stone-800 mb-8 pb-6">
+      <h2 class="text-xl font-medium text-stone-200 mb-2">{$t('common.symmetry')}</h2>
+      <p class="text-sm text-stone-400">
+        {$t('common.access')}
+      </p>
+    </div>
+
     <div class="mb-8">
       <h3 class="text-2xl font-semibold mb-4">{$t('common.active_connections')}</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -130,12 +137,16 @@
               <td class="px-2 py-3">
                 <span class="font-medium">
                   {#if peer.online}
-                    <a class="text-green-500" href="/chat?model={peer.model_name}">
-                      Chat
+                    <a href="/chat?model={peer.model_name}">
+                      <button
+                        class="px-3 py-1 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors"
+                      >
+                        {$t('common.chat')}
+                      </button>
                     </a>
                   {/if}
                   {#if !peer.online}
-                    Offline
+                    {$t('common.offline')}
                   {/if}
                 </span>
               </td>
