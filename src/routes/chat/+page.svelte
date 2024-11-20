@@ -74,7 +74,7 @@
           .filter((msg) => msg !== null)
 
         for (const message of streamMessages) {
-          if (!message?.choices.length) continue
+          if (!message?.choices?.length) continue
 
           const choice = message.choices[0]
           if (!choice) continue
