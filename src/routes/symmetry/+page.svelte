@@ -112,7 +112,7 @@
           {#each filteredPeers as peer}
             <tr class="border-t border-stone-700 hover:bg-stone-700/50 transition-colors">
               <td class="px-2 py-3">{getShortId(peer.model_name)}</td>
-              <td class="px-2 py-3">{getShortId(peer.name)}</td>
+              <td class="px-2 py-3">{getShortId(peer.name, 5, 5)}</td>
               <td class="px-2 py-3">
                 <span class="inline-flex items-center px-2 py-1 rounded-full font-medium">
                   <span class={peer.online ? 'text-green-600' : 'text-red-600'}

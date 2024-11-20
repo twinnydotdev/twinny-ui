@@ -28,6 +28,7 @@
     if (!message) return
     try {
       messages = [...messages, { role: 'user', content: message }]
+      message = ''
       const response = await fetch('https://twinny.dev/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -45,7 +46,7 @@
       }
 
       if (!response.body) return
-      message = ''
+
       const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
       await processStream(reader)
     } catch (error) {
@@ -128,6 +129,28 @@
 <div
   class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
+  {#if !messages.length && !completion}
+    <div class="text-center text-white mt-56 font-semibold">
+      <svg class="h-20 w-auto mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="6" fill="white" />
+        <path d="M32 26L18 18" stroke="white" stroke-width="2" />
+        <path d="M32 26L46 18" stroke="white" stroke-width="2" />
+        <path d="M32 38L18 46" stroke="white" stroke-width="2" />
+        <path d="M32 38L46 46" stroke="white" stroke-width="2" />
+        <circle cx="18" cy="18" r="4" fill="white" />
+        <circle cx="46" cy="18" r="4" fill="white" />
+        <circle cx="18" cy="46" r="4" fill="white" />
+        <circle cx="46" cy="46" r="4" fill="white" />
+        <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
+        <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
+      </svg>
+      <p>
+        This is a chat interface powered by Symmetry - a network that connects users to AI. Your
+        messages are sent to a central server which uses peer-to-peer networking to communicate with
+        AI providers. Once processed, responses flow back through the same path to reach you here.
+      </p>
+    </div>
+  {/if}
   <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
     {#each messages as msg}
       <div
