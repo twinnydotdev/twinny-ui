@@ -158,6 +158,7 @@
         onclick={newChat}
         class="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 py-2 order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
         data-state="closed"
+        aria-label="New Chat"
         ><svg
           height="16"
           stroke-linejoin="round"
@@ -170,8 +171,8 @@
             d="M8.75 1.75V1H7.25V1.75V6.75H2.25H1.5V8.25H2.25H7.25V13.25V14H8.75V13.25V8.25H13.75H14.5V6.75H13.75H8.75V1.75Z"
             fill="currentColor"
           ></path></svg
-        ><span class="md:sr-only">New Chat</span></button
-      >
+        >
+      </button>
     </div>
   {/if}
   {#if !messages.length && !completion}
@@ -245,12 +246,9 @@
           <path d="M22 2L15 22L11 13L2 9L22 2z" />
         </svg>
       </button>
-      <small class="flex justify-end text-stone-400 pr-2 pb-3 text-xs">
-        v0.1 alpha
-      </small>
+      <small class="flex justify-end text-stone-400 pr-2 pb-3 text-xs"> v0.1 alpha </small>
     </div>
   </div>
-
 </div>
 
 <style>
@@ -272,13 +270,27 @@
     }
 
     /* Syntax highlighting colors */
-    :global(.hljs-keyword) { color: #eb6f92; } /* love */
-    :global(.hljs-string) { color: #f6c177; } /* gold */
-    :global(.hljs-comment) { color: #6e6a86; } /* muted */
-    :global(.hljs-function) { color: #9ccfd8; } /* foam */
-    :global(.hljs-number) { color: #c4a7e7; } /* iris */
-    :global(.hljs-class) { color: #31748f; } /* pine */
-    :global(.hljs-title) { color: #ebbcba; } /* rose */
+    :global(.hljs-keyword) {
+      color: #eb6f92;
+    } /* love */
+    :global(.hljs-string) {
+      color: #f6c177;
+    } /* gold */
+    :global(.hljs-comment) {
+      color: #6e6a86;
+    } /* muted */
+    :global(.hljs-function) {
+      color: #9ccfd8;
+    } /* foam */
+    :global(.hljs-number) {
+      color: #c4a7e7;
+    } /* iris */
+    :global(.hljs-class) {
+      color: #31748f;
+    } /* pine */
+    :global(.hljs-title) {
+      color: #ebbcba;
+    } /* rose */
 
     /* Add some margin to the code container */
     :global(pre code.hljs) {
@@ -288,58 +300,59 @@
 
     /* Headers */
     :global(h1) {
-     font-size: 1.8rem;
-     font-weight: 600;
-     margin: 0;
-   }
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+    }
 
-   :global(h2) {
-     font-size: 1.5rem;
-     font-weight: 600;
-     margin: 0;
-   }
+    :global(h2) {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
 
-   :global(h3) {
-     font-size: 1.25rem;
-     font-weight: 600;
-     margin: 0;
-   }
+    :global(h3) {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
 
-   /* Paragraphs */
-   :global(p) {
-     margin: 0;
-     line-height: 1.6;
-   }
+    /* Paragraphs */
+    :global(p) {
+      margin: 0;
+      line-height: 1.6;
+    }
 
-   /* Inline code */
-   :global(code:not(pre code)) {
-     background: #1f1d2e;
-     padding: 0.2rem 0.4rem;
-     border-radius: 0.25rem;
-     font-family: 'Fira Code', monospace;
-     font-size: 0.875rem;
-   }
+    /* Inline code */
+    :global(code:not(pre code)) {
+      background: #1f1d2e;
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.875rem;
+    }
 
-   /* Lists */
-   :global(ul), :global(ol) {
-     margin: 0 0 0 1.5rem;
-   }
+    /* Lists */
+    :global(ul),
+    :global(ol) {
+      margin: 0 0 0 1.5rem;
+    }
 
-   :global(li) {
-     margin: 0;
-     line-height: 1.6;
-     list-style: disc;
-   }
+    :global(li) {
+      margin: 0;
+      line-height: 1.6;
+      list-style: disc;
+    }
 
-   /* Links */
-   :global(a) {
-     color: #9ccfd8;
-     text-decoration: none;
-     border-bottom: 1px solid #9ccfd8;
-   }
+    /* Links */
+    :global(a) {
+      color: #9ccfd8;
+      text-decoration: none;
+      border-bottom: 1px solid #9ccfd8;
+    }
 
-   :global(a:hover) {
-     opacity: 0.8;
-   }
+    :global(a:hover) {
+      opacity: 0.8;
+    }
   }
 </style>
