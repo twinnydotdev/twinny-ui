@@ -4,7 +4,11 @@
   import { markedHighlight } from 'marked-highlight'
   import hljs from 'highlight.js'
   import { onMount } from 'svelte'
+  import { t } from '$lib/translations'
+  import { Motion } from 'svelte-motion'
+
   let completion = $state('')
+  let opacity = $state(0)
   let message = $state('')
   let messages = $state<Array<{ role: string; content: string }>>([])
   let chatContainer: HTMLDivElement
@@ -129,7 +133,7 @@
         emptyLangClass: 'hljs',
         langPrefix: 'hljs language-',
         highlight(code, lang) {
-          const language = hljs.getLanguage(lang) ? lang : 'plaintext'
+          const language = hljs.getLanguage(lang) ? lang : 'auto'
           console.log(lang)
           return hljs.highlight(code, { language }).value
         }
@@ -147,18 +151,29 @@
   onMount(() => {
     inputRef.focus()
   })
+
+  $effect(() => {
+    message
+    inputRef.style.height = '0px'
+    const scrollHeight = inputRef.scrollHeight
+    inputRef.style.height = `${scrollHeight + 5}px`
+  })
 </script>
 
 <div
   class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
+  <Motion animate={{ opacity }} transition={{ duration: 3 }} let:motion>
+    <div class="opacity-0">HEY</div>
+  </Motion>
   {#if messages.length}
     <div class="flex justify-between my-2 w-full">
       <button
         onclick={newChat}
         class="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 py-2 order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
         data-state="closed"
-        aria-label="New Chat"
+        aria-label={$t('common.new_chat')}
+        title={$t('common.new_chat')}
         ><svg
           height="16"
           stroke-linejoin="round"
@@ -176,44 +191,57 @@
     </div>
   {/if}
   {#if !messages.length && !completion}
-    <div class="text-center text-white mt-56 font-semibold">
-      <svg class="h-20 w-auto mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-        <circle cx="32" cy="32" r="6" fill="white" />
-        <path d="M32 26L18 18" stroke="white" stroke-width="2" />
-        <path d="M32 26L46 18" stroke="white" stroke-width="2" />
-        <path d="M32 38L18 46" stroke="white" stroke-width="2" />
-        <path d="M32 38L46 46" stroke="white" stroke-width="2" />
-        <circle cx="18" cy="18" r="4" fill="white" />
-        <circle cx="46" cy="18" r="4" fill="white" />
-        <circle cx="18" cy="46" r="4" fill="white" />
-        <circle cx="46" cy="46" r="4" fill="white" />
-        <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
-        <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
-      </svg>
-      <p>
-        This is a chat interface powered by Symmetry - a network that connects users to AI. Your
-        messages are sent to a central server which uses peer-to-peer networking to communicate with
-        AI providers. Once processed, responses flow back through the same path to reach you here.
-      </p>
-    </div>
+    <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
+      <div class="opacity-0 text-center text-white mt-56" use:motion>
+        <svg
+          class="h-20 w-auto mx-auto mb-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 64 64"
+        >
+          <circle cx="32" cy="32" r="6" fill="white" />
+          <path d="M32 26L18 18" stroke="white" stroke-width="2" />
+          <path d="M32 26L46 18" stroke="white" stroke-width="2" />
+          <path d="M32 38L18 46" stroke="white" stroke-width="2" />
+          <path d="M32 38L46 46" stroke="white" stroke-width="2" />
+          <circle cx="18" cy="18" r="4" fill="white" />
+          <circle cx="46" cy="18" r="4" fill="white" />
+          <circle cx="18" cy="46" r="4" fill="white" />
+          <circle cx="46" cy="46" r="4" fill="white" />
+          <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
+          <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
+        </svg>
+
+        <p>
+          {$t('common.this_interface')}
+        </p>
+      </div>
+    </Motion>
   {/if}
 
   <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
     {#each messages as msg}
-      <div
-        class={`p-4 rounded-lg ${msg.role === 'user' ? 'bg-stone-800 ml-12' : 'bg-stone-700 mr-12'}`}
+      <Motion
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        let:motion
       >
-        <div class="text-wrap text-white whitespace-pre-wrap chat-content">
-          {@html processMarkdown(msg.content)}
+        <div use:motion class={`w-full flex justify-end ${msg.role === 'user' ? 'opacity-0' : ''}`}>
+          <div
+            class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
+          >
+            {@html processMarkdown(msg.content)}
+          </div>
         </div>
-      </div>
+      </Motion>
     {/each}
     {#if completion}
-      <div class="bg-stone-700 p-4 rounded-lg mr-12">
-        <div class="text-wrap text-white whitespace-pre-wrap chat-content">
-          {@html processMarkdown(completion)}
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.5 }} let:motion>
+        <div use:motion class="p-2">
+          <div class="text-wrap text-white chat-content">
+            {@html processMarkdown(completion)}
+          </div>
         </div>
-      </div>
+      </Motion>
     {/if}
   </div>
 
@@ -224,7 +252,7 @@
         bind:value={message}
         onkeydown={handleKeyDown}
         placeholder="How can twinny help you today?"
-        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-40"
+        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-80"
       ></textarea>
       <button
         onclick={streamChat}
