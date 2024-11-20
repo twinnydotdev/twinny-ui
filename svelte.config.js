@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-node'
+import { mdsvex } from 'mdsvex';
 
 import { sveltekit } from '@sveltejs/kit/vite'
 
@@ -6,6 +7,9 @@ import { sveltekit } from '@sveltejs/kit/vite'
 const config = {
   preprocess: [
     sveltekit(),
+    mdsvex({
+      extensions: ['.svx', '.md'],
+    })
   ],
   kit: {
     adapter: adapter()

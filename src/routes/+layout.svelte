@@ -8,6 +8,7 @@
 <svelte:head>
   <title>twinny</title>
   <meta name="description" content="The free and private AI extension for Visual Studio Code." />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
 </svelte:head>
 
 <Analytics />
