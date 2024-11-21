@@ -1,10 +1,9 @@
 {
   "about": "about",
+  "access": "Access distributed AI models through our peer-to-peer network. Select any provider marked 'chat' in the table below to start a conversation.",
   "active_connections": "Active connections",
   "active_models": "Active models",
   "active_peers": "Active peers",
-  "this_interface": "This is a chat interface powered by Symmetry - a network that connects users to AI. Your messages are sent to a central server which uses peer-to-peer networking to communicate with AI providers. Once processed, responses flow back through the same path to reach you here.",
-  "access": "Access distributed AI models through our peer-to-peer network. Select any provider marked 'chat' in the table below to start a conversation.",
   "become_a_provider_description": "Become a provider and share your computational resources with the world.",
   "become_a_provider": "Become a inference provider",
   "chapter1_title": "I: The Tale of Symmetry",
@@ -38,10 +37,10 @@
   "read_symmetry_documentation": "Read the Symmetry documentation.",
   "show_offline": "Show offline",
   "sponsor": "sponsor",
+  "subscribe_error": "Something went wrong. Have you subscribed before?",
   "subscribe_label": "Subscribe for updates",
   "subscribe_placeholder": "Your email address",
   "subscribe": "Subscribe",
-  "subscribe_error": "Something went wrong. Have you subscribed before?",
   "subtitle": "The free and private AI extension for Visual Studio Code.",
   "symmetry_cli": "You can also run the Symmetry client from the command line using the CLI.",
   "symmetry_description": "Symmetry is the peer-to-peer network for Twinny. It enables users to connect with each other and share computational resources, enhancing collaboration and distributed processing capabilities.",
@@ -52,6 +51,8 @@
   "symmetry_statistics": "Symmetry statistics",
   "symmetry": "⚡️ symmetry",
   "thanks": "Thanks for subscribing!",
+  "thinking": "Thinking",
+  "this_interface": "This is a chat interface powered by Symmetry - a network that connects users to AI. Your messages are sent to a central server which uses peer-to-peer networking to communicate with AI providers. Once processed, responses flow back through the same path to reach you here.",
   "title": "twinny",
   "yes": "Yes"
 }

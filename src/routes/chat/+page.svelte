@@ -10,6 +10,8 @@
   let completion = $state('')
   let opacity = $state(0)
   let message = $state('')
+  let loading = $state(false)
+  let streaming = $state(false)
   let messages = $state<Array<{ role: string; content: string }>>([])
   let chatContainer: HTMLDivElement
   let inputRef: HTMLTextAreaElement
@@ -32,9 +34,12 @@
 
   async function streamChat() {
     if (!message) return
+    loading = true
+
     try {
       messages = [...messages, { role: 'user', content: message }]
       message = ''
+      chatContainer.scrollTo({ top: chatContainer.scrollHeight })
       const response = await fetch('https://twinny.dev/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,6 +59,7 @@
       if (!response.body) return
 
       const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
+      loading = false
       await processStream(reader)
     } catch (error) {
       console.error('Stream error:', error)
@@ -62,6 +68,7 @@
 
   async function processStream(reader: ReadableStreamDefaultReader) {
     try {
+      streaming = true
       while (true) {
         const { value, done } = await reader.read()
         if (done) break
@@ -85,9 +92,7 @@
 
           if (choice.delta.content) {
             completion += choice.delta.content
-            chatContainer.scrollTo({
-              top: chatContainer.scrollHeight
-            })
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight })
           }
 
           if (choice.finish_reason === 'stop') {
@@ -102,7 +107,10 @@
               ]
             }
             completion = ''
-            inputRef?.focus()
+            streaming = false
+            queueMicrotask(() => {
+              inputRef?.focus()
+            })
           }
         }
       }
@@ -220,11 +228,7 @@
 
   <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
     {#each messages as msg}
-      <Motion
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        let:motion
-      >
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
         <div use:motion class={`w-full flex ${msg.role === 'user' ? 'opacity-0 justify-end' : ''}`}>
           <div
             class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
@@ -243,6 +247,46 @@
         </div>
       </Motion>
     {/if}
+    {#if loading}
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
+        <div use:motion class="p-2">
+          <div class="flex items-center text-wrap text-white chat-content">
+            <span>
+              {$t('common.thinking')}
+            </span>
+            <svg class="h-2 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30">
+              <circle cx="15" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0s"
+                />
+              </circle>
+              <circle cx="45" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0.2s"
+                />
+              </circle>
+              <circle cx="75" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0.4s"
+                />
+              </circle>
+            </svg>
+          </div>
+        </div>
+      </Motion>
+    {/if}
   </div>
 
   <div>
@@ -250,11 +294,13 @@
       <textarea
         bind:this={inputRef}
         bind:value={message}
+        disabled={streaming}
         onkeydown={handleKeyDown}
         placeholder="How can twinny help you today?"
         class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-80"
       ></textarea>
       <button
+        disabled={streaming}
         onclick={streamChat}
         class="absolute bottom-16 right-3 px-4 py-2 text-white"
         aria-label="Send"
