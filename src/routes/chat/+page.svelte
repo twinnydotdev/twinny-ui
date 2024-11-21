@@ -294,7 +294,8 @@
       font-family: 'Fira Code', monospace;
       font-size: 0.875rem;
       line-height: 1.6;
-      tab-size: 4;
+      tab-size: 2;
+      white-space: pre-wrap;
     }
 
     /* Syntax highlighting colors */
