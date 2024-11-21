@@ -96,7 +96,6 @@
           }
 
           if (choice.finish_reason === 'stop') {
-            console.log(completion)
             if (completion.trim()) {
               messages = [
                 ...messages,
@@ -222,6 +221,17 @@
         <p>
           {$t('common.this_interface')}
         </p>
+        <div class="mt-8"></div>
+        <p class="mt-2">
+          {$t('common.learn_how')}
+        </p>
+        <a href="https://github.com/twinnydotdev/symmetry-cli" target="_blank">
+          <button
+            class="inline-flex items-center gap-1.5 mt-4 px-3 py-2 bg-rose-600 text-white rounded-md font-medium"
+          >
+            {$t('common.install_cli')}
+          </button>
+        </a>
       </div>
     </Motion>
   {/if}
