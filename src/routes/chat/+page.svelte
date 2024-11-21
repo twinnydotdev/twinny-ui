@@ -225,7 +225,7 @@
         transition={{ duration: 0.3 }}
         let:motion
       >
-        <div use:motion class={`w-full flex justify-end ${msg.role === 'user' ? 'opacity-0' : ''}`}>
+        <div use:motion class={`w-full flex ${msg.role === 'user' ? 'opacity-0 justify-end' : ''}`}>
           <div
             class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
           >
