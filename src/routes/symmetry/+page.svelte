@@ -27,14 +27,16 @@
     uniquePeerCount: 0
   })
 
-  let peers: any[] = $state([])
+  let peers = $state<any[]>([])
+  let connectionStatus = $state<'connected' | 'disconnected'>('disconnected')
 
   onMount(() => {
     ws = new WebSocket('wss://twinny.dev/ws')
+    ws.onopen = () => connectionStatus = 'connected'
+    ws.onclose = () => connectionStatus = 'disconnected'
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       peers = data.allPeers
-
       stats = {
         averageSessionMinutes: data.stats.averageSessionMinutes,
         totalProviderTime: data.stats.totalProviderTime,
@@ -45,99 +47,83 @@
         activeModels: data.activeModels,
         uniquePeerCount: data.uniquePeerCount
       }
-      console.log(stats)
     }
   })
 
-  onDestroy(() => {
-    if (ws) {
-      ws.close()
-    }
-  })
+  onDestroy(() => ws?.close())
 </script>
 
-<div>
-  <div>
-    <div class="border-b border-stone-800 mb-8 pb-6">
-      <h2 class="text-xl font-medium text-stone-200 mb-2">{$t('common.symmetry')}</h2>
-      <p class="text-sm text-stone-400">
-        {$t('common.access')}
-      </p>
+<div class="min-h-screen bg-stone-900 text-stone-100 p-6">
+  <div class="max-w-7xl mx-auto space-y-8">
+    <div class="border-b border-stone-800 pb-6">
+      <h2 class="text-3xl font-bold text-stone-100 mb-2">{$t('common.symmetry')}</h2>
+      <p class="text-stone-400">{$t('common.access')}</p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.active_peers')}</p>
-        <p class="text-3xl font-bold">{stats.activePeers}</p>
+    {#if connectionStatus === 'disconnected'}
+      <div class="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-lg">
+        Connection lost. Attempting to reconnect...
       </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.active_models')}</p>
-        <p class="text-3xl font-bold">{stats.activeModels}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.unique_peer_count')}</p>
-        <p class="text-3xl font-bold">{stats.uniquePeerCount}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.average_session_duration')}</p>
-        <p class="text-3xl font-bold">{stats.averageSessionMinutes}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.total_provider_time')}</p>
-        <p class="text-3xl font-bold">{stats.totalProviderTime}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.total_requests')}</p>
-        <p class="text-3xl font-bold">{stats.totalRequests}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.total_requests_today')}</p>
-        <p class="text-3xl font-bold">{stats.totalRequestsToday}</p>
-      </div>
-      <div class="bg-stone-800 p-6 rounded-lg">
-        <p class="text-sm font-medium mb-2">{$t('common.total_sessions')}</p>
-        <p class="text-3xl font-bold">{stats.totalSessions}</p>
-      </div>
+    {/if}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {#each Object.entries(stats) as [key, value]}
+        <div class="bg-gradient-to-br from-stone-800 to-stone-900 p-6 rounded-xl shadow-lg">
+          <div class="flex items-center gap-4">
+            <div class="rounded-lg">
+              <div class=" text-stone-100">
+                {#if key === 'activeModels'}🤖
+                {:else if key === 'activePeers'}⚡
+                {:else if key === 'uniquePeerCount'}👥
+                {:else if key === 'averageSessionMinutes'}⏱️
+                {:else if key === 'totalProviderTime'}⌛
+                {:else if key === 'totalRequests'}📊
+                {:else if key === 'totalRequestsToday'}📈
+                {:else}📝
+                {/if}
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-stone-400">{$t(`common.${key}`)}</p>
+              <p class="text-3xl font-bold">{value}</p>
+            </div>
+          </div>
+        </div>
+      {/each}
     </div>
 
-    <div class="space-y-4 md:space-y-0">
+    <div class="bg-stone-800 rounded-xl overflow-hidden shadow-lg">
       <div class="hidden md:block overflow-x-auto">
-        <table class="w-full bg-stone-800 rounded-lg overflow-hidden text-sm">
+        <table class="w-full text-sm">
           <thead class="bg-stone-700">
             <tr>
-              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.model')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.name')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.online')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold hidden xl:table-cell">{$t('common.data_collected')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold hidden lg:table-cell">{$t('common.provider')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.up_time_minutes')}</th>
-              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.chat')}</th>
+              {#each ['model', 'name', 'online', 'data_collected', 'provider', 'up_time_minutes', 'chat'] as header}
+                <th class="px-6 py-4 text-left font-semibold {header === 'data_collected' ? 'hidden xl:table-cell' : ''} {header === 'provider' ? 'hidden lg:table-cell' : ''}">{$t(`common.${header}`)}</th>
+              {/each}
             </tr>
           </thead>
-          <tbody>
+          <tbody class="divide-y divide-stone-700">
             {#each peers as peer}
-              <tr class="border-t border-stone-700 hover:bg-stone-700/50 transition-colors">
-                <td class="px-2 py-3">{getShortId(peer.model_name)}</td>
-                <td class="px-2 py-3">{getShortId(peer.name, 5, 5)}</td>
-                <td class="px-2 py-3">
-                  <span class={peer.online ? 'text-green-600' : 'text-red-600'}>
-                    {peer.online ? '✔' : '✕'}
+              <tr class="hover:bg-stone-700/30 transition-colors">
+                <td class="px-6 py-4">{getShortId(peer.model_name)}</td>
+                <td class="px-6 py-4">{getShortId(peer.name, 5, 5)}</td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}">
+                    {peer.online ? 'Online' : 'Offline'}
                   </span>
                 </td>
-                <td class="px-2 py-3 hidden xl:table-cell">
-                  {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
-                </td>
-                <td class="px-2 py-3 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
-                <td class="px-2 py-3">{peer.duration_minutes || 0}</td>
-                <td class="px-2 py-3">
+                <td class="px-6 py-4 hidden xl:table-cell">{peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}</td>
+                <td class="px-6 py-4 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
+                <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
+                <td class="px-6 py-4">
                   {#if peer.online}
                     <a href="/chat?model={peer.model_name}">
-                      <button class="px-3 py-1 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors">
+                      <button class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
                         {$t('common.chat')}
                       </button>
                     </a>
                   {:else}
-                    {$t('common.offline')}
+                    <span class="text-stone-500">{$t('common.offline')}</span>
                   {/if}
                 </td>
               </tr>
@@ -146,33 +132,31 @@
         </table>
       </div>
 
-      <div class="md:hidden space-y-4">
+      <div class="md:hidden divide-y divide-stone-700">
         {#each peers as peer}
-          <div class="bg-stone-800 p-4 rounded-lg space-y-2">
-            <div class="flex justify-between items-center">
+          <div class="p-4 space-y-4">
+            <div class="flex justify-between items-start">
               <div>
-                <div class="text-xs text-stone-400">{$t('common.model')}</div>
-                <div class="font-medium">{getShortId(peer.model_name)}</div>
+                <p class="font-medium">{getShortId(peer.model_name)}</p>
+                <p class="text-sm text-stone-400">{getShortId(peer.name, 5, 5)}</p>
               </div>
-              <span class={peer.online ? 'text-green-600' : 'text-red-600'}>
-                {peer.online ? '✔' : '✕'}
+              <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}">
+                {peer.online ? 'Online' : 'Offline'}
               </span>
             </div>
-
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <div class="text-xs text-stone-400">{$t('common.name')}</div>
-                <div>{getShortId(peer.name, 5, 5)}</div>
+                <p class="text-stone-400">{$t('common.provider')}</p>
+                <p>{peer.provider || 'unknown'}</p>
               </div>
               <div>
-                <div class="text-xs text-stone-400">{$t('common.up_time_minutes')}</div>
-                <div>{peer.duration_minutes || 0}</div>
+                <p class="text-stone-400">{$t('common.up_time_minutes')}</p>
+                <p>{peer.duration_minutes || 0}</p>
               </div>
             </div>
-
             {#if peer.online}
-              <a href="/chat?model={peer.model_name}" class="block mt-2">
-                <button class="w-full px-3 py-2 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors">
+              <a href="/chat?model={peer.model_name}">
+                <button class="w-full px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
                   {$t('common.chat')}
                 </button>
               </a>
@@ -182,17 +166,24 @@
       </div>
     </div>
 
-    <h3 class="text-2xl font-semibold mb-4 mt-6">{$t('common.become_a_provider')}</h3>
-
-    <div class="bg-stone-800 rounded-lg p-6 mb-8">
-      <p class="mb-4">{$t('common.become_a_provider_description')}</p>
-      <div class="space-y-2">
-        <a href={URL_SYMMETRY_CORE} class="text-rose-500 hover:text-rose-400 block"
-          >{$t('common.symmetry_installation')}</a
-        >
-        <a href={URL_SYMMETRY_CLI} class="text-rose-500 hover:text-rose-400 block"
-          >{$t('common.symmetry_installation_cli')}</a
-        >
+    <div class="space-y-6">
+      <h3 class="text-2xl font-bold">{$t('common.become_a_provider')}</h3>
+      <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg">
+        <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
+        <div class="space-y-4">
+          {#each [[URL_SYMMETRY_CORE, 'symmetry_installation', '📦'], [URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
+            <a href={url} class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="p-2 bg-rose-500/10 rounded-lg">
+                  <div class="w-6 h-6 text-rose-500">{icon}</div>
+                </div>
+                <div>
+                  <p class="font-medium">{$t(`common.${key}`)}</p>
+                </div>
+              </div>
+            </a>
+          {/each}
+        </div>
       </div>
     </div>
   </div>
