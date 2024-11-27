@@ -36,6 +36,12 @@
   "points": "Points",
   "provider": "Provider",
   "providers": "Providers",
+  "total_provider_time": "Total provider time (minutes)",
+  "average_session_duration": "Average session duration (minutes)",
+  "total_requests_today": "Total requests today",
+  "total_sessions": "Total sessions (all time)",
+  "total_requests": "Total requests",
+  "up_time_minutes": "Up time (minutes)",
   "public": "Public",
   "read_symmetry_documentation": "Read the Symmetry documentation.",
   "show_offline": "Show offline",
@@ -57,5 +63,6 @@
   "thinking": "Thinking",
   "this_interface": "This is a chat interface powered by Symmetry - a network that connects users to AI. Your messages are sent to a central server which uses peer-to-peer networking to communicate with AI providers. Once processed, responses flow back through the same path to reach you here.",
   "title": "twinny",
+  "unique_peer_count": "Unique peers (all time)",
   "yes": "Yes"
 }

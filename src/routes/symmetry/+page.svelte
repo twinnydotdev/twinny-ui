@@ -3,42 +3,51 @@
   import { onMount, onDestroy } from 'svelte'
   import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE } from '$lib/const'
   import { getShortId } from '$lib/utils'
+  import type { DbPeer } from '$lib/types'
 
-  let ws: WebSocket
-  let activePeers = $state(0)
-  let activeModels = $state(0)
-  let peers: any[] = $state([])
-  let filterStatus = $state('all')
-
-  const sortPeers = (peers: any[]): any[] => {
-    return [...peers].sort((a, b) => {
-      if (a.online !== b.online) {
-        return b.online - a.online
-      }
-      const pointsA = a.points ?? 0
-      const pointsB = b.points ?? 0
-      return pointsB - pointsA
-    })
+  interface Stats {
+    activeModels: number
+    activePeers: number
+    averageSessionMinutes: number
+    totalProviderTime: number
+    totalRequests: number
+    totalRequestsToday: number
+    totalSessions: number
+    uniquePeerCount: number
   }
 
-  const filteredPeers = $derived(
-    filterStatus === 'all'
-      ? peers
-      : peers.filter((peer) => (filterStatus === 'online' ? peer.online : !peer.online))
-  )
+  let ws: WebSocket
+  let stats = $state<Stats>({
+    activeModels: 0,
+    activePeers: 0,
+    averageSessionMinutes: 0,
+    totalProviderTime: 0,
+    totalRequests: 0,
+    totalRequestsToday: 0,
+    totalSessions: 0,
+    uniquePeerCount: 0
+  })
+
+  let filterStatus = $state('all')
+  let peers: any[] = $state([])
 
   onMount(() => {
-    ws = new WebSocket('wss://twinny.dev/ws')
-
+    ws = new WebSocket('http://localhost:4005/ws')
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      activePeers = data.activePeers
-      activeModels = data.activeModels
-      peers = sortPeers(data.allPeers).filter((peer) => peer.points > 1)
-    }
+      peers = data.allPeers
 
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error)
+      stats = {
+        averageSessionMinutes: data.stats.averageSessionMinutes,
+        totalProviderTime: data.stats.totalProviderTime,
+        totalRequests: data.stats.totalRequests,
+        totalRequestsToday: data.stats.totalRequestsToday,
+        totalSessions: data.stats.totalSessions,
+        activePeers: data.activePeers,
+        activeModels: data.activeModels,
+        uniquePeerCount: data.uniquePeerCount
+      }
+      console.log(stats)
     }
   })
 
@@ -58,17 +67,38 @@
       </p>
     </div>
 
-    <div class="mb-8">
-      <h3 class="text-2xl font-semibold mb-4">{$t('common.active_connections')}</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="bg-stone-800 p-6 rounded-lg">
-          <p class="text-sm font-medium mb-2">{$t('common.active_peers')}</p>
-          <p class="text-3xl font-bold">{activePeers}</p>
-        </div>
-        <div class="bg-stone-800 p-6 rounded-lg">
-          <p class="text-sm font-medium mb-2">{$t('common.active_models')}</p>
-          <p class="text-3xl font-bold">{activeModels}</p>
-        </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.active_peers')}</p>
+        <p class="text-3xl font-bold">{stats.activePeers}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.active_models')}</p>
+        <p class="text-3xl font-bold">{stats.activeModels}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.unique_peer_count')}</p>
+        <p class="text-3xl font-bold">{stats.uniquePeerCount}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.average_session_duration')}</p>
+        <p class="text-3xl font-bold">{stats.averageSessionMinutes}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.total_provider_time')}</p>
+        <p class="text-3xl font-bold">{stats.totalProviderTime}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.total_requests')}</p>
+        <p class="text-3xl font-bold">{stats.totalRequests}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.total_requests_today')}</p>
+        <p class="text-3xl font-bold">{stats.totalRequestsToday}</p>
+      </div>
+      <div class="bg-stone-800 p-6 rounded-lg">
+        <p class="text-sm font-medium mb-2">{$t('common.total_sessions')}</p>
+        <p class="text-3xl font-bold">{stats.totalSessions}</p>
       </div>
     </div>
 
@@ -111,12 +141,12 @@
             <th class="px-2 py-3 text-left text-sm font-semibold hidden lg:table-cell"
               >{$t('common.provider')}</th
             >
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.points')}</th>
+            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.up_time_minutes')}</th>
             <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.chat')}</th>
           </tr>
         </thead>
         <tbody>
-          {#each filteredPeers as peer}
+          {#each peers as peer}
             <tr class="border-t border-stone-700 hover:bg-stone-700/50 transition-colors">
               <td class="px-2 py-3">{getShortId(peer.model_name)}</td>
               <td class="px-2 py-3">{getShortId(peer.name, 5, 5)}</td>
@@ -132,7 +162,7 @@
               >
               <td class="px-2 py-3 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
               <td class="px-2 py-3">
-                <span class="font-medium">{peer.points || 0}</span>
+                <span class="font-medium">{peer.duration_minutes || 0}</span>
               </td>
               <td class="px-2 py-3">
                 <span class="font-medium">
