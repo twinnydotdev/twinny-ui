@@ -27,7 +27,6 @@
     uniquePeerCount: 0
   })
 
-  let filterStatus = $state('all')
   let peers: any[] = $state([])
 
   onMount(() => {
@@ -101,88 +100,86 @@
       </div>
     </div>
 
-    <div class="mb-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-2xl font-semibold">{$t('common.providers')}</h3>
-        <div class="flex gap-2">
-          <button
-            class={`px-3 py-1 rounded-md transition-colors ${filterStatus === 'all' ? 'bg-stone-700 text-white' : 'bg-stone-800 text-gray-400 hover:bg-stone-700'}`}
-            onclick={() => (filterStatus = 'all')}
-          >
-            All
-          </button>
-          <button
-            class={`px-3 py-1 rounded-md transition-colors ${filterStatus === 'online' ? 'bg-stone-700 text-green-500' : 'bg-stone-800 text-gray-400 hover:bg-stone-700'}`}
-            onclick={() => (filterStatus = 'online')}
-          >
-            Online
-          </button>
-          <button
-            class={`px-3 py-1 rounded-md transition-colors ${filterStatus === 'offline' ? 'bg-stone-700 text-red-500' : 'bg-stone-800 text-gray-400 hover:bg-stone-700'}`}
-            onclick={() => (filterStatus = 'offline')}
-          >
-            Offline
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="overflow-x-auto">
-      <table class="w-full min-w-full bg-stone-800 rounded-lg overflow-hidden text-sm layout">
-        <thead class="bg-stone-700">
-          <tr>
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.model')}</th>
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.name')}</th>
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.online')}</th>
-            <th class="px-2 py-3 text-left text-sm font-semibold hidden xl:table-cell"
-              >{$t('common.data_collected')}</th
-            >
-            <th class="px-2 py-3 text-left text-sm font-semibold hidden lg:table-cell"
-              >{$t('common.provider')}</th
-            >
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.up_time_minutes')}</th>
-            <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.chat')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each peers as peer}
-            <tr class="border-t border-stone-700 hover:bg-stone-700/50 transition-colors">
-              <td class="px-2 py-3">{getShortId(peer.model_name)}</td>
-              <td class="px-2 py-3">{getShortId(peer.name, 5, 5)}</td>
-              <td class="px-2 py-3">
-                <span class="inline-flex items-center px-2 py-1 rounded-full font-medium">
-                  <span class={peer.online ? 'text-green-600' : 'text-red-600'}
-                    >{peer.online ? '✔' : '✕'}</span
-                  >
-                </span>
-              </td>
-              <td class="px-2 py-3 hidden xl:table-cell"
-                >{peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}</td
-              >
-              <td class="px-2 py-3 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
-              <td class="px-2 py-3">
-                <span class="font-medium">{peer.duration_minutes || 0}</span>
-              </td>
-              <td class="px-2 py-3">
-                <span class="font-medium">
+    <div class="space-y-4 md:space-y-0">
+      <div class="hidden md:block overflow-x-auto">
+        <table class="w-full bg-stone-800 rounded-lg overflow-hidden text-sm">
+          <thead class="bg-stone-700">
+            <tr>
+              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.model')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.name')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.online')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold hidden xl:table-cell">{$t('common.data_collected')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold hidden lg:table-cell">{$t('common.provider')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.up_time_minutes')}</th>
+              <th class="px-2 py-3 text-left text-sm font-semibold">{$t('common.chat')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each peers as peer}
+              <tr class="border-t border-stone-700 hover:bg-stone-700/50 transition-colors">
+                <td class="px-2 py-3">{getShortId(peer.model_name)}</td>
+                <td class="px-2 py-3">{getShortId(peer.name, 5, 5)}</td>
+                <td class="px-2 py-3">
+                  <span class={peer.online ? 'text-green-600' : 'text-red-600'}>
+                    {peer.online ? '✔' : '✕'}
+                  </span>
+                </td>
+                <td class="px-2 py-3 hidden xl:table-cell">
+                  {peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}
+                </td>
+                <td class="px-2 py-3 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
+                <td class="px-2 py-3">{peer.duration_minutes || 0}</td>
+                <td class="px-2 py-3">
                   {#if peer.online}
                     <a href="/chat?model={peer.model_name}">
-                      <button
-                        class="px-3 py-1 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors"
-                      >
+                      <button class="px-3 py-1 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors">
                         {$t('common.chat')}
                       </button>
                     </a>
-                  {/if}
-                  {#if !peer.online}
+                  {:else}
                     {$t('common.offline')}
                   {/if}
-                </span>
-              </td>
-            </tr>
-          {/each}
-        </tbody>
-      </table>
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="md:hidden space-y-4">
+        {#each peers as peer}
+          <div class="bg-stone-800 p-4 rounded-lg space-y-2">
+            <div class="flex justify-between items-center">
+              <div>
+                <div class="text-xs text-stone-400">{$t('common.model')}</div>
+                <div class="font-medium">{getShortId(peer.model_name)}</div>
+              </div>
+              <span class={peer.online ? 'text-green-600' : 'text-red-600'}>
+                {peer.online ? '✔' : '✕'}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <div class="text-xs text-stone-400">{$t('common.name')}</div>
+                <div>{getShortId(peer.name, 5, 5)}</div>
+              </div>
+              <div>
+                <div class="text-xs text-stone-400">{$t('common.up_time_minutes')}</div>
+                <div>{peer.duration_minutes || 0}</div>
+              </div>
+            </div>
+
+            {#if peer.online}
+              <a href="/chat?model={peer.model_name}" class="block mt-2">
+                <button class="w-full px-3 py-2 rounded-md bg-green-700 text-white hover:bg-green-600 transition-colors">
+                  {$t('common.chat')}
+                </button>
+              </a>
+            {/if}
+          </div>
+        {/each}
+      </div>
     </div>
 
     <h3 class="text-2xl font-semibold mb-4 mt-6">{$t('common.become_a_provider')}</h3>
