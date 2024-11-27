@@ -31,7 +31,7 @@
   let peers: any[] = $state([])
 
   onMount(() => {
-    ws = new WebSocket('http://localhost:4005/ws')
+    ws = new WebSocket('wss://twinny.dev/ws')
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       peers = data.allPeers
