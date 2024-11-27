@@ -3,7 +3,6 @@
   import { onMount, onDestroy } from 'svelte'
   import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE } from '$lib/const'
   import { getShortId } from '$lib/utils'
-  import type { DbPeer } from '$lib/types'
 
   interface Stats {
     activeModels: number
