@@ -3,6 +3,7 @@
   import { t } from '$lib/translations'
   import Analytics from '$lib/analytics/index.svelte'
   import '../app.postcss'
+  import '@fontsource/geist-sans'
 </script>
 
 <svelte:head>

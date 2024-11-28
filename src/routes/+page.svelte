@@ -15,7 +15,7 @@
     src={logo}
   />
   <h2
-    class="flex font-medium grow items-center justify-center pt-10 pb-4 text-white text-4xl mx-auto max-w-xl text-center leading-normal"
+    class="flex items-center justify-center pt-10 pb-4 text-white text-xl mx-auto max-w-xl text-center leading-normal"
   >
     {$t('common.subtitle')}
   </h2>
@@ -25,7 +25,7 @@
     </a>
     <a href="/symmetry" target="_blank" rel="noreferrer noopener">
       <button class="font-bold py-3 px-6 rounded transition-all duration-200 bg-stone-500">
-        {$t('common.symmetry')} / {$t('common.chat')}
+        {$t('common.try-symmetry')}
       </button>
     </a>
   </div>
