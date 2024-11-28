@@ -50,7 +50,7 @@
   "subscribe_label": "Subscribe for updates",
   "subscribe_placeholder": "Your email address",
   "subscribe": "Subscribe",
-  "subtitle": "The free and private AI extension for Visual Studio Code and  of the symmetry inference network.",
+  "subtitle": "The free and private AI extension for Visual Studio Code and home of the symmetry inference network.",
   "symmetry_cli": "You can also run the Symmetry client from the command line using the CLI.",
   "symmetry_description": "Symmetry is the peer-to-peer network for Twinny. It enables users to connect with each other and share computational resources, enhancing collaboration and distributed processing capabilities.",
   "symmetry_installation_cli": "install the Symmetry CLI.",
