@@ -63,7 +63,7 @@
   "thinking": "Thinking",
   "this_interface": "This is a chat interface powered by Symmetry - a network that connects users to AI. Your messages are sent to a central server which uses peer-to-peer networking to communicate with AI providers. Once processed, responses flow back through the same path to reach you here.",
   "title": "twinny",
-  "totalSessions": "total sessions",
+  "totalSessions": "Total sessions",
   "uniquePeerCount": "Unique peers (all time)",
   "yes": "Yes"
 }
