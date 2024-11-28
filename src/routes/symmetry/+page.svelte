@@ -92,6 +92,27 @@
       {/each}
     </div>
 
+    <div class="space-y-6">
+      <h3 class="text-2xl font-bold">{$t('common.become_a_provider')}</h3>
+      <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg">
+        <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
+        <div class="space-y-4">
+          {#each [[URL_SYMMETRY_CORE, 'symmetry_installation', '📦'], [URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
+            <a href={url} class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="p-2 bg-rose-500/10 rounded-lg">
+                  <div class="w-6 h-6 text-rose-500">{icon}</div>
+                </div>
+                <div>
+                  <p class="font-medium">{$t(`common.${key}`)}</p>
+                </div>
+              </div>
+            </a>
+          {/each}
+        </div>
+      </div>
+    </div>
+
     <div class="bg-stone-800 rounded-xl overflow-hidden shadow-lg">
       <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-sm">
@@ -165,25 +186,9 @@
         {/each}
       </div>
     </div>
-
-    <div class="space-y-6">
-      <h3 class="text-2xl font-bold">{$t('common.become_a_provider')}</h3>
-      <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg">
-        <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
-        <div class="space-y-4">
-          {#each [[URL_SYMMETRY_CORE, 'symmetry_installation', '📦'], [URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
-            <a href={url} class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors">
-              <div class="flex items-center gap-4">
-                <div class="p-2 bg-rose-500/10 rounded-lg">
-                  <div class="w-6 h-6 text-rose-500">{icon}</div>
-                </div>
-                <div>
-                  <p class="font-medium">{$t(`common.${key}`)}</p>
-                </div>
-              </div>
-            </a>
-          {/each}
-        </div>
+    <div>
+      <div class="flex justify-end items-center mt-8 text-rose-500 font-medium">
+        <a href='/privacy'>{$t('common.privacy_policy')}</a>
       </div>
     </div>
   </div>
