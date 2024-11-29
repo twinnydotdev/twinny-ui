@@ -97,7 +97,7 @@
       <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg">
         <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
         <div class="space-y-4">
-          {#each [[URL_SYMMETRY_CORE, 'symmetry_installation', '📦'], [URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
+          {#each [[URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
             <a href={url} class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors">
               <div class="flex items-center gap-4">
                 <div class="p-2 bg-rose-500/10 rounded-lg">
