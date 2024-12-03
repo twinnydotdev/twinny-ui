@@ -32,8 +32,8 @@
 
   onMount(() => {
     ws = new WebSocket('wss://twinny.dev/ws')
-    ws.onopen = () => connectionStatus = 'connected'
-    ws.onclose = () => connectionStatus = 'disconnected'
+    ws.onopen = () => (connectionStatus = 'connected')
+    ws.onclose = () => (connectionStatus = 'disconnected')
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       peers = data.allPeers
@@ -98,7 +98,10 @@
         <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
         <div class="space-y-4">
           {#each [[URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
-            <a href={url} class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors">
+            <a
+              href={url}
+              class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors"
+            >
               <div class="flex items-center gap-4">
                 <div class="p-2 bg-rose-500/10 rounded-lg">
                   <div class="w-6 h-6 text-rose-500">{icon}</div>
@@ -118,28 +121,43 @@
         <table class="w-full text-sm">
           <thead class="bg-stone-700">
             <tr>
-              {#each ['model', 'name', 'online', 'data_collected', 'provider', 'up_time_minutes', 'chat'] as header}
-                <th class="px-6 py-4 text-left font-semibold {header === 'data_collected' ? 'hidden xl:table-cell' : ''} {header === 'provider' ? 'hidden lg:table-cell' : ''}">{$t(`common.${header}`)}</th>
+              {#each ['model', 'name', 'online', 'provider', 'total_requests', 'tokens_per_sec', 'total_tokens', 'up_time_minutes', 'chat'] as header}
+                <th
+                  class="px-6 py-4 text-left font-semibold {header === 'provider'
+                    ? 'hidden lg:table-cell'
+                    : ''} {header === 'tokens_per_sec' ? 'hidden xl:table-cell' : ''}"
+                  >{$t(`common.${header}`)}</th
+                >
               {/each}
             </tr>
           </thead>
           <tbody class="divide-y divide-stone-700">
             {#each peers as peer}
               <tr class="hover:bg-stone-700/30 transition-colors">
-                <td class="px-6 py-4">{getShortId(peer.model_name)}</td>
-                <td class="px-6 py-4">{getShortId(peer.name, 5, 5)}</td>
+                <td class="px-6 py-4">{getShortId(peer.model_name, 10, 10)}</td>
+                <td class="px-6 py-4">{getShortId(peer.name, 10, 10)}</td>
                 <td class="px-6 py-4">
-                  <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}">
+                  <span
+                    class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online
+                      ? 'bg-green-500/10 text-green-500'
+                      : 'bg-red-500/10 text-red-500'}"
+                  >
                     {peer.online ? 'Online' : 'Offline'}
                   </span>
                 </td>
-                <td class="px-6 py-4 hidden xl:table-cell">{peer.data_collection_enabled ? $t('common.yes') : $t('common.no')}</td>
                 <td class="px-6 py-4 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
+                <td class="px-6 py-4">{peer.total_requests || 0}</td>
+                <td class="px-6 py-4 hidden xl:table-cell"
+                  >{Math.round(peer.avg_tokens_per_second || 0)}</td
+                >
+                <td class="px-6 py-4">{peer.total_tokens || 0}</td>
                 <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
                 <td class="px-6 py-4">
                   {#if peer.online}
                     <a href="/chat?model={peer.model_name}">
-                      <button class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
+                      <button
+                        class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
+                      >
                         {$t('common.chat')}
                       </button>
                     </a>
@@ -159,7 +177,7 @@
             <div class="flex justify-between items-start">
               <div>
                 <p class="font-medium">{getShortId(peer.model_name)}</p>
-                <p class="text-sm text-stone-400">{getShortId(peer.name, 5, 5)}</p>
+                <p class="text-sm text-stone-400">{peer.name}</p>
               </div>
               <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}">
                 {peer.online ? 'Online' : 'Offline'}
@@ -171,13 +189,21 @@
                 <p>{peer.provider || 'unknown'}</p>
               </div>
               <div>
+                <p class="text-stone-400">{$t('common.total_requests')}</p>
+                <p>{peer.total_requests || 0}</p>
+              </div>
+              <div>
+                <p class="text-stone-400">{$t('common.total_tokens')}</p>
+                <p>{peer.total_tokens || 0}</p>
+              </div>
+              <div>
                 <p class="text-stone-400">{$t('common.up_time_minutes')}</p>
                 <p>{peer.duration_minutes || 0}</p>
               </div>
             </div>
             {#if peer.online}
               <a href="/chat?model={peer.model_name}">
-                <button class="w-full px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
+                <button class="w-full mt-3 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
                   {$t('common.chat')}
                 </button>
               </a>
@@ -188,7 +214,7 @@
     </div>
     <div>
       <div class="flex justify-end items-center mt-8 text-rose-500 font-medium">
-        <a href='/privacy'>{$t('common.privacy_policy')}</a>
+        <a href="/privacy">{$t('common.privacy_policy')}</a>
       </div>
     </div>
   </div>
