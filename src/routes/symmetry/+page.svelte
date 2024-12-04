@@ -1,7 +1,7 @@
 <script lang="ts">
   import { t } from '$lib/translations'
   import { onMount, onDestroy } from 'svelte'
-  import { URL_SYMMETRY_CLI, URL_SYMMETRY_CORE } from '$lib/const'
+  import { URL_GITHUB } from '$lib/const'
   import { getShortId } from '$lib/utils'
 
   interface Stats {
@@ -51,6 +51,20 @@
   })
 
   onDestroy(() => ws?.close())
+
+  let unixCopied = false
+  let windowsCopied = false
+
+  const copyToClipboard = async (command: string, type: 'unix' | 'windows') => {
+    await navigator.clipboard.writeText(command)
+    if (type === 'unix') {
+      unixCopied = true
+      setTimeout(() => (unixCopied = false), 2000)
+    } else {
+      windowsCopied = true
+      setTimeout(() => (windowsCopied = false), 2000)
+    }
+  }
 </script>
 
 <div class="min-h-screen bg-stone-900 text-stone-100 p-6">
@@ -94,17 +108,17 @@
 
     <div class="space-y-6">
       <h3 class="text-2xl font-bold">{$t('common.become_a_provider')}</h3>
-      <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg">
-        <p class="text-stone-300 mb-6">{$t('common.become_a_provider_description')}</p>
+      <div class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-xl p-6 shadow-lg space-y-6">
+        <p class="text-stone-300">{$t('common.become_a_provider_description')}</p>
         <div class="space-y-4">
-          {#each [[URL_SYMMETRY_CLI, 'symmetry_installation_cli', '💻']] as [url, key, icon]}
+          {#each [[URL_GITHUB, 'symmetry_github_repo', '<>']] as [url, key, icon]}
             <a
               href={url}
               class="block p-4 bg-stone-700/50 rounded-lg hover:bg-stone-700 transition-colors"
             >
               <div class="flex items-center gap-4">
                 <div class="p-2 bg-rose-500/10 rounded-lg">
-                  <div class="w-6 h-6 text-rose-500">{icon}</div>
+                  <div class="text-rose-500">{icon}</div>
                 </div>
                 <div>
                   <p class="font-medium">{$t(`common.${key}`)}</p>
@@ -179,7 +193,11 @@
                 <p class="font-medium">{getShortId(peer.model_name)}</p>
                 <p class="text-sm text-stone-400">{peer.name}</p>
               </div>
-              <span class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}">
+              <span
+                class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online
+                  ? 'bg-green-500/10 text-green-500'
+                  : 'bg-red-500/10 text-red-500'}"
+              >
                 {peer.online ? 'Online' : 'Offline'}
               </span>
             </div>
@@ -203,7 +221,9 @@
             </div>
             {#if peer.online}
               <a href="/chat?model={peer.model_name}">
-                <button class="w-full mt-3 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors">
+                <button
+                  class="w-full mt-3 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
+                >
                   {$t('common.chat')}
                 </button>
               </a>
