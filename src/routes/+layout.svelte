@@ -1,9 +1,25 @@
 <script lang="ts">
   import { URL_DOCS, URL_GITHUB, URL_TWINNYDOTDEV } from '$lib/const'
-  import { t } from '$lib/translations'
+  import { t, locale } from '$lib/translations'
   import Analytics from '$lib/analytics/index.svelte'
   import '../app.postcss'
   import '@fontsource/geist-sans'
+
+  const languages = [
+    { code: 'en', label: 'en' },
+    { code: 'zh-CN', label: '简' },
+    { code: 'zh-TW', label: '繁' },
+    { code: 'ja', label: '日' },
+    { code: 'ko', label: '한' },
+    { code: 'fr', label: 'fr' },
+    { code: 'de', label: 'de' },
+  ]
+
+  function handleLanguageChange(event: Event) {
+    const select = event.target as HTMLSelectElement
+    locale.set(select.value)
+    document.cookie = `lang=${select.value} ;`
+  }
 </script>
 
 <svelte:head>
@@ -62,13 +78,6 @@
     <nav aria-label="Main navigation" class="flex items-center">
       <a
         class="ml-3 hover:text-gray-100 transition-colors"
-        href="/symmetry"
-        aria-label="Symmetry inference network"
-      >
-        {$t('common.symmetry')}
-      </a>
-      <a
-        class="ml-3 hover:text-gray-100 transition-colors"
         href={URL_GITHUB}
         target="_blank"
         rel="noopener noreferrer nofollow"
@@ -85,6 +94,18 @@
       >
         {$t('common.docs')}
       </a>
+      <select
+        class="ml-3 bg-[#1c1917] rounded transition-colors focus:outline-none"
+        on:change={handleLanguageChange}
+        value={$locale}
+        aria-label="Select language"
+      >
+        {#each languages as { code, label }}
+          <option class="bg-[#1c1917]" value={code}>
+            {label}
+          </option>
+        {/each}
+      </select>
     </nav>
   </header>
 
