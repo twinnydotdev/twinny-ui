@@ -21,7 +21,9 @@
   </h2>
   <div class="flex grow gap-3 items-center justify-center pb-10">
     <a href={URL_VSCODE_MARKETPLACE} target="_blank" rel="noreferrer noopener">
-      <Button buttonText={$t('common.install')} />
+      <button class="font-bold py-3 px-6 rounded transition-all duration-200 bg-rose-600">
+        {$t('common.install')}
+      </button>
     </a>
     <a href="/symmetry" target="_blank" rel="noreferrer noopener">
       <button class="font-bold py-3 px-6 rounded transition-all duration-200 bg-stone-500">
