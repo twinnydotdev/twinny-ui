@@ -26,7 +26,7 @@
       tabindex="0"
       aria-label="Click to copy Bitcoin address"
     >
-      <code class="font-mono text-sm text-gray-300 break-all">
+      <code class="font-mono text-xs text-gray-300 break-all">
         {bitcoinAddress}
       </code>
 
