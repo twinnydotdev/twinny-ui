@@ -170,9 +170,6 @@
 <div
   class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
-  <Motion animate={{ opacity }} transition={{ duration: 3 }} let:motion>
-    <div class="opacity-0">HEY</div>
-  </Motion>
   {#if messages.length}
     <div class="flex justify-between my-2 w-full">
       <button
@@ -199,7 +196,7 @@
   {/if}
   {#if !messages.length && !completion}
     <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
-      <div class="opacity-0 text-center text-white mt-56" use:motion>
+      <div class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400" use:motion>
         <svg
           class="h-20 w-auto mx-auto mb-4"
           xmlns="http://www.w3.org/2000/svg"

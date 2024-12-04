@@ -7,39 +7,104 @@
 </script>
 
 <svelte:head>
-  <title>twinny</title>
-  <meta name="description" content="The free and private AI extension for Visual Studio Code." />
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <title>Twinny - Privacy-First AI Extension & Symmetry Network</title>
+  <meta name="title" content="Twinny - Free AI Extension for VS Code & Symmetry Network" />
+  <meta
+    name="description"
+    content="The free and private AI extension for Visual Studio Code and home of the Symmetry inference network. Enhance your development with privacy-focused AI assistance."
+  />
+  <meta
+    name="keywords"
+    content="VS Code extension, AI assistant, Symmetry inference network, private AI, code completion, developer tools, privacy-focused AI"
+  />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Twinny - Private AI Extension & Symmetry Network" />
+  <meta
+    property="og:description"
+    content="Free, privacy-focused AI extension for VS Code. Home of the Symmetry inference network for enhanced development workflows."
+  />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Twinny - VS Code AI Extension & Symmetry" />
+  <meta
+    name="twitter:description"
+    content="Free and private AI coding assistant, featuring the Symmetry inference network for smarter development."
+  />
+
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Twinny",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "VS Code",
+      "description": "Free and private AI extension for Visual Studio Code, featuring the Symmetry inference network for enhanced development"
+    }
+  </script>
 </svelte:head>
 
 <Analytics />
+
 <div class="flex h-[100vh] flex-col p-2 text-gray-300">
   <header class="flex justify-between items-center px-4 py-2">
-    <a href="/">
-      <h1 class="text-xl font-bold flex-grow select-none">{$t('common.title')}</h1>
+    <a href="/" aria-label="Home">
+      <h1
+        class="text-xl font-bold flex-grow select-none"
+        itemscope
+        itemtype="http://schema.org/SoftwareApplication"
+      >
+        <span itemprop="name">{$t('common.title')}</span>
+      </h1>
     </a>
-    <div>
-      <a class="ml-3" href="/symmetry">{$t('common.symmetry')}</a>
-      <a class="ml-3" href={URL_GITHUB} target="_blank" rel="noopener noreferrer nofollow"
-        >{$t('common.github')}</a
+    <nav aria-label="Main navigation" class="flex items-center">
+      <a
+        class="ml-3 hover:text-gray-100 transition-colors"
+        href="/symmetry"
+        aria-label="Symmetry inference network"
       >
-      <a class="ml-3" href={URL_DOCS} target="_blank" rel="noopener noreferrer nofollow"
-        >{$t('common.docs')}</a
+        {$t('common.symmetry')}
+      </a>
+      <a
+        class="ml-3 hover:text-gray-100 transition-colors"
+        href={URL_GITHUB}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        aria-label="GitHub repository"
       >
-    </div>
+        {$t('common.github')}
+      </a>
+      <a
+        class="ml-3 hover:text-gray-100 transition-colors"
+        href={URL_DOCS}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        aria-label="Documentation"
+      >
+        {$t('common.docs')}
+      </a>
+    </nav>
   </header>
 
-  <div class="flex grow flex-col items-center justify-center">
+  <main class="flex grow flex-col items-center justify-center">
     <slot />
-  </div>
+  </main>
 
   <footer class="flex justify-between items-center w-full px-4 py-2">
-    <a href="/sponsor">
-      <span class="text-red-500 mr-1">🖤</span>
+    <a href="/sponsor" class="hover:text-gray-100 transition-colors" aria-label="Sponsor project">
+      <span class="text-red-500 mr-1" aria-hidden="true">🖤</span>
       <span>{$t('common.sponsor')}</span>
     </a>
-    <a href={URL_TWINNYDOTDEV} target="_blank" rel="noopener noreferrer nofollow"
-      >{$t('common.contact')}</a
+    <a
+      href={URL_TWINNYDOTDEV}
+      class="hover:text-gray-100 transition-colors"
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      aria-label="Contact us"
     >
+      {$t('common.contact')}
+    </a>
   </footer>
 </div>
