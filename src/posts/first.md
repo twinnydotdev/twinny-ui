@@ -1,7 +1,7 @@
 ---
 title: First post
 date: 2024-12-06
-excerpt: This is a post about twinny and other shit...
+excerpt: This is a post about twinny and other stuff...
 readingTime: 1
 author: richard
 tags: 
@@ -12,7 +12,7 @@ tags:
 
 # First post
 
-This is the first of post about twinny and other shit.  For some background, twinny was started as a personal project by me, rj, a shitty software engineer from the police state known as the UK.  I was looking for something to help my with my daily grind as a code monkey which was similar to Github Copilot but less overlord and free (because im cheap).
+This is the first of post about twinny and other shit.  For some background, twinny was started as a personal project by me, rj, an average software engineer from the police state known as the UK.  I was looking for something to help a code monkey which was similar to Github Copilot but less overlord and free (because im cheap).
 
 Anyway, continue.dev did not exist and the only one was called [Faux Pilot](https://github.com/fauxpilot/fauxpilot) which is where the initial inspiration came from.  This project was using Nvidia Triton as the inference engine, but it was not easy to setup if I remember correctly, anyway I wrote my own small python server using FastAPI and then quickly moved onto Ollama because it was better.  Faux Pilot also didn't have a chat interface which was something I felt was missing for local models etc in Visual Studio Code.
 
