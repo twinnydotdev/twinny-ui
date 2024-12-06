@@ -1,9 +1,9 @@
 ---
 title: What is symmetry anyway?
 date: 2024-12-07
-excerpt: What is symmetry anyway? - it's an open-source project I built to make AI infrastructure distributed. Using some p2p tech from Holepunch called Hyperswarm, it lets people share computing power over a janky network.
+excerpt: What is symmetry anyway? - it's an open-source project I built to make AI infrastructure distributed. Using some p2p tech from Holepunch called Hyperswarm, it lets people share computing power for inference.
 readingTime: 12
-author: RJ
+author: rj
 tags: 
   - AI Infrastructure
   - Distributed Computing
@@ -16,17 +16,17 @@ tags:
 
 # What is symmetry anyway?
 
-Alright, let me tell you about this thing I've been working on called Symmetry. If you're anything like me - a shitty software engineer trying to make AI stuff work by copying and pasting from Claude you might find this interesting.
+Alright, let me tell you about this thing I've been working on called Symmetry. If you're anything like me - an average software engineer trying to make AI stuff work by copying and pasting from Claude you might find this interesting.
 
 It's an open-source project I built to make AI infrastructure distributed. Using some p2p tech from [Holepunch](https://holepunch.to) called [Hyperswarm](https://github.com/holepunchto/hyperswarm) with some added jankyness on top of it.
 
 ## What's This All About?
 
-So here's the story - I got tired of seeing AI infrastructure being this massive pain in the ass that either costs a fortune or requires you to sacrifice your firstborn to some tech overlord. I mean, have you seen the prices these days? It's mental, $200 a month for ShitGPT Pro, come on...
+So here's the story - I got tired of seeing AI infrastructure being this massive pain in the ass that either costs a fortune or requires you to sacrifice your firstborn to some tech overlord. I mean, have you seen the prices these days? It's mental, $200 a month for ChatGPT Pro, come on...
 
 Symmetry is basically my attempt to do something about it. Think of it like a peer-to-peer network where people can share their computing power for AI stuff. Kind of like torrenting, but for machine learning.
 
-## Technical shit
+## Technical jargon
 
 Right, so under the hood, this thing uses [Hyperswarm](https://github.com/holepunchto/hyperswarm) - it's this p2p networking stack from the folks at [Holepunch](https://holepunch.to). Don't worry if you've never heard of it, just know that it lets computers talk to each other without needing some central server.
 
@@ -68,7 +68,7 @@ systemMessage: "whatever you want really"
 userSecret: "make-this-unique-you-muppet"
 ```
 
-After all that shit, run it and see what happens!
+After all that fun stuff, run it and see what happens!
 
 ```
 symmetry-cli
@@ -129,7 +129,6 @@ Finally, symmetry isn't perfect, but it's trying to make AI infrastructure more 
 
 If you want to know more:
 - [GitHub Repo](https://github.com/twinnydotdev/symmetry-core)
-- [Models List](https://twinny.dev/symmetry)
 - [Hyperswarm Docs](https://github.com/holepunchto/hyperswarm)
 - [Holepunch](https://holepunch.to)
 - [Web Symmetry](https://twinny.dev/symmetry) Try symmetry in the web, I made that work at least.
