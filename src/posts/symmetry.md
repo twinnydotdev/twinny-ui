@@ -24,7 +24,7 @@ It's an open-source project I built to make AI infrastructure distributed. Using
 
 So here's the story - I got tired of seeing AI infrastructure being this massive pain in the ass that either costs a fortune or requires you to sacrifice your firstborn to some tech overlord. I mean, have you seen the prices these days? It's mental, $200 a month for ShitGPT Pro, come on...
 
-Symmetry is basically my attempt to something about it. Think of it like a peer-to-peer network where people can share their computing power for AI stuff. Kind of like torrenting, but for machine learning.
+Symmetry is basically my attempt to do something about it. Think of it like a peer-to-peer network where people can share their computing power for AI stuff. Kind of like torrenting, but for machine learning.
 
 ## Technical shit
 
