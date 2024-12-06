@@ -31,7 +31,7 @@
   let connectionStatus = $state<'connected' | 'disconnected'>('disconnected')
 
   onMount(() => {
-    ws = new WebSocket('https://twinny.dev/ws')
+    ws = new WebSocket('http://localhost:4005/ws')
     ws.onopen = () => (connectionStatus = 'connected')
     ws.onclose = () => (connectionStatus = 'disconnected')
     ws.onmessage = (event) => {

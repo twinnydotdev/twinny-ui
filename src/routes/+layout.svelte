@@ -12,7 +12,7 @@
     { code: 'ja', label: '日' },
     { code: 'ko', label: '한' },
     { code: 'fr', label: 'fr' },
-    { code: 'de', label: 'de' },
+    { code: 'de', label: 'de' }
   ]
 
   function handleLanguageChange(event: Event) {
@@ -65,7 +65,7 @@
 <Analytics />
 
 <div class="flex h-[100vh] flex-col p-2 text-gray-300">
-  <header class="flex justify-between items-center px-4 py-2">
+  <header class="flex justify-between items-center px-2 py-2">
     <a href="/" aria-label="Home">
       <h1
         class="text-xl font-bold flex-grow select-none"
@@ -77,16 +77,14 @@
     </a>
     <nav aria-label="Main navigation" class="flex items-center">
       <a
-        class="ml-3 hover:text-gray-100 transition-colors"
-        href={URL_GITHUB}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        aria-label="GitHub repository"
+        class="hover:text-gray-100  mt-0.5 transition-colors"
+        href="/symmetry"
+        aria-label="Documentation"
       >
-        {$t('common.github')}
+        {$t('common.symmetry')}
       </a>
       <a
-        class="ml-3 hover:text-gray-100 transition-colors"
+        class="ml-3 mt-0.5 hover:text-gray-100 transition-colors"
         href={URL_DOCS}
         target="_blank"
         rel="noopener noreferrer nofollow"
@@ -113,19 +111,39 @@
     <slot />
   </main>
 
-  <footer class="flex justify-between items-center w-full px-4 py-2">
+  <footer class="flex justify-between items-center w-full px-2 py-2">
     <a href="/sponsor" class="hover:text-gray-100 transition-colors" aria-label="Sponsor project">
       <span class="text-red-500 mr-1" aria-hidden="true">🖤</span>
       <span>{$t('common.sponsor')}</span>
     </a>
-    <a
-      href={URL_TWINNYDOTDEV}
-      class="hover:text-gray-100 transition-colors"
-      target="_blank"
-      rel="noopener noreferrer nofollow"
-      aria-label="Contact us"
-    >
-      {$t('common.contact')}
-    </a>
+    <div>
+      <a
+        href='/blog'
+        class="ml-3 hover:text-gray-100 transition-colors"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        aria-label="Contact us"
+      >
+        {$t('common.blog')}
+      </a>
+      <a
+        class="ml-3 hover:text-gray-100 transition-colors"
+        href={URL_GITHUB}
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        aria-label="GitHub repository"
+      >
+        {$t('common.github')}
+      </a>
+      <a
+        href={URL_TWINNYDOTDEV}
+        class="ml-3 hover:text-gray-100 transition-colors"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        aria-label="Contact us"
+      >
+        {$t('common.contact')}
+      </a>
+    </div>
   </footer>
 </div>

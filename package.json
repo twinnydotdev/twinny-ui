@@ -49,6 +49,7 @@
   "dependencies": {
     "@fontsource/geist-sans": "^5.1.0",
     "dotenv": "^16.4.5",
+    "gray-matter": "^4.0.3",
     "highlight.js": "^11.10.0",
     "marked": "^15.0.1",
     "marked-highlight": "^2.2.1",
