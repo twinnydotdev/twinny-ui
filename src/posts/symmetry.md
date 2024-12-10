@@ -38,7 +38,7 @@ Here's what makes cool:
 
 ## Running It
 
-It's actually pretty simple to set up. Just paste this shit in your terminal...You need Node.js installed btw.
+It's actually pretty simple to set up. Just paste this in your terminal...You need Node.js installed btw.
 
 ```bash
 # If you're on Unix because you're cool:
@@ -103,7 +103,7 @@ await provider.init();
 ## What's Coming Next?
 
 Look, I'm just one person working on this in between trying to keep my plants alive and remembering to eat, but here's what I'm planning:
-- Better Node.js stuff (because the current implementation is a bit shitty)
+- Better Node.js stuff (because the current implementation is a bit hacky)
 - An API gateway that doesn't suck and isn't ripe for ddos
 - Support for other AI workloads (not just chat)
 
