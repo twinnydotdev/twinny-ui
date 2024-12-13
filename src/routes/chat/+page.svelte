@@ -141,7 +141,6 @@
         langPrefix: 'hljs language-',
         highlight(code, lang) {
           const language = hljs.getLanguage(lang) ? lang : 'auto'
-          console.log(lang)
           return hljs.highlight(code, { language }).value
         }
       })

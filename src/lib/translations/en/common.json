@@ -7,7 +7,7 @@
   "averageSessionMinutes": "Average session duration (minutes)",
   "become_a_provider_description": "Become a provider and share your computational resources with the world. If you're running Ollama, LMStudio or other local AI models, join the Symmetry network to share your compute. Please be aware that Node.js 18 or later is required to install and run the Symmetry client and CLI.",
   "become_a_provider": "Become an inference provider",
-  "blog_title": "don't mind me im just ranting about",
+  "blog_title": "don't mind me im just ranting",
   "blog": "blog",
   "back_to_blog": "Back to blog",
   "chapter1_title": "I: The Tale of Symmetry",

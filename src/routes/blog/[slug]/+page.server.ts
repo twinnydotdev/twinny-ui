@@ -25,8 +25,6 @@ export const load = (({ params }: any) => {
 
     const html = marked.parse(markdownContent)
 
-    console.log(html)
-
     return {
       html,
       title: frontmatter.title,

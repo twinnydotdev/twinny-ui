@@ -163,4 +163,3 @@
     /* Rest of your styles remain unchanged */
   }
 </style>
-```
