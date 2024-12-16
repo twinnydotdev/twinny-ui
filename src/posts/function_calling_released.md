@@ -12,6 +12,8 @@ tags:
   - Release Notes
 ---
 
+# Twinny 3.20.0 - Adding Function Calling Support with Ollama
+
 I'm excited to announce the release of Twinny 3.20.0, which brings native support for Ollama's function calling capabilities! This integration allows your AI assistant to interact with tools and execute functions directly through the Ollama API, opening up new possibilities for AI-assisted development.
 
 ## Available Tools
