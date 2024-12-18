@@ -2,7 +2,7 @@
 title: Twinny 3.20.0 - Adding Function Calling Support with Ollama
 date: 2024-12-16
 excerpt: Twinny 3.20.0 introduces function/tool calling capabilities through Ollama, enabling more powerful AI-assisted development workflows with direct integration of Ollama's tool calling features.
-author: Richard
+author: rj
 tags:
   - Twinny
   - Ollama
