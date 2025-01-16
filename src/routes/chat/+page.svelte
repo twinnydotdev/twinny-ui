@@ -10,31 +10,21 @@
   let completion = $state('')
   let opacity = $state(0)
   let message = $state('')
+  let loading = $state(false)
+  let streaming = $state(false)
   let messages = $state<Array<{ role: string; content: string }>>([])
   let chatContainer: HTMLDivElement
   let inputRef: HTMLTextAreaElement
   const model = $page.url.searchParams.get('model')
 
-  export function isStreamWithDataPrefix(stringBuffer: string) {
-    return stringBuffer.startsWith('data:')
-  }
-
-  export function safeParseStreamResponse(stringBuffer: string) {
-    try {
-      if (isStreamWithDataPrefix(stringBuffer)) {
-        return JSON.parse(stringBuffer.split('data:')[1])
-      }
-      return JSON.parse(stringBuffer)
-    } catch (e) {
-      return undefined
-    }
-  }
-
   async function streamChat() {
     if (!message) return
+    loading = true
+
     try {
       messages = [...messages, { role: 'user', content: message }]
       message = ''
+      chatContainer.scrollTo({ top: chatContainer.scrollHeight })
       const response = await fetch('https://twinny.dev/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,6 +44,7 @@
       if (!response.body) return
 
       const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
+      loading = false
       await processStream(reader)
     } catch (error) {
       console.error('Stream error:', error)
@@ -62,61 +53,42 @@
 
   async function processStream(reader: ReadableStreamDefaultReader) {
     try {
+      streaming = true
+
+
       while (true) {
         const { value, done } = await reader.read()
-        if (done) break
 
-        const chunk = typeof value === 'string' ? value : new TextDecoder().decode(value)
-
-        const streamMessages = chunk
-          .split('\n')
-          .filter((line) => line.trim().length > 0)
-          .map((line) => {
-            if (line.includes('symmetryEmitterKey')) return null
-            return safeParseStreamResponse(line)
-          })
-          .filter((msg) => msg !== null)
-
-        for (const message of streamMessages) {
-          if (!message?.choices?.length) continue
-
-          const choice = message.choices[0]
-          if (!choice) continue
-
-          if (choice.delta.content) {
-            completion += choice.delta.content
-            chatContainer.scrollTo({
-              top: chatContainer.scrollHeight
-            })
-          }
-
-          if (choice.finish_reason === 'stop') {
-            console.log(completion)
-            if (completion.trim()) {
-              messages = [
-                ...messages,
-                {
-                  role: 'assistant',
-                  content: completion.trim()
-                }
-              ]
-            }
-            completion = ''
-            inputRef?.focus()
-          }
+        if (value) {
+          completion += value
         }
+
+        if (done) break;
       }
+
+      const trimmedCompletion = completion.trim()
+      if (trimmedCompletion) {
+        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
+      }
+
+      streaming = false
+      completion = ''
+
+      requestAnimationFrame(() => {
+        inputRef?.focus()
+      })
     } catch (error) {
       console.error('Error processing stream:', error)
-      if (completion.trim()) {
-        messages = [
-          ...messages,
-          {
-            role: 'assistant',
-            content: completion.trim()
-          }
-        ]
+      // Handle error case
+      const trimmedCompletion = completion.trim()
+      if (trimmedCompletion) {
+        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
       }
+      streaming = false
+      completion = ''
+      requestAnimationFrame(() => {
+        inputRef?.focus()
+      })
     }
   }
 
@@ -134,7 +106,6 @@
         langPrefix: 'hljs language-',
         highlight(code, lang) {
           const language = hljs.getLanguage(lang) ? lang : 'auto'
-          console.log(lang)
           return hljs.highlight(code, { language }).value
         }
       })
@@ -163,9 +134,6 @@
 <div
   class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
-  <Motion animate={{ opacity }} transition={{ duration: 3 }} let:motion>
-    <div class="opacity-0">HEY</div>
-  </Motion>
   {#if messages.length}
     <div class="flex justify-between my-2 w-full">
       <button
@@ -192,7 +160,7 @@
   {/if}
   {#if !messages.length && !completion}
     <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
-      <div class="opacity-0 text-center text-white mt-56" use:motion>
+      <div class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400" use:motion>
         <svg
           class="h-20 w-auto mx-auto mb-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -214,18 +182,25 @@
         <p>
           {$t('common.this_interface')}
         </p>
+        <div class="mt-8"></div>
+        <p class="mt-2">
+          {$t('common.learn_how')}
+        </p>
+        <a href="https://github.com/twinnydotdev/symmetry-cli" target="_blank">
+          <button
+            class="inline-flex items-center gap-1.5 mt-4 px-3 py-2 bg-rose-600 text-white rounded-md font-medium"
+          >
+            {$t('common.install_cli')}
+          </button>
+        </a>
       </div>
     </Motion>
   {/if}
 
   <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
     {#each messages as msg}
-      <Motion
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        let:motion
-      >
-        <div use:motion class={`w-full flex justify-end ${msg.role === 'user' ? 'opacity-0' : ''}`}>
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
+        <div use:motion class={`w-full flex ${msg.role === 'user' ? 'opacity-0 justify-end' : ''}`}>
           <div
             class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
           >
@@ -243,6 +218,46 @@
         </div>
       </Motion>
     {/if}
+    {#if loading}
+      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
+        <div use:motion class="p-2">
+          <div class="flex items-center text-wrap text-white chat-content">
+            <span>
+              {$t('common.thinking')}
+            </span>
+            <svg class="h-2 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30">
+              <circle cx="15" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0s"
+                />
+              </circle>
+              <circle cx="45" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0.2s"
+                />
+              </circle>
+              <circle cx="75" cy="15" r="5" fill="currentColor">
+                <animate
+                  attributeName="opacity"
+                  dur="1s"
+                  values="0.3;1;0.3"
+                  repeatCount="indefinite"
+                  begin="0.4s"
+                />
+              </circle>
+            </svg>
+          </div>
+        </div>
+      </Motion>
+    {/if}
   </div>
 
   <div>
@@ -250,11 +265,13 @@
       <textarea
         bind:this={inputRef}
         bind:value={message}
+        disabled={streaming}
         onkeydown={handleKeyDown}
         placeholder="How can twinny help you today?"
         class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-80"
       ></textarea>
       <button
+        disabled={streaming}
         onclick={streamChat}
         class="absolute bottom-16 right-3 px-4 py-2 text-white"
         aria-label="Send"
@@ -294,7 +311,8 @@
       font-family: 'Fira Code', monospace;
       font-size: 0.875rem;
       line-height: 1.6;
-      tab-size: 4;
+      tab-size: 2;
+      white-space: pre-wrap;
     }
 
     /* Syntax highlighting colors */
@@ -378,6 +396,7 @@
       text-decoration: none;
       border-bottom: 1px solid #9ccfd8;
     }
+
 
     :global(a:hover) {
       opacity: 0.8;
