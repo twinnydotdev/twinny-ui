@@ -17,21 +17,6 @@
   let inputRef: HTMLTextAreaElement
   const model = $page.url.searchParams.get('model')
 
-  export function isStreamWithDataPrefix(stringBuffer: string) {
-    return stringBuffer.startsWith('data:')
-  }
-
-  export function safeParseStreamResponse(stringBuffer: string) {
-    try {
-      if (isStreamWithDataPrefix(stringBuffer)) {
-        return JSON.parse(stringBuffer.split('data:')[1])
-      }
-      return JSON.parse(stringBuffer)
-    } catch (e) {
-      return undefined
-    }
-  }
-
   async function streamChat() {
     if (!message) return
     loading = true
@@ -69,61 +54,41 @@
   async function processStream(reader: ReadableStreamDefaultReader) {
     try {
       streaming = true
+
+
       while (true) {
         const { value, done } = await reader.read()
-        if (done) break
 
-        const chunk = typeof value === 'string' ? value : new TextDecoder().decode(value)
-
-        const streamMessages = chunk
-          .split('\n')
-          .filter((line) => line.trim().length > 0)
-          .map((line) => {
-            if (line.includes('symmetryEmitterKey')) return null
-            return safeParseStreamResponse(line)
-          })
-          .filter((msg) => msg !== null)
-
-        for (const message of streamMessages) {
-          if (!message?.choices?.length) continue
-
-          const choice = message.choices[0]
-          if (!choice) continue
-
-          if (choice.delta.content) {
-            completion += choice.delta.content
-            chatContainer.scrollTo({ top: chatContainer.scrollHeight })
-          }
-
-          if (choice.finish_reason === 'stop') {
-            if (completion.trim()) {
-              messages = [
-                ...messages,
-                {
-                  role: 'assistant',
-                  content: completion.trim()
-                }
-              ]
-            }
-            completion = ''
-            streaming = false
-            queueMicrotask(() => {
-              inputRef?.focus()
-            })
-          }
+        if (value) {
+          completion += value
         }
+
+        if (done) break;
       }
+
+      const trimmedCompletion = completion.trim()
+      if (trimmedCompletion) {
+        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
+      }
+
+      streaming = false
+      completion = ''
+
+      requestAnimationFrame(() => {
+        inputRef?.focus()
+      })
     } catch (error) {
       console.error('Error processing stream:', error)
-      if (completion.trim()) {
-        messages = [
-          ...messages,
-          {
-            role: 'assistant',
-            content: completion.trim()
-          }
-        ]
+      // Handle error case
+      const trimmedCompletion = completion.trim()
+      if (trimmedCompletion) {
+        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
       }
+      streaming = false
+      completion = ''
+      requestAnimationFrame(() => {
+        inputRef?.focus()
+      })
     }
   }
 
@@ -431,6 +396,7 @@
       text-decoration: none;
       border-bottom: 1px solid #9ccfd8;
     }
+
 
     :global(a:hover) {
       opacity: 0.8;
