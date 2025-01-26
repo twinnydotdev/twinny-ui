@@ -6,7 +6,6 @@
   import { onMount } from 'svelte'
   import { t } from '$lib/translations'
   import { Motion } from 'svelte-motion'
-  import { safeParseJson } from 'symmetry-core'
 
   let completion = $state('')
   let opacity = $state(0)
@@ -49,6 +48,14 @@
       await processStream(reader)
     } catch (error) {
       console.error('Stream error:', error)
+    }
+  }
+
+  function safeParseJson<T>(data: string): T | undefined {
+    try {
+      return JSON.parse(data) as T;
+    } catch (e) {
+      return undefined;
     }
   }
 
