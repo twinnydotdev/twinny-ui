@@ -6,6 +6,7 @@
   import { onMount } from 'svelte'
   import { t } from '$lib/translations'
   import { Motion } from 'svelte-motion'
+  import { safeParseJson } from 'symmetry-core'
 
   let completion = $state('')
   let opacity = $state(0)
@@ -60,7 +61,9 @@
         const { value, done } = await reader.read()
 
         if (value) {
-          completion += value
+          const part: any = safeParseJson(value)
+          if (!part) return
+          completion += part.choices[0].delta.content
         }
 
         if (done) break;
