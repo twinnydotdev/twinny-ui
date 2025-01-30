@@ -135,8 +135,12 @@
             </a>
           {/each}
         </div>
-        <div class="text-rose-500 bold">
-          {$t("common.version-warning")}
+        <div class="text-rose-400 bold">
+          Attention! If your node displays as unlealthy you are likely running an outdated version of twinny or symmetry-core or your configuration is not correct.  Please check your provider configuration <span class="text-rose-200">`provider.yml`</span> against the
+          <a class="text-rose-200" href="https://github.com/twinnydotdev/symmetry-core?tab=readme-ov-file#configuration" target="_blank">
+            official configuration options
+          </a>
+          they might be out-dated.
         </div>
       </div>
     </div>

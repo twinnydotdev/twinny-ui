@@ -73,6 +73,5 @@
   "try-symmetry": "Try symmetry ⚡️",
   "uniquePeerCount": "Unique peers (all time)",
   "up_time_minutes": "Up time (minutes)",
-  "version-warning": "Attention! If your node displays as unlealthy you are likely running an outdated version of twinny or symmetry-core. Please check your configuration is correct.",
   "yes": "Yes"
 }
