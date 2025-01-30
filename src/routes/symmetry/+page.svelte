@@ -135,6 +135,9 @@
             </a>
           {/each}
         </div>
+        <div class="text-rose-500 bold">
+          {$t("common.version-warning")}
+        </div>
       </div>
     </div>
 
@@ -181,6 +184,13 @@
                     >
                       {peer.online ? 'Online' : 'Offline'}
                     </span>
+                    <span
+                      class="inline-flex px-2.5 mt-2 py-0.5 rounded-full text-xs font-medium {peer.healthy
+                        ? 'bg-green-500/10 text-green-500'
+                        : 'bg-red-500/10 text-red-500'}"
+                    >
+                      <span>{peer.healthy ? 'Healthy' : 'Unhealthy'}</span>
+                  </span>
                   </td>
                   <td class="px-6 py-4 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
                   <td class="px-6 py-4">{peer.total_requests || 0}</td>
@@ -255,6 +265,7 @@
                     : 'bg-red-500/10 text-red-500'}"
                 >
                   {peer.online ? 'Online' : 'Offline'}
+                  {peer.healthy ? '💖' : '☠️'}
                 </span>
               </div>
               <div class="grid grid-cols-2 gap-4 text-sm">
