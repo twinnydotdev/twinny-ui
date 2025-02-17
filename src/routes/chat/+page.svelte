@@ -53,9 +53,9 @@
 
   function safeParseJson<T>(data: string): T | undefined {
     try {
-      return JSON.parse(data) as T;
+      return JSON.parse(data) as T
     } catch (e) {
-      return undefined;
+      return undefined
     }
   }
 
@@ -63,17 +63,16 @@
     try {
       streaming = true
 
-
       while (true) {
         const { value, done } = await reader.read()
 
         if (value) {
           const part: any = safeParseJson(value)
-          if (!part) return
-          completion += part.choices[0].delta.content
+          if (!part) continue
+          completion += part.choices[0]?.delta?.content || ''
         }
 
-        if (done) break;
+        if (done) break
       }
 
       const trimmedCompletion = completion.trim()
@@ -170,7 +169,10 @@
   {/if}
   {#if !messages.length && !completion}
     <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
-      <div class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400" use:motion>
+      <div
+        class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400"
+        use:motion
+      >
         <svg
           class="h-20 w-auto mx-auto mb-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -406,7 +408,6 @@
       text-decoration: none;
       border-bottom: 1px solid #9ccfd8;
     }
-
 
     :global(a:hover) {
       opacity: 0.8;
