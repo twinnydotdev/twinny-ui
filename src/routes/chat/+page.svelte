@@ -62,17 +62,107 @@
   async function processStream(reader: ReadableStreamDefaultReader) {
     try {
       streaming = true
+      let buffer = ''
 
       while (true) {
         const { value, done } = await reader.read()
 
         if (value) {
-          const part: any = safeParseJson(value)
-          if (!part) continue
-          completion += part.choices[0]?.delta?.content || ''
+          // Append new data to buffer
+          buffer += value
+
+          // Process the buffer to extract JSON objects
+          let processedUpTo = 0
+          let pos = 0
+
+          while (pos < buffer.length) {
+            // Try to find a complete JSON object starting at pos
+            let startPos = buffer.indexOf('{', pos)
+            if (startPos === -1) break; // No more JSON objects
+
+            let braceCount = 1
+            let inString = false
+            let escapeNext = false
+            let endPos = -1
+
+            // Scan forward to find the matching closing brace
+            for (let i = startPos + 1; i < buffer.length; i++) {
+              const char = buffer[i]
+
+              if (escapeNext) {
+                escapeNext = false
+                continue
+              }
+
+              if (char === '\\' && inString) {
+                escapeNext = true
+                continue
+              }
+
+              if (char === '"' && !escapeNext) {
+                inString = !inString
+                continue
+              }
+
+              if (!inString) {
+                if (char === '{') {
+                  braceCount++
+                } else if (char === '}') {
+                  braceCount--
+                  if (braceCount === 0) {
+                    endPos = i + 1
+                    break
+                  }
+                }
+              }
+            }
+
+            // If we found a complete JSON object
+            if (endPos !== -1) {
+              // Extract and process the complete JSON object
+              const jsonStr = buffer.substring(startPos, endPos)
+              const part: any = safeParseJson(jsonStr)
+
+              if (part) {
+                const content = part.choices[0]?.delta?.content || ''
+                if (content) {
+                  completion += content
+                  // Force a UI update by reassigning the completion
+                  completion = completion
+                }
+              }
+
+              // Move position for the next scan
+              processedUpTo = endPos
+              pos = endPos
+            } else {
+              // No complete JSON object found, exit the loop
+              break
+            }
+          }
+
+          // Remove processed JSON objects from the buffer
+          if (processedUpTo > 0) {
+            buffer = buffer.substring(processedUpTo)
+          }
         }
 
-        if (done) break
+        if (done) {
+          // Try to process any remaining data in the buffer
+          // This is a best-effort attempt for any partial JSON
+          try {
+            const part: any = safeParseJson(buffer)
+            if (part) {
+              const content = part.choices[0]?.delta?.content || ''
+              if (content) {
+                completion += content
+              }
+            }
+          } catch (e) {
+            console.error('Error parsing remaining buffer:', e)
+          }
+          break
+        }
       }
 
       const trimmedCompletion = completion.trim()
