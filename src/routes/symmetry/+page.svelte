@@ -135,6 +135,13 @@
             </a>
           {/each}
         </div>
+        <div class="text-rose-400 bold">
+          Attention! If your node displays as unlealthy you are likely running an outdated version of twinny or symmetry-core or your configuration is not correct.  Please check your provider configuration <span class="text-rose-200">`provider.yml`</span> against the
+          <a class="text-rose-200" href="https://github.com/twinnydotdev/symmetry-core?tab=readme-ov-file#configuration" target="_blank">
+            official configuration options
+          </a>
+          they might be out-dated.
+        </div>
       </div>
     </div>
 
@@ -181,6 +188,13 @@
                     >
                       {peer.online ? 'Online' : 'Offline'}
                     </span>
+                    <span
+                      class="inline-flex px-2.5 mt-2 py-0.5 rounded-full text-xs font-medium {peer.healthy
+                        ? 'bg-green-500/10 text-green-500'
+                        : 'bg-red-500/10 text-red-500'}"
+                    >
+                      <span>{peer.healthy ? 'Healthy' : 'Unhealthy'}</span>
+                  </span>
                   </td>
                   <td class="px-6 py-4 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
                   <td class="px-6 py-4">{peer.total_requests || 0}</td>
@@ -255,6 +269,7 @@
                     : 'bg-red-500/10 text-red-500'}"
                 >
                   {peer.online ? 'Online' : 'Offline'}
+                  {peer.healthy ? '💖' : '☠️'}
                 </span>
               </div>
               <div class="grid grid-cols-2 gap-4 text-sm">
