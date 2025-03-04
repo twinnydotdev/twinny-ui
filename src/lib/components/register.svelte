@@ -2,37 +2,51 @@
   import { enhance } from '$app/forms'
   import { t } from '$lib/translations'
   import Button from '$lib/components/button.svelte'
+  import { slide } from 'svelte/transition'
+
   let { form } = $props()
+  let email = ''
 </script>
 
-<div class="flex flex-col gap-3 items-center justify-center mt-4">
+<div class="w-full">
   <form
     action="?/register"
     method="POST"
-    class="flex flex-wrap gap-2 items-center justify-center"
+    class="flex flex-col sm:flex-row gap-3 items-stretch"
     use:enhance
   >
-    <label for="email">
+    <div class="flex-grow">
+      <label for="email" class="sr-only">Email</label>
       <input
         id="email"
         name="email"
         type="email"
+        bind:value={email}
         placeholder={$t('common.subscribe_placeholder')}
-        class="w-full px-4 text-base font-medium tracking-wide text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm transition-all duration-300 ease-in-out focus:outline-none h-[48px] focus:border-rose-500"
+        class="form-input h-full"
+        required
       />
-    </label>
-    <Button buttonText={$t('common.subscribe')} />
+    </div>
+    <button class="btn-primary">
+      <span class="flex items-center">
+        {$t('common.subscribe')}
+      </span>
+    </button>
   </form>
 
   {#if form?.success}
-    <p class="text-center font-bold text-green-500 my-1">
-      {$t('common.thanks')}
-    </p>
+    <div transition:slide class="mt-3 px-3 py-2 bg-green-500/20 border border-green-500/30 rounded-md">
+      <p class="text-sm font-medium text-green-400">
+        {$t('common.thanks')}
+      </p>
+    </div>
   {/if}
 
   {#if form?.error}
-    <p class="text-center font-bold text-red-500 my-1">
-      {$t('common.subscribe_error')}
-    </p>
+    <div transition:slide class="mt-3 px-3 py-2 bg-red-500/20 border border-red-500/30 rounded-md">
+      <p class="text-sm font-medium text-red-400">
+        {$t('common.subscribe_error')}
+      </p>
+    </div>
   {/if}
 </div>

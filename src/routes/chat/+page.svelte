@@ -231,7 +231,7 @@
 </script>
 
 <div
-  class="flex flex-col h-[calc(100vh-100px)] bg-stone-900 w-full max-w-3xl mx-auto sm:min-w-[550px]"
+  class="flex flex-col h-[calc(100vh-100px)]00 w-full max-w-3xl mx-auto sm:min-w-[550px]"
 >
   {#if messages.length}
     <div class="flex justify-between my-2 w-full">

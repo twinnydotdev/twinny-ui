@@ -3,11 +3,51 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
-html {
-  background: #1c1917;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gradient-to-b from-dark-950 to-dark-800 min-h-screen text-secondary-100 font-sans;
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-rose-500/30 text-white;
+  }
 }
 
-a:hover {
-  filter: brightness(120%);
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-900 disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn bg-rose-600 text-white hover:bg-rose-500
+    focus:ring-rose-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary-700 hover:bg-secondary-600 text-white
+    focus:ring-secondary-500;
+  }
+
+  .form-input {
+    @apply w-full px-4 py-3 text-sm text-secondary-100 bg-secondary-800 border border-secondary-700 rounded-lg
+    transition-all duration-300
+    placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-rose-600;
+  }
+
+  .card {
+    @apply bg-secondary-800 border border-secondary-700 rounded-xl p-6;
+  }
+}
+
+.glass-panel {
+  @apply bg-secondary-800 border border-secondary-700 rounded-xl;
 }

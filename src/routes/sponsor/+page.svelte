@@ -19,7 +19,7 @@
 
   <div class="relative group">
     <div
-      class="flex items-center gap-3 bg-stone-900 rounded-lg p-4 pr-12 border border-stone-500 hover:border-gray-600 transition-colors cursor-pointer"
+      class="flex items-center gap-3rounded-lg p-4 pr-12 border border-stone-500 hover:border-gray-600 transition-colors cursor-pointer"
       on:click={copyToClipboard}
       on:keydown={(e) => e.key === 'Enter' && copyToClipboard()}
       role="button"

@@ -69,7 +69,7 @@
   }
 </script>
 
-<div class="min-h-screen bg-stone-900 text-stone-100 p-6">
+<div class="min-h-screen text-stone-100 p-6">
   <div class="max-w-7xl mx-auto space-y-8">
     <div class="border-b border-stone-800 pb-6">
       <h2 class="text-3xl font-bold text-stone-100 mb-2">{$t('common.symmetry')}</h2>

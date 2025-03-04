@@ -3,7 +3,7 @@
   export let data
 </script>
 
-<div class="min-h-screen bg-stone-900 text-stone-100 p-6">
+<div class="min-h-screen text-stone-100 p-6">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
     <h1 class="text-4xl font-bold text-white mb-14">
       {$t('common.blog_title')}

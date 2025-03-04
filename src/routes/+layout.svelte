@@ -64,86 +64,110 @@
 
 <Analytics />
 
-<div class="flex h-[100vh] flex-col p-2 text-gray-300">
-  <header class="flex justify-between items-center px-2 py-2">
-    <a href="/" aria-label="Home">
-      <h1
-        class="text-xl font-bold flex-grow select-none"
-        itemscope
-        itemtype="http://schema.org/SoftwareApplication"
-      >
-        <span itemprop="name">{$t('common.title')}</span>
-      </h1>
-    </a>
-    <nav aria-label="Main navigation" class="flex items-center">
-      <a
-        class="hover:text-gray-100  mt-0.5 transition-colors"
-        href="/symmetry"
-        aria-label="Documentation"
-      >
-        {$t('common.symmetry')}
-      </a>
-      <a
-        class="ml-3 mt-0.5 hover:text-gray-100 transition-colors"
-        href={URL_DOCS}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        aria-label="Documentation"
-      >
-        {$t('common.docs')}
-      </a>
-      <select
-        class="ml-3 bg-[#1c1917] rounded transition-colors focus:outline-none"
-        on:change={handleLanguageChange}
-        value={$locale}
-        aria-label="Select language"
-      >
-        {#each languages as { code, label }}
-          <option class="bg-[#1c1917]" value={code}>
-            {label}
-          </option>
-        {/each}
-      </select>
-    </nav>
+<div class="flex min-h-[100vh] flex-col bg-dark-900 px-4 sm:px-6 text-secondary-100">
+  <header class="relative z-10 py-6">
+    <div class="container mx-auto">
+      <div class="flex justify-between items-center">
+        <a href="/" class="flex items-center group" aria-label="Home">
+          <h1
+            class="text-xl font-bold group-hover:text-rose-500 transition-colors duration-300"
+            itemscope
+            itemtype="http://schema.org/SoftwareApplication"
+          >
+            <span itemprop="name" class="text-secondary-100">
+              {$t('common.title')}
+            </span>
+          </h1>
+        </a>
+
+        <nav aria-label="Main navigation" class="flex items-center space-x-6">
+          <a
+            class="text-sm font-medium hover:text-rose-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-rose-500 after:transition-all hover:after:w-full"
+            href="/symmetry"
+            aria-label="Symmetry"
+          >
+            {$t('common.symmetry')}
+          </a>
+          <a
+            class="text-sm font-medium hover:text-rose-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-rose-500 after:transition-all hover:after:w-full"
+            href={URL_DOCS}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            aria-label="Documentation"
+          >
+            {$t('common.docs')}
+          </a>
+
+          <div class="relative">
+            <select
+              class="appearance-none text-sm font-medium py-1 pl-2 pr-8 rounded-lg bg-secondary-800 border border-secondary-700 focus:outline-none focus:ring-1 focus:ring-rose-500"
+              on:change={handleLanguageChange}
+              value={$locale}
+              aria-label="Select language"
+            >
+              {#each languages as { code, label }}
+                <option class="bg-secondary-800" value={code}>
+                  {label}
+                </option>
+              {/each}
+            </select>
+            <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-secondary-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
   </header>
 
-  <main class="flex grow flex-col items-center justify-center">
-    <slot />
+  <main class="flex-grow py-8">
+    <div class="container mx-auto flex justify-center items-center">
+      <slot />
+    </div>
   </main>
 
-  <footer class="flex justify-between items-center w-full px-2 py-2">
-    <a href="/sponsor" class="hover:text-gray-100 transition-colors" aria-label="Sponsor project">
-      <span class="text-red-500 mr-1" aria-hidden="true">🖤</span>
-      <span>{$t('common.sponsor')}</span>
-    </a>
-    <div>
-      <a
-        href='/blog'
-        class="ml-3 hover:text-gray-100 transition-colors"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        aria-label="Contact us"
-      >
-        {$t('common.blog')}
-      </a>
-      <a
-        class="ml-3 hover:text-gray-100 transition-colors"
-        href={URL_GITHUB}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        aria-label="GitHub repository"
-      >
-        {$t('common.github')}
-      </a>
-      <a
-        href={URL_TWINNYDOTDEV}
-        class="ml-3 hover:text-gray-100 transition-colors"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        aria-label="Contact us"
-      >
-        {$t('common.contact')}
-      </a>
+  <footer class="py-6 border-t border-secondary-800">
+    <div class="container mx-auto">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <a
+          href="/sponsor"
+          class="flex items-center group space-x-1 hover:text-rose-500 transition-colors"
+          aria-label="Sponsor project"
+        >
+          <span class="text-rose-500 transition-colors" aria-hidden="true">❤️</span>
+          <span>{$t('common.sponsor')}</span>
+        </a>
+
+        <div class="flex items-center space-x-6">
+          <a
+            href='/blog'
+            class="text-sm font-medium hover:text-rose-500 transition-colors"
+            aria-label="Blog"
+          >
+            {$t('common.blog')}
+          </a>
+          <a
+            class="text-sm font-medium hover:text-rose-500 transition-colors"
+            href={URL_GITHUB}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            aria-label="GitHub repository"
+          >
+            {$t('common.github')}
+          </a>
+          <a
+            href={URL_TWINNYDOTDEV}
+            class="text-sm font-medium hover:text-rose-500 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            aria-label="Contact us"
+          >
+            {$t('common.contact')}
+          </a>
+        </div>
+      </div>
     </div>
   </footer>
 </div>
