@@ -1,6 +1,6 @@
 export const URL_VSCODE_MARKETPLACE =
   'https://marketplace.visualstudio.com/items?itemName=rjmacarthy.Twinny'
-export const URL_DOCS = 'https://docs.twinny.dev'
+export const URL_DOCS = 'https://twinnydotdev.github.io/twinny-docs/'
 export const URL_GITHUB = 'https://github.com/twinnydotdev'
 export const URL_TWINNYDOTDEV = 'https://x.com/twinnydotdev'
 export const URL_SYMMETRY_CORE = 'https://github.com/twinnydotdev/symmetry-core'
