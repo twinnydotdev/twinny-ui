@@ -301,10 +301,6 @@
             <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
           </svg>
 
-          <h2 class="text-2xl font-bold mb-4 bg-gradient-to-r text-white">
-            Welcome to Twinny Chat
-          </h2>
-
           <p class="max-w-xl text-lg">
             {$t('common.this_interface')}
           </p>
