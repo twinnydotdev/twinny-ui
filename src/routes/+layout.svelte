@@ -64,7 +64,7 @@
 
 <Analytics />
 
-<div class="flex min-h-[100vh] flex-col bg-dark-900 px-4 sm:px-6 text-secondary-100">
+<div class="flex min-h-[100vh] flex-col px-4 sm:px-6 text-secondary-100">
   <header class="relative z-10 py-6">
     <div class="container mx-auto">
       <div class="flex justify-between items-center">
@@ -122,8 +122,8 @@
     </div>
   </header>
 
-  <main class="flex-grow py-8">
-    <div class="container mx-auto flex justify-center items-center">
+  <main class="flex-grow py-8 w-full">
+    <div class="container mx-auto flex justify-center items-center w-full">
       <slot />
     </div>
   </main>

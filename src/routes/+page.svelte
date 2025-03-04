@@ -23,7 +23,7 @@
       </h2>
 
       <p class="mt-4 text-secondary-300 text-lg max-w-xl">
-        Enhance your development experience with privacy-focused AI assistance, powered by the cutting-edge Symmetry inference network.
+        {$t('common.feature_description')}
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 mt-8">
@@ -64,28 +64,28 @@
 
   <!-- Features section -->
   <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="card hover:-translate-y-1 transition-all">
+    <div class="card">
       <svg class="w-10 h-10 text-rose-500 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M21 9V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V9M21 9L12 3L3 9M21 9H3M16 14C16 15.1046 15.1046 16 14 16H10C8.89543 16 8 15.1046 8 14V11H16V14Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <h3 class="text-lg font-bold mb-2 text-white">Privacy-First</h3>
-      <p class="text-secondary-300">Your code stays private. Twinny prioritizes your data security above all else.</p>
+      <h3 class="text-lg font-bold mb-2 text-white">{$t('common.feature_privacy_first_title')}</h3>
+      <p class="text-secondary-300">{$t('common.feature_privacy_first_desc')}</p>
     </div>
 
-    <div class="card hover:-translate-y-1 transition-all">
+    <div class="card">
       <svg class="w-10 h-10 text-rose-500 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 16.01V16M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <h3 class="text-lg font-bold mb-2 text-white">Symmetry Network</h3>
-      <p class="text-secondary-300">Advanced AI inference network designed for developers, by developers.</p>
+      <h3 class="text-lg font-bold mb-2 text-white">{$t('common.feature_symmetry_network_title')}</h3>
+      <p class="text-secondary-300">{$t('common.feature_symmetry_network_desc')}</p>
     </div>
 
-    <div class="card hover:-translate-y-1 transition-all">
+    <div class="card">
       <svg class="w-10 h-10 text-rose-500 mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 20L14 4M18 8L22 12L18 16M6 16L2 12L6 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <h3 class="text-lg font-bold mb-2 text-white">VS Code Integration</h3>
-      <p class="text-secondary-300">Seamlessly integrated with VS Code for a natural coding experience.</p>
+      <h3 class="text-lg font-bold mb-2 text-white">{$t('common.feature_vscode_title')}</h3>
+      <p class="text-secondary-300">{$t('common.feature_vscode_desc')}</p>
     </div>
   </div>
 </div>

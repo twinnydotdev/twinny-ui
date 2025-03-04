@@ -8,7 +8,6 @@
   import { Motion } from 'svelte-motion'
 
   let completion = $state('')
-  let opacity = $state(0)
   let message = $state('')
   let loading = $state(false)
   let streaming = $state(false)
@@ -17,14 +16,27 @@
   let inputRef: HTMLTextAreaElement
   const model = $page.url.searchParams.get('model')
 
-  async function streamChat() {
-    if (!message) return
+  async function streamChat(regenerateLastMessage = false) {
+    if (!regenerateLastMessage && !message) return
     loading = true
 
     try {
-      messages = [...messages, { role: 'user', content: message }]
-      message = ''
+      // If regenerating, remove the last assistant message
+      if (regenerateLastMessage) {
+        // Find the index of the last assistant message
+        const lastAssistantIndex = [...messages].reverse().findIndex(m => m.role === 'assistant')
+        if (lastAssistantIndex !== -1) {
+          // Remove the last assistant message from the array
+          messages = messages.slice(0, messages.length - lastAssistantIndex - 1)
+        }
+      } else {
+        // Add the new user message if not regenerating
+        messages = [...messages, { role: 'user', content: message }]
+        message = ''
+      }
+
       chatContainer.scrollTo({ top: chatContainer.scrollHeight })
+
       const response = await fetch('https://twinny.dev/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -216,6 +228,14 @@
     message = ''
     messages = []
     inputRef.focus()
+    streaming = false
+    completion = ''
+    loading = false
+  }
+
+  function regenerateResponse() {
+    if (streaming || loading) return
+    streamChat(true)
   }
 
   onMount(() => {
@@ -226,187 +246,219 @@
     message
     inputRef.style.height = '0px'
     const scrollHeight = inputRef.scrollHeight
-    inputRef.style.height = `${scrollHeight + 5}px`
+    inputRef.style.height = `${scrollHeight}px`
   })
 </script>
 
-<div
-  class="flex flex-col h-[calc(100vh-100px)]00 w-full max-w-3xl mx-auto sm:min-w-[550px]"
->
-  {#if messages.length}
-    <div class="flex justify-between my-2 w-full">
+<div class="flex flex-col h-screen text-white">
+  <header class="flex items-center justify-between p-4 max-w-4xl mx-auto w-full">
+    {#if messages.length}
       <button
         onclick={newChat}
-        class="inline-flex items-center gap-2 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 py-2 order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
-        data-state="closed"
-        aria-label={$t('common.new_chat')}
-        title={$t('common.new_chat')}
-        ><svg
+        class="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border border-stone-700/50 hover:bg-stone-800"
+      >
+        <svg
           height="16"
           stroke-linejoin="round"
           viewBox="0 0 16 16"
           width="16"
-          style="color:currentcolor"
-          ><path
+        >
+          <path
             fill-rule="evenodd"
             clip-rule="evenodd"
             d="M8.75 1.75V1H7.25V1.75V6.75H2.25H1.5V8.25H2.25H7.25V13.25V14H8.75V13.25V8.25H13.75H14.5V6.75H13.75H8.75V1.75Z"
             fill="currentColor"
-          ></path></svg
-        >
-      </button>
-    </div>
-  {/if}
-  {#if !messages.length && !completion}
-    <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
-      <div
-        class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400"
-        use:motion
-      >
-        <svg
-          class="h-20 w-auto mx-auto mb-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 64 64"
-        >
-          <circle cx="32" cy="32" r="6" fill="white" />
-          <path d="M32 26L18 18" stroke="white" stroke-width="2" />
-          <path d="M32 26L46 18" stroke="white" stroke-width="2" />
-          <path d="M32 38L18 46" stroke="white" stroke-width="2" />
-          <path d="M32 38L46 46" stroke="white" stroke-width="2" />
-          <circle cx="18" cy="18" r="4" fill="white" />
-          <circle cx="46" cy="18" r="4" fill="white" />
-          <circle cx="18" cy="46" r="4" fill="white" />
-          <circle cx="46" cy="46" r="4" fill="white" />
-          <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
-          <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
+          ></path>
         </svg>
+        {$t('common.new_chat')}
+      </button>
+    {/if}
+  </header>
 
-        <p>
-          {$t('common.this_interface')}
-        </p>
-        <div class="mt-8"></div>
-        <p class="mt-2">
-          {$t('common.learn_how')}
-        </p>
-        <a href="https://github.com/twinnydotdev/symmetry-cli" target="_blank">
-          <button
-            class="inline-flex items-center gap-1.5 mt-4 px-3 py-2 bg-rose-600 text-white rounded-md font-medium"
+  <main class="flex flex-col max-w-4xl mx-auto w-full sm:min-w-[860px] min-h-[600px] overflow-hidden">
+
+    {#if !messages.length && !completion}
+      <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
+        <div
+          class="flex h-full flex-col justify-center items-center opacity-0 text-center text-stone-400 px-4"
+          use:motion
+        >
+          <svg
+            class="h-24 w-auto mx-auto mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 64 64"
           >
-            {$t('common.install_cli')}
-          </button>
-        </a>
-      </div>
-    </Motion>
-  {/if}
+            <circle cx="32" cy="32" r="6" fill="white" />
+            <path d="M32 26L18 18" stroke="white" stroke-width="2" />
+            <path d="M32 26L46 18" stroke="white" stroke-width="2" />
+            <path d="M32 38L18 46" stroke="white" stroke-width="2" />
+            <path d="M32 38L46 46" stroke="white" stroke-width="2" />
+            <circle cx="18" cy="18" r="4" fill="white" />
+            <circle cx="46" cy="18" r="4" fill="white" />
+            <circle cx="18" cy="46" r="4" fill="white" />
+            <circle cx="46" cy="46" r="4" fill="white" />
+            <path d="M18 22C18 36 46 36 46 22" stroke="white" stroke-width="2" fill="none" />
+            <path d="M18 42C18 28 46 28 46 42" stroke="white" stroke-width="2" fill="none" />
+          </svg>
 
-  <div bind:this={chatContainer} class="flex-1 overflow-y-auto p-4 space-y-4">
-    {#each messages as msg}
-      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
-        <div use:motion class={`w-full flex ${msg.role === 'user' ? 'opacity-0 justify-end' : ''}`}>
+          <h2 class="text-2xl font-bold mb-4 bg-gradient-to-r text-white">
+            Welcome to Twinny Chat
+          </h2>
+
+          <p class="max-w-xl text-lg">
+            {$t('common.this_interface')}
+          </p>
+          <div class="mt-8"></div>
+          <p class="mt-2 max-w-xl">
+            {$t('common.learn_how')}
+          </p>
+          <a href="https://github.com/twinnydotdev/symmetry-cli" target="_blank">
+            <button
+              class="flex items-center gap-2 mt-6 px-4 py-2 btn-primary"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
+              </svg>
+              {$t('common.install_cli')}
+            </button>
+          </a>
+        </div>
+      </Motion>
+    {/if}
+
+    <div bind:this={chatContainer} class="flex-1 min-h-[300px] overflow-y-auto p-4 space-y-6">
+      {#each messages as msg, i}
+        <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
           <div
-            class={`text-wrap p-2 rounded-xl text-white chat-content ${msg.role === 'user' ? 'bg-blue-900  w-fit' : ''}`}
+            use:motion
+            class={`w-full ${msg.role === 'user' ? 'opacity-0 flex justify-end' : 'flex flex-col'}`}
           >
-            {@html processMarkdown(msg.content)}
-          </div>
-        </div>
-      </Motion>
-    {/each}
-    {#if completion}
-      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.5 }} let:motion>
-        <div use:motion class="p-2">
-          <div class="text-wrap text-white chat-content">
-            {@html processMarkdown(completion)}
-          </div>
-        </div>
-      </Motion>
-    {/if}
-    {#if loading}
-      <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
-        <div use:motion class="p-2">
-          <div class="flex items-center text-wrap text-white chat-content">
-            <span>
-              {$t('common.thinking')}
-            </span>
-            <svg class="h-2 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30">
-              <circle cx="15" cy="15" r="5" fill="currentColor">
-                <animate
-                  attributeName="opacity"
-                  dur="1s"
-                  values="0.3;1;0.3"
-                  repeatCount="indefinite"
-                  begin="0s"
-                />
-              </circle>
-              <circle cx="45" cy="15" r="5" fill="currentColor">
-                <animate
-                  attributeName="opacity"
-                  dur="1s"
-                  values="0.3;1;0.3"
-                  repeatCount="indefinite"
-                  begin="0.2s"
-                />
-              </circle>
-              <circle cx="75" cy="15" r="5" fill="currentColor">
-                <animate
-                  attributeName="opacity"
-                  dur="1s"
-                  values="0.3;1;0.3"
-                  repeatCount="indefinite"
-                  begin="0.4s"
-                />
-              </circle>
-            </svg>
-          </div>
-        </div>
-      </Motion>
-    {/if}
-  </div>
+            <div
+              class={`max-w-[90%] text-wrap p-3 sm:p-4 rounded-2xl shadow-md ${msg.role === 'user' ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white ml-auto' : 'bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700'}`}
+            >
+              <div class="chat-content">
+                {@html processMarkdown(msg.content)}
+              </div>
+            </div>
 
-  <div>
-    <div class="flex-1 p-4 relative">
-      <textarea
-        bind:this={inputRef}
-        bind:value={message}
-        disabled={streaming}
-        onkeydown={handleKeyDown}
-        placeholder="How can twinny help you today?"
-        class="w-full p-2 pr-16 rounded-md bg-stone-700 text-white placeholder:text-stone-400 resize-none min-h-[70px] max-h-80"
-      ></textarea>
-      <button
-        disabled={streaming}
-        onclick={streamChat}
-        class="absolute bottom-16 right-3 px-4 py-2 text-white"
-        aria-label="Send"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M22 2L11 13" />
-          <path d="M22 2L15 22L11 13L2 9L22 2z" />
-        </svg>
-      </button>
-      <small class="flex justify-end text-stone-400 pr-2 pb-3 text-xs"> v0.1 alpha </small>
+            {#if msg.role === 'assistant' && i === messages.length - 1 && !loading && !streaming}
+              <div class="flex mt-2 space-x-2">
+                <!-- svelte-ignore a11y_consider_explicit_label -->
+                <button
+                  onclick={regenerateResponse}
+                  class="flex items-center gap-1.5 px-3 py-1.5 bg-stone-800/50 hover:bg-stone-700/80 text-stone-300 hover:text-white rounded-full text-sm transition-all border border-stone-700/50"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                  </svg>
+                </button>
+              </div>
+            {/if}
+          </div>
+        </Motion>
+      {/each}
+
+      {#if completion}
+        <Motion animate={{ opacity: 1 }} transition={{ duration: 0.5 }} let:motion>
+          <div use:motion class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md">
+            <div class="chat-content">
+              {@html processMarkdown(completion)}
+            </div>
+          </div>
+        </Motion>
+      {/if}
+
+      {#if loading}
+        <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
+          <div use:motion class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md">
+            <div class="flex items-center text-wrap text-white chat-content">
+              <span>
+                {$t('common.thinking')}
+              </span>
+              <div class="ml-3 flex space-x-1">
+                <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse"></div>
+                <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse" style="animation-delay: 0.2s"></div>
+                <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse" style="animation-delay: 0.4s"></div>
+              </div>
+            </div>
+          </div>
+        </Motion>
+      {/if}
     </div>
-  </div>
+
+    <div class="p-4 border-t border-stone-800 backdrop-blur-sm sticky bottom-0 z-10">
+      <div class="relative w-full max-w-3xl mx-auto">
+        <textarea
+          bind:this={inputRef}
+          bind:value={message}
+          disabled={streaming}
+          onkeydown={handleKeyDown}
+          placeholder="How can twinny help you today?"
+          class="w-full p-3 pr-12 rounded-xl bg-stone-800/80 text-white placeholder:text-stone-400 resize-none min-h-[60px] max-h-80 border border-stone-700 focus:outline-none focus:border-stone-500 transition-all"
+        ></textarea>
+
+        <button
+          disabled={streaming || !message}
+          onclick={() => streamChat()}
+          class="absolute bottom-11 right-3 p-2 text-white disabled:pointer-events-none disabled:opacity-50 transition-all duration-200"
+          aria-label="Send"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M22 2L11 13" />
+            <path d="M22 2L15 22L11 13L2 9L22 2z" />
+          </svg>
+        </button>
+
+        <div class="flex justify-between items-center mt-2 text-xs text-stone-500">
+          <div>Press <kbd class="px-1.5 py-0.5 bg-stone-800 rounded text-stone-400 border border-stone-700">Enter</kbd> to send</div>
+          <small>v0.1 alpha</small>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
 <style>
   :global(.chat-content) {
     /* Code blocks */
     :global(pre) {
-      background: #171717;
+      background: rgba(0, 0, 0, 0.3);
       padding: 1.25rem;
       border-radius: 0.5rem;
       margin: 1rem 0;
       overflow-x: auto;
+      border: 1px solid rgba(75, 85, 99, 0.3);
     }
 
     :global(pre code) {
@@ -419,26 +471,26 @@
 
     /* Syntax highlighting colors */
     :global(.hljs-keyword) {
-      color: #eb6f92;
-    } /* love */
+      color: #c678dd;
+    }
     :global(.hljs-string) {
-      color: #f6c177;
-    } /* gold */
+      color: #98c379;
+    }
     :global(.hljs-comment) {
-      color: #6e6a86;
-    } /* muted */
+      color: #7f848e;
+    }
     :global(.hljs-function) {
-      color: #9ccfd8;
-    } /* foam */
+      color: #61afef;
+    }
     :global(.hljs-number) {
-      color: #c4a7e7;
-    } /* iris */
+      color: #d19a66;
+    }
     :global(.hljs-class) {
-      color: #31748f;
-    } /* pine */
+      color: #e5c07b;
+    }
     :global(.hljs-title) {
-      color: #ebbcba;
-    } /* rose */
+      color: #e06c75;
+    }
 
     /* Add some margin to the code container */
     :global(pre code.hljs) {
@@ -450,57 +502,92 @@
     :global(h1) {
       font-size: 1.8rem;
       font-weight: 600;
-      margin: 0;
+      margin: 0.75em 0 0.5em 0;
+      color: #f3f4f6;
+      border-bottom: 1px solid rgba(107, 114, 128, 0.3);
+      padding-bottom: 0.3em;
     }
 
     :global(h2) {
       font-size: 1.5rem;
       font-weight: 600;
-      margin: 0;
+      margin: 0.75em 0 0.5em 0;
+      color: #f3f4f6;
+      border-bottom: 1px solid rgba(107, 114, 128, 0.2);
+      padding-bottom: 0.2em;
     }
 
     :global(h3) {
       font-size: 1.25rem;
       font-weight: 600;
-      margin: 0;
+      margin: 0.75em 0 0.5em 0;
+      color: #f3f4f6;
     }
 
     /* Paragraphs */
     :global(p) {
-      margin: 0;
       line-height: 1.6;
     }
 
     /* Inline code */
     :global(code:not(pre code)) {
-      background: #1f1d2e;
+      background: rgba(0, 0, 0, 0.25);
       padding: 0.2rem 0.4rem;
       border-radius: 0.25rem;
       font-family: 'Fira Code', monospace;
       font-size: 0.875rem;
+      border: 1px solid rgba(75, 85, 99, 0.2);
     }
 
     /* Lists */
     :global(ul),
     :global(ol) {
-      margin: 0 0 0 1.5rem;
+      margin: 0.7em 0 0.7em 1.5rem;
     }
 
     :global(li) {
-      margin: 0;
+      margin: 0.3em 0;
       line-height: 1.6;
-      list-style: disc;
     }
 
     /* Links */
     :global(a) {
-      color: #9ccfd8;
+      color: #a5b4fc;
       text-decoration: none;
-      border-bottom: 1px solid #9ccfd8;
+      border-bottom: 1px solid rgba(165, 180, 252, 0.3);
+      transition: all 0.2s ease;
     }
 
     :global(a:hover) {
-      opacity: 0.8;
+      color: #818cf8;
+      border-bottom: 1px solid rgba(129, 140, 248, 0.6);
+    }
+
+    /* Tables */
+    :global(table) {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(75, 85, 99, 0.3);
+    }
+
+    :global(th) {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.75rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+    }
+
+    :global(td) {
+      padding: 0.75rem;
+      border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+    }
+
+    :global(tr:last-child td) {
+      border-bottom: none;
     }
   }
 </style>
