@@ -204,7 +204,7 @@
                   <td class="px-6 py-4">{peer.total_tokens || 0}</td>
                   <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
                   <td class="px-6 py-4">
-                    {#if peer.online}
+                    {#if peer.online && peer.healthy}
                       <a href="/chat?model={peer.model_name}">
                         <button
                           class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
