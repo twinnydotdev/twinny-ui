@@ -42,7 +42,7 @@
       const openai = new OpenAI({
         apiKey: "dummy",
         dangerouslyAllowBrowser: true,
-        baseURL: 'http://twinny.dev/v1'
+        baseURL: 'https://twinny.dev/v1'
       })
 
       loading = false
