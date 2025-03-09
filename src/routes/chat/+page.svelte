@@ -6,15 +6,18 @@
   import { onMount } from 'svelte'
   import { t } from '$lib/translations'
   import { Motion } from 'svelte-motion'
+  import { OpenAI } from 'openai'
+  import type { CompletionStreaming, LLMProvider } from 'fluency.js/dist/chat'
+  import type { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
   let completion = $state('')
   let message = $state('')
   let loading = $state(false)
   let streaming = $state(false)
-  let messages = $state<Array<{ role: string; content: string }>>([])
+  let messages = $state<ChatCompletionMessageParam[]>([])
   let chatContainer: HTMLDivElement
   let inputRef: HTMLTextAreaElement
-  const model = $page.url.searchParams.get('model')
+  const model = $page.url.searchParams.get('model') || 'llama3.2:latest'
 
   async function streamChat(regenerateLastMessage = false) {
     if (!regenerateLastMessage && !message) return
@@ -24,7 +27,7 @@
       // If regenerating, remove the last assistant message
       if (regenerateLastMessage) {
         // Find the index of the last assistant message
-        const lastAssistantIndex = [...messages].reverse().findIndex(m => m.role === 'assistant')
+        const lastAssistantIndex = [...messages].reverse().findIndex((m) => m.role === 'assistant')
         if (lastAssistantIndex !== -1) {
           // Remove the last assistant message from the array
           messages = messages.slice(0, messages.length - lastAssistantIndex - 1)
@@ -37,167 +40,37 @@
 
       chatContainer.scrollTo({ top: chatContainer.scrollHeight })
 
-      const response = await fetch('https://twinny.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model,
-          messages
-        })
+      const openai = new OpenAI({
+        apiKey: "dummy-api-key",
+        dangerouslyAllowBrowser: true,
+        baseURL: 'http://localhost:4005/v1'
       })
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        messages.push({ role: 'assistant', content: `Error: ${JSON.stringify(errorData)}` })
+      loading = false
+
+      const stream = await openai.chat.completions.create({
+        model,
+        messages,
+        stream: true
+      })
+
+      for await (const chunk of stream) {
+        completion += chunk.choices[0].delta.content
       }
 
-      if (!response.body) return
+      const trimmedCompletion = completion.trim()
+      if (trimmedCompletion) {
+        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
+      }
 
-      const reader = response.body.pipeThrough(new TextDecoderStream()).getReader()
-      loading = false
-      await processStream(reader)
+      streaming = false
+      completion = ''
+
+      requestAnimationFrame(() => {
+        inputRef?.focus()
+      })
     } catch (error) {
       console.error('Stream error:', error)
-    }
-  }
-
-  function safeParseJson<T>(data: string): T | undefined {
-    try {
-      return JSON.parse(data) as T
-    } catch (e) {
-      return undefined
-    }
-  }
-
-  async function processStream(reader: ReadableStreamDefaultReader) {
-    try {
-      streaming = true
-      let buffer = ''
-
-      while (true) {
-        const { value, done } = await reader.read()
-
-        if (value) {
-          // Append new data to buffer
-          buffer += value
-
-          // Process the buffer to extract JSON objects
-          let processedUpTo = 0
-          let pos = 0
-
-          while (pos < buffer.length) {
-            // Try to find a complete JSON object starting at pos
-            let startPos = buffer.indexOf('{', pos)
-            if (startPos === -1) break; // No more JSON objects
-
-            let braceCount = 1
-            let inString = false
-            let escapeNext = false
-            let endPos = -1
-
-            // Scan forward to find the matching closing brace
-            for (let i = startPos + 1; i < buffer.length; i++) {
-              const char = buffer[i]
-
-              if (escapeNext) {
-                escapeNext = false
-                continue
-              }
-
-              if (char === '\\' && inString) {
-                escapeNext = true
-                continue
-              }
-
-              if (char === '"' && !escapeNext) {
-                inString = !inString
-                continue
-              }
-
-              if (!inString) {
-                if (char === '{') {
-                  braceCount++
-                } else if (char === '}') {
-                  braceCount--
-                  if (braceCount === 0) {
-                    endPos = i + 1
-                    break
-                  }
-                }
-              }
-            }
-
-            // If we found a complete JSON object
-            if (endPos !== -1) {
-              // Extract and process the complete JSON object
-              const jsonStr = buffer.substring(startPos, endPos)
-              const part: any = safeParseJson(jsonStr)
-
-              if (part) {
-                const content = part.choices[0]?.delta?.content || ''
-                if (content) {
-                  completion += content
-                  // Force a UI update by reassigning the completion
-                  completion = completion
-                }
-              }
-
-              // Move position for the next scan
-              processedUpTo = endPos
-              pos = endPos
-            } else {
-              // No complete JSON object found, exit the loop
-              break
-            }
-          }
-
-          // Remove processed JSON objects from the buffer
-          if (processedUpTo > 0) {
-            buffer = buffer.substring(processedUpTo)
-          }
-        }
-
-        if (done) {
-          // Try to process any remaining data in the buffer
-          // This is a best-effort attempt for any partial JSON
-          try {
-            const part: any = safeParseJson(buffer)
-            if (part) {
-              const content = part.choices[0]?.delta?.content || ''
-              if (content) {
-                completion += content
-              }
-            }
-          } catch (e) {
-            console.error('Error parsing remaining buffer:', e)
-          }
-          break
-        }
-      }
-
-      const trimmedCompletion = completion.trim()
-      if (trimmedCompletion) {
-        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
-      }
-
-      streaming = false
-      completion = ''
-
-      requestAnimationFrame(() => {
-        inputRef?.focus()
-      })
-    } catch (error) {
-      console.error('Error processing stream:', error)
-      // Handle error case
-      const trimmedCompletion = completion.trim()
-      if (trimmedCompletion) {
-        messages = [...messages, { role: 'assistant', content: trimmedCompletion }]
-      }
-      streaming = false
-      completion = ''
-      requestAnimationFrame(() => {
-        inputRef?.focus()
-      })
     }
   }
 
@@ -255,12 +128,7 @@
         onclick={newChat}
         class="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border border-stone-700/50 hover:bg-stone-800"
       >
-        <svg
-          height="16"
-          stroke-linejoin="round"
-          viewBox="0 0 16 16"
-          width="16"
-        >
+        <svg height="16" stroke-linejoin="round" viewBox="0 0 16 16" width="16">
           <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -273,8 +141,9 @@
     {/if}
   </header>
 
-  <main class="flex flex-col max-w-4xl mx-auto w-full sm:min-w-[860px] min-h-[600px] overflow-hidden">
-
+  <main
+    class="flex flex-col max-w-4xl mx-auto w-full sm:min-w-[860px] min-h-[600px] overflow-hidden"
+  >
     {#if !messages.length && !completion}
       <Motion animate={{ opacity: 1, scale: 1.03 }} transition={{ duration: 0.3 }} let:motion>
         <div
@@ -307,9 +176,7 @@
             {$t('common.learn_how')}
           </p>
           <a href="https://github.com/twinnydotdev/symmetry-cli" target="_blank">
-            <button
-              class="flex items-center gap-2 mt-6 px-4 py-2 btn-primary"
-            >
+            <button class="flex items-center gap-2 mt-6 px-4 py-2 btn-primary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -341,7 +208,7 @@
               class={`max-w-[90%] text-wrap p-3 sm:p-4 rounded-2xl shadow-md ${msg.role === 'user' ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white ml-auto' : 'bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700'}`}
             >
               <div class="chat-content">
-                {@html processMarkdown(msg.content)}
+                {@html processMarkdown(msg.content as string)}
               </div>
             </div>
 
@@ -375,7 +242,10 @@
 
       {#if completion}
         <Motion animate={{ opacity: 1 }} transition={{ duration: 0.5 }} let:motion>
-          <div use:motion class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md">
+          <div
+            use:motion
+            class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md"
+          >
             <div class="chat-content">
               {@html processMarkdown(completion)}
             </div>
@@ -385,15 +255,24 @@
 
       {#if loading}
         <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
-          <div use:motion class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md">
+          <div
+            use:motion
+            class="max-w-[85%] p-4 rounded-2xl bg-gradient-to-br from-stone-800 to-stone-900 text-white border border-stone-700 shadow-md"
+          >
             <div class="flex items-center text-wrap text-white chat-content">
               <span>
                 {$t('common.thinking')}
               </span>
               <div class="ml-3 flex space-x-1">
                 <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse"></div>
-                <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse" style="animation-delay: 0.2s"></div>
-                <div class="w-2 h-2 rounded-full bg-stone-400 animate-pulse" style="animation-delay: 0.4s"></div>
+                <div
+                  class="w-2 h-2 rounded-full bg-stone-400 animate-pulse"
+                  style="animation-delay: 0.2s"
+                ></div>
+                <div
+                  class="w-2 h-2 rounded-full bg-stone-400 animate-pulse"
+                  style="animation-delay: 0.4s"
+                ></div>
               </div>
             </div>
           </div>
@@ -435,7 +314,12 @@
         </button>
 
         <div class="flex justify-between items-center mt-2 text-xs text-stone-500">
-          <div>Press <kbd class="px-1.5 py-0.5 bg-stone-800 rounded text-stone-400 border border-stone-700">Enter</kbd> to send</div>
+          <div>
+            Press <kbd
+              class="px-1.5 py-0.5 bg-stone-800 rounded text-stone-400 border border-stone-700"
+              >Enter</kbd
+            > to send
+          </div>
           <small>v0.1 alpha</small>
         </div>
       </div>
