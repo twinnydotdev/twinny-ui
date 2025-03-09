@@ -7,7 +7,6 @@
   import { t } from '$lib/translations'
   import { Motion } from 'svelte-motion'
   import { OpenAI } from 'openai'
-  import type { CompletionStreaming, LLMProvider } from 'fluency.js/dist/chat'
   import type { ChatCompletionMessageParam } from 'openai/resources/index.mjs'
 
   let completion = $state('')
@@ -41,9 +40,9 @@
       chatContainer.scrollTo({ top: chatContainer.scrollHeight })
 
       const openai = new OpenAI({
-        apiKey: "dummy-api-key",
+        apiKey: "dummy",
         dangerouslyAllowBrowser: true,
-        baseURL: 'http://localhost:4005/v1'
+        baseURL: 'http://twinny.dev/v1'
       })
 
       loading = false
