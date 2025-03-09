@@ -196,7 +196,7 @@
       </Motion>
     {/if}
 
-    <div bind:this={chatContainer} class="flex-1 min-h-[300px] overflow-y-auto p-4 space-y-6">
+    <div bind:this={chatContainer} class="flex-1 min-h-[300px] overflow-y-auto p-2 space-y-6">
       {#each messages as msg, i}
         <Motion animate={{ opacity: 1 }} transition={{ duration: 0.3 }} let:motion>
           <div
@@ -279,7 +279,7 @@
       {/if}
     </div>
 
-    <div class="p-4 border-t border-stone-800 backdrop-blur-sm sticky bottom-0 z-10">
+    <div class="p-2 border-t border-stone-800 backdrop-blur-sm sticky bottom-0 z-10">
       <div class="relative w-full max-w-3xl mx-auto">
         <textarea
           bind:this={inputRef}
