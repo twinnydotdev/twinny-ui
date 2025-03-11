@@ -122,11 +122,7 @@
     </div>
   </header>
 
-  <main class="flex-grow py-8 w-full">
-    <div class="container mx-auto flex justify-center items-center w-full">
-      <slot />
-    </div>
-  </main>
+  <slot />
 
   <footer class="py-6 border-t border-secondary-800">
     <div class="container mx-auto">
