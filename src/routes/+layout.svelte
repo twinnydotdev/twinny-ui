@@ -122,7 +122,9 @@
     </div>
   </header>
 
-  <slot />
+  <main class="flex grow flex-col items-center justify-center">
+    <slot />
+  </main>
 
   <footer class="py-6 border-t border-secondary-800">
     <div class="container mx-auto">

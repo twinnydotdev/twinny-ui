@@ -49,7 +49,7 @@
             </span>
           </button>
         </a>
-        <a href="/symmetry" rel="noreferrer noopener">
+        <a href="https://chat.twinny.dev" target="_blank" rel="noreferrer noopener">
           <button class="btn-secondary">
             <span class="flex items-center">
               <svg
@@ -70,7 +70,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-              {$t('common.try-symmetry')}
+              {$t('common.symmetry-chat')}
             </span>
           </button>
         </a>

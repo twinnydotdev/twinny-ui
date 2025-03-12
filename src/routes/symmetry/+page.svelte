@@ -145,6 +145,14 @@
       </div>
     </div>
 
+    <div class="flex justify-center mb-6">
+      <a href="https://chat.twinny.dev" target="_blank" rel="noopener noreferrer">
+        <button class="px-6 py-3 rounded-lg bg-rose-600 rose:bg-green-500 transition-colors text-lg font-medium flex items-center gap-2">
+          {$t('common.symmetry-chat')}
+        </button>
+      </a>
+    </div>
+
     <div class="bg-stone-800 rounded-xl overflow-hidden shadow-lg">
       <div class="hidden md:block overflow-x-auto">
         <table class="w-full text-sm">
@@ -205,13 +213,7 @@
                   <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
                   <td class="px-6 py-4">
                     {#if peer.online && peer.healthy}
-                      <a href="/chat?model={peer.model_name}">
-                        <button
-                          class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
-                        >
-                          {$t('common.chat')}
-                        </button>
-                      </a>
+                      <span class="text-green-500">{$t('common.online')}</span>
                     {:else}
                       <span class="text-stone-500">{$t('common.offline')}</span>
                     {/if}
@@ -291,7 +293,7 @@
                 </div>
               </div>
               {#if peer.online}
-                <a href="/chat?model={peer.model_name}">
+                <a href="https://chat.twinny.dev" target="_blank" rel="noopener noreferrer">
                   <button
                     class="w-full mt-3 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
                   >
