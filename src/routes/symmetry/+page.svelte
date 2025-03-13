@@ -158,7 +158,7 @@
         <table class="w-full text-sm">
           <thead class="bg-stone-700">
             <tr>
-              {#each ['model', 'name', 'online', 'provider', 'total_requests', 'tokens_per_sec', 'total_tokens', 'up_time_minutes', 'chat'] as header}
+              {#each ['model', 'name', 'status', 'total_requests', 'tokens_per_sec', 'total_tokens', 'up_time_minutes'] as header}
                 <th
                   class="px-6 py-4 text-left font-semibold {header === 'provider'
                     ? 'hidden lg:table-cell'
@@ -174,13 +174,10 @@
                 <tr class="hover:bg-stone-700/30 transition-colors">
                   <td class="px-6 py-4"><div class="h-5 w-24 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4"><div class="h-5 w-24 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4"><div class="h-5 w-16 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4 hidden lg:table-cell"><div class="h-5 w-20 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4 hidden xl:table-cell"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4"><div class="h-8 w-20 bg-stone-700 animate-pulse rounded"></div></td>
                 </tr>
               {/each}
             {:else}
@@ -190,13 +187,6 @@
                   <td class="px-6 py-4">{getShortId(peer.name, 10, 10)}</td>
                   <td class="px-6 py-4">
                     <span
-                      class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online
-                        ? 'bg-green-500/10 text-green-500'
-                        : 'bg-red-500/10 text-red-500'}"
-                    >
-                      {peer.online ? 'Online' : 'Offline'}
-                    </span>
-                    <span
                       class="inline-flex px-2.5 mt-2 py-0.5 rounded-full text-xs font-medium {peer.healthy
                         ? 'bg-green-500/10 text-green-500'
                         : 'bg-red-500/10 text-red-500'}"
@@ -204,20 +194,12 @@
                       <span>{peer.healthy ? 'Healthy' : 'Unhealthy'}</span>
                   </span>
                   </td>
-                  <td class="px-6 py-4 hidden lg:table-cell">{peer.provider || 'unknown'}</td>
                   <td class="px-6 py-4">{peer.total_requests || 0}</td>
                   <td class="px-6 py-4 hidden xl:table-cell"
                     >{Math.round(peer.avg_tokens_per_second || 0)}</td
                   >
                   <td class="px-6 py-4">{peer.total_tokens || 0}</td>
                   <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
-                  <td class="px-6 py-4">
-                    {#if peer.online && peer.healthy}
-                      <span class="text-green-500">{$t('common.online')}</span>
-                    {:else}
-                      <span class="text-stone-500">{$t('common.offline')}</span>
-                    {/if}
-                  </td>
                 </tr>
               {/each}
             {/if}
@@ -237,10 +219,6 @@
                 <div class="h-5 w-16 bg-stone-700 animate-pulse rounded"></div>
               </div>
               <div class="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p class="text-stone-400">{$t('common.provider')}</p>
-                  <div class="h-4 w-16 bg-stone-700 animate-pulse rounded mt-1"></div>
-                </div>
                 <div>
                   <p class="text-stone-400">{$t('common.total_requests')}</p>
                   <div class="h-4 w-12 bg-stone-700 animate-pulse rounded mt-1"></div>
@@ -292,15 +270,6 @@
                   <p>{peer.duration_minutes || 0}</p>
                 </div>
               </div>
-              {#if peer.online}
-                <a href="https://chat.twinny.dev" target="_blank" rel="noopener noreferrer">
-                  <button
-                    class="w-full mt-3 px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 transition-colors"
-                  >
-                    {$t('common.chat')}
-                  </button>
-                </a>
-              {/if}
             </div>
           {/each}
         {/if}
