@@ -13,7 +13,7 @@
 
   ## Data Collection and Usage
   We collect and process the following information:
-  - Inferece data sent through the Symmetry network
+  - Inference data sent through the Symmetry network
   - Connection and session metadata (timestamps, network identifiers, etc.)
   - Technical information necessary for service operation
 
