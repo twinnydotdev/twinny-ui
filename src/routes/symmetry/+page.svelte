@@ -244,11 +244,10 @@
                   <p class="text-sm text-stone-400">{peer.name}</p>
                 </div>
                 <span
-                  class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.online
+                  class="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {peer.healthy
                     ? 'bg-green-500/10 text-green-500'
                     : 'bg-red-500/10 text-red-500'}"
                 >
-                  {peer.online ? 'Online' : 'Offline'}
                   {peer.healthy ? '💖' : '☠️'}
                 </span>
               </div>
