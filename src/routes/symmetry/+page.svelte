@@ -103,7 +103,7 @@
               <p class="text-sm font-medium text-stone-400">{$t(`common.${key}`)}</p>
               <p class="text-3xl font-bold">
                 {#if loading}
-                  <div class="h-8 w-16 bg-stone-700 animate-pulse rounded"></div>
+                  <span class="h-8 w-16 bg-stone-700 animate-pulse rounded"></span>
                 {:else}
                   {value}
                 {/if}
@@ -158,12 +158,9 @@
         <table class="w-full text-sm">
           <thead class="bg-stone-700">
             <tr>
-              {#each ['model', 'name', 'status', 'total_requests', 'tokens_per_sec', 'total_tokens', 'up_time_minutes'] as header}
+              {#each ['model', 'name', 'status', 'total_requests', 'total_tokens', 'up_time_minutes'] as header}
                 <th
-                  class="px-6 py-4 text-left font-semibold {header === 'provider'
-                    ? 'hidden lg:table-cell'
-                    : ''} {header === 'tokens_per_sec' ? 'hidden xl:table-cell' : ''}"
-                  >{$t(`common.${header}`)}</th
+                  class="px-6 py-4 text-left font-semibold">{$t(`common.${header}`)}</th
                 >
               {/each}
             </tr>
@@ -172,7 +169,6 @@
             {#if loading}
               {#each Array(3) as _}
                 <tr class="hover:bg-stone-700/30 transition-colors">
-                  <td class="px-6 py-4"><div class="h-5 w-24 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4"><div class="h-5 w-24 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4 hidden lg:table-cell"><div class="h-5 w-20 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
@@ -195,9 +191,6 @@
                   </span>
                   </td>
                   <td class="px-6 py-4">{peer.total_requests || 0}</td>
-                  <td class="px-6 py-4 hidden xl:table-cell"
-                    >{Math.round(peer.avg_tokens_per_second || 0)}</td
-                  >
                   <td class="px-6 py-4">{peer.total_tokens || 0}</td>
                   <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
                 </tr>

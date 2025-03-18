@@ -86,7 +86,7 @@
   "subtitle": "The free and private AI extension for Visual Studio Code.",
   "symmetry_cli": "You can also run the Symmetry client from the command line using the CLI.",
   "symmetry_description": "Symmetry is the peer-to-peer network for Twinny. It enables users to connect with each other and share computational resources, enhancing collaboration and distributed processing capabilities.",
-  "symmetry_github_repo": "The client and server code is open source on our Github page, don't forget to star and follow!",
+  "symmetry_github_repo": "The client code is open source on our Github page, don't forget to star and follow!",
   "symmetry_installation": "install the Symmetry client.",
   "symmetry_learn_more": "Symmetry client is open source software, licensed under MIT.",
   "symmetry_server_learn_more": "Symmetry server is also open source software, licensed under MIT.",

@@ -5,7 +5,7 @@
   import { slide } from 'svelte/transition'
 
   let { form } = $props()
-  let email = ''
+  let email = $state()
 </script>
 
 <div class="w-full">
