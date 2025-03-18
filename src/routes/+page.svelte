@@ -453,7 +453,7 @@
         </div>
       </div>
       <h3 class="text-xl font-bold text-white text-center mb-2">Token Incentives</h3>
-      <p class="text-secondary-300 text-center">Earn Symmetry tokens for your contributions to the network. Coming soon: trade or stake your tokens for additional benefits.</p>
+      <p class="text-secondary-300 text-center">Earn Symmetry tokens for your contributions to the network. Coming soon.</p>
     </div>
 
     <div class="card bg-secondary-800/50 backdrop-blur-sm border border-secondary-700/50 hover:border-rose-500/30 transition-all duration-300">
@@ -487,8 +487,8 @@
 
       <!-- svelte-ignore a11y_consider_explicit_label -->
       <a href="https://x.com/twinnydotdev" target="_blank" rel="noreferrer noopener" class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-800 hover:bg-secondary-700 transition-colors">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+        <svg width="20" height="20" viewBox="0 0 1200 1227" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" fill="white"/>
         </svg>
       </a>
     </div>
