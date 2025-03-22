@@ -4,29 +4,7 @@
   import { URL_GITHUB } from '$lib/const'
   import { getShortId } from '$lib/utils'
 
-  interface Stats {
-    activeModels: number
-    activePeers: number
-    averageSessionMinutes: number
-    totalProviderTime: number
-    totalRequests: number
-    totalRequestsToday: number
-    totalSessions: number
-    uniquePeerCount: number
-  }
-
   let ws: WebSocket
-  let stats = $state<Stats>({
-    activeModels: 0,
-    activePeers: 0,
-    averageSessionMinutes: 0,
-    totalProviderTime: 0,
-    totalRequests: 0,
-    totalRequestsToday: 0,
-    totalSessions: 0,
-    uniquePeerCount: 0
-  })
-
   let peers = $state<any[]>([])
   let connectionStatus = $state<'connected' | 'disconnected'>('disconnected')
   let loading = $state(true)
@@ -38,16 +16,6 @@
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
       peers = data.allPeers
-      stats = {
-        averageSessionMinutes: data.stats.averageSessionMinutes,
-        totalProviderTime: data.stats.totalProviderTime,
-        totalRequests: data.stats.totalRequests,
-        totalRequestsToday: data.stats.totalRequestsToday,
-        totalSessions: data.stats.totalSessions,
-        activePeers: data.activePeers,
-        activeModels: data.activeModels,
-        uniquePeerCount: data.uniquePeerCount
-      }
       loading = false
     }
   })
@@ -74,44 +42,6 @@
     <div class="border-b border-stone-800 pb-6">
       <h2 class="text-3xl font-bold text-stone-100 mb-2">{$t('common.symmetry')}</h2>
       <p class="text-stone-400">{$t('common.access')}</p>
-    </div>
-
-    {#if connectionStatus === 'disconnected'}
-      <div class="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-lg">
-        Connection lost. Attempting to reconnect...
-      </div>
-    {/if}
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {#each Object.entries(stats) as [key, value]}
-        <div class="bg-gradient-to-br from-stone-800 to-stone-900 p-6 rounded-xl shadow-lg">
-          <div class="flex items-center gap-4">
-            <div class="rounded-lg">
-              <div class=" text-stone-100">
-                {#if key === 'activeModels'}🤖
-                {:else if key === 'activePeers'}⚡
-                {:else if key === 'uniquePeerCount'}👥
-                {:else if key === 'averageSessionMinutes'}⏱️
-                {:else if key === 'totalProviderTime'}⌛
-                {:else if key === 'totalRequests'}📊
-                {:else if key === 'totalRequestsToday'}📈
-                {:else}📝
-                {/if}
-              </div>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-stone-400">{$t(`common.${key}`)}</p>
-              <p class="text-3xl font-bold">
-                {#if loading}
-                  <span class="h-8 w-16 bg-stone-700 animate-pulse rounded"></span>
-                {:else}
-                  {value}
-                {/if}
-              </p>
-            </div>
-          </div>
-        </div>
-      {/each}
     </div>
 
     <div class="space-y-6">
