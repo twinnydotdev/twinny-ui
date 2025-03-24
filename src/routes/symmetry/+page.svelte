@@ -88,7 +88,7 @@
         <table class="w-full text-sm">
           <thead class="bg-stone-700">
             <tr>
-              {#each ['model', 'name', 'status', 'total_requests', 'total_tokens', 'up_time_minutes'] as header}
+              {#each ['model', 'name', 'status'] as header}
                 <th
                   class="px-6 py-4 text-left font-semibold">{$t(`common.${header}`)}</th
                 >
@@ -101,9 +101,6 @@
                 <tr class="hover:bg-stone-700/30 transition-colors">
                   <td class="px-6 py-4"><div class="h-5 w-24 bg-stone-700 animate-pulse rounded"></div></td>
                   <td class="px-6 py-4 hidden lg:table-cell"><div class="h-5 w-20 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4 hidden xl:table-cell"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
-                  <td class="px-6 py-4"><div class="h-5 w-12 bg-stone-700 animate-pulse rounded"></div></td>
                 </tr>
               {/each}
             {:else}
@@ -120,9 +117,6 @@
                       <span>{peer.healthy ? 'Healthy' : 'Unhealthy'}</span>
                   </span>
                   </td>
-                  <td class="px-6 py-4">{peer.total_requests || 0}</td>
-                  <td class="px-6 py-4">{peer.total_tokens || 0}</td>
-                  <td class="px-6 py-4">{peer.duration_minutes || 0}</td>
                 </tr>
               {/each}
             {/if}
