@@ -10,6 +10,10 @@
 
   // Animation for network nodes
   let ctx: CanvasRenderingContext2D
+  let mouseX = 0
+  let mouseY = 0
+  let mouseRadius = 100
+  let isMouseOver = false
 
   function initNetworkCanvas(node: HTMLCanvasElement) {
     const canvas = node;
@@ -19,21 +23,62 @@
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    const nodes: {x: number, y: number, radius: number, vx: number, vy: number, color: string}[] = []
+    // Track mouse position
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseX = e.clientX - rect.left
+      mouseY = e.clientY - rect.top
+      isMouseOver = true
+    })
+
+    canvas.addEventListener('mouseleave', () => {
+      isMouseOver = false
+    })
+
+    // Handle resize
+    const resizeObserver = new ResizeObserver(() => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    })
+    resizeObserver.observe(canvas)
+
+    const nodes: {
+      x: number,
+      y: number,
+      radius: number,
+      vx: number,
+      vy: number,
+      color: string,
+      originalRadius: number,
+      targetRadius: number,
+      hue: number
+    }[] = []
 
     // Create nodes
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 25; i++) {
+      const radius = 2 + Math.random() * 3
+      const hue = 350 + Math.random() * 20 // Red to pink hue range
       nodes.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: 2 + Math.random() * 3,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        color: `rgba(244, 63, 94, ${0.2 + Math.random() * 0.3})`
+        radius: radius,
+        originalRadius: radius,
+        targetRadius: radius,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7,
+        color: `hsla(${hue}, 90%, 60%, ${0.3 + Math.random() * 0.4})`,
+        hue: hue
       })
     }
 
-    function drawNodes() {
+    let lastTime = 0
+    function drawNodes(timestamp: number) {
+      // Calculate delta time for smooth animation regardless of frame rate
+      const deltaTime = timestamp - lastTime
+      lastTime = timestamp
+      const fps = deltaTime > 0 ? 1000 / deltaTime : 60
+      const speedFactor = 60 / fps // Normalize to 60fps
+
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       // Draw connections
@@ -42,38 +87,118 @@
           const dx = nodes[i].x - nodes[j].x
           const dy = nodes[i].y - nodes[j].y
           const distance = Math.sqrt(dx * dx + dy * dy)
+          const maxDistance = 100
 
-          if (distance < 80) {
+          if (distance < maxDistance) {
+            // Create gradient for connections
+            const gradient = ctx.createLinearGradient(
+              nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y
+            )
+            gradient.addColorStop(0, `hsla(${nodes[i].hue}, 90%, 60%, ${0.15 * (1 - distance / maxDistance)})`)
+            gradient.addColorStop(1, `hsla(${nodes[j].hue}, 90%, 60%, ${0.15 * (1 - distance / maxDistance)})`)
+
             ctx.beginPath()
             ctx.moveTo(nodes[i].x, nodes[i].y)
             ctx.lineTo(nodes[j].x, nodes[j].y)
-            ctx.strokeStyle = `rgba(244, 63, 94, ${0.1 * (1 - distance / 80)})`
+            ctx.strokeStyle = gradient
             ctx.lineWidth = 1
             ctx.stroke()
           }
         }
       }
 
-      // Draw nodes
+      // Draw nodes and handle mouse interaction
       for (const node of nodes) {
+        // Smooth radius transition
+        node.radius += (node.targetRadius - node.radius) * 0.1 * speedFactor
+
+        // Draw glow effect
+        const glow = ctx.createRadialGradient(
+          node.x, node.y, 0,
+          node.x, node.y, node.radius * 2
+        )
+        glow.addColorStop(0, `hsla(${node.hue}, 90%, 60%, 0.5)`)
+        glow.addColorStop(1, `hsla(${node.hue}, 90%, 60%, 0)`)
+
+        ctx.beginPath()
+        ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2)
+        ctx.fillStyle = glow
+        ctx.fill()
+
+        // Draw node
         ctx.beginPath()
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
         ctx.fillStyle = node.color
         ctx.fill()
 
-        // Update position
-        node.x += node.vx
-        node.y += node.vy
+        // Mouse interaction
+        if (isMouseOver) {
+          const dx = mouseX - node.x
+          const dy = mouseY - node.y
+          const distance = Math.sqrt(dx * dx + dy * dy)
 
-        // Bounce off walls
-        if (node.x < 0 || node.x > canvas.width) node.vx *= -1
-        if (node.y < 0 || node.y > canvas.height) node.vy *= -1
+          if (distance < mouseRadius) {
+            // Repel nodes from mouse
+            const force = (1 - distance / mouseRadius) * 0.2 * speedFactor
+            node.vx -= dx * force / distance
+            node.vy -= dy * force / distance
+
+            // Increase size when near mouse
+            node.targetRadius = node.originalRadius * (1.5 + (1 - distance / mouseRadius))
+          } else {
+            node.targetRadius = node.originalRadius
+          }
+        } else {
+          node.targetRadius = node.originalRadius
+        }
+
+        // Update position with delta time for smooth movement
+        node.x += node.vx * speedFactor
+        node.y += node.vy * speedFactor
+
+        // Add slight randomness to movement
+        node.vx += (Math.random() - 0.5) * 0.02 * speedFactor
+        node.vy += (Math.random() - 0.5) * 0.02 * speedFactor
+
+        // Limit velocity
+        const maxVel = 1.5
+        const vel = Math.sqrt(node.vx * node.vx + node.vy * node.vy)
+        if (vel > maxVel) {
+          node.vx = (node.vx / vel) * maxVel
+          node.vy = (node.vy / vel) * maxVel
+        }
+
+        // Bounce off walls with slight dampening
+        if (node.x < 0) {
+          node.x = 0
+          node.vx *= -0.9
+        } else if (node.x > canvas.width) {
+          node.x = canvas.width
+          node.vx *= -0.9
+        }
+
+        if (node.y < 0) {
+          node.y = 0
+          node.vy *= -0.9
+        } else if (node.y > canvas.height) {
+          node.y = canvas.height
+          node.vy *= -0.9
+        }
       }
 
       requestAnimationFrame(drawNodes)
     }
 
-    drawNodes()
+    requestAnimationFrame(drawNodes)
+
+    // Clean up on destroy
+    return {
+      destroy() {
+        resizeObserver.disconnect()
+        canvas.removeEventListener('mousemove', () => {})
+        canvas.removeEventListener('mouseleave', () => {})
+      }
+    }
   }
 
   // Animation for symmetry logo
@@ -87,61 +212,181 @@
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    let rotation = 0
+    // Handle resize
+    const resizeObserver = new ResizeObserver(() => {
+      canvas.width = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
+    })
+    resizeObserver.observe(canvas)
 
-    function drawSymmetryLogo() {
+    let rotation = 0
+    let pulsePhase = 0
+    const nodePositions: {x: number, y: number, angle: number, pulseOffset: number}[] = []
+
+    // Calculate node positions
+    const numNodes = 6
+    for (let i = 0; i < numNodes; i++) {
+      const angle = (i / numNodes) * Math.PI * 2
+      nodePositions.push({
+        x: 0, // Will be calculated in draw function
+        y: 0, // Will be calculated in draw function
+        angle: angle,
+        pulseOffset: Math.random() * Math.PI * 2
+      })
+    }
+
+    let lastTime = 0
+    function drawSymmetryLogo(timestamp: number) {
+      // Calculate delta time for smooth animation
+      const deltaTime = timestamp - lastTime
+      lastTime = timestamp
+      const fps = deltaTime > 0 ? 1000 / deltaTime : 60
+      const speedFactor = 60 / fps // Normalize to 60fps
+
       symmetryCtx.clearRect(0, 0, canvas.width, canvas.height)
 
       const centerX = canvas.width / 2
       const centerY = canvas.height / 2
       const radius = Math.min(centerX, centerY) * 0.7
 
+      // Update animation values
+      rotation += 0.003 * speedFactor
+      pulsePhase += 0.02 * speedFactor
+
+      // Create background glow
+      const bgGlow = symmetryCtx.createRadialGradient(
+        centerX, centerY, 0,
+        centerX, centerY, radius * 1.2
+      )
+      bgGlow.addColorStop(0, 'rgba(244, 63, 94, 0.1)')
+      bgGlow.addColorStop(1, 'rgba(244, 63, 94, 0)')
+
+      symmetryCtx.beginPath()
+      symmetryCtx.arc(centerX, centerY, radius * 1.2, 0, Math.PI * 2)
+      symmetryCtx.fillStyle = bgGlow
+      symmetryCtx.fill()
+
       // Save context
       symmetryCtx.save()
       symmetryCtx.translate(centerX, centerY)
-      symmetryCtx.rotate(rotation)
 
-      // Draw outer circle
+      // Draw outer rotating circle
+      symmetryCtx.rotate(rotation)
       symmetryCtx.beginPath()
       symmetryCtx.arc(0, 0, radius, 0, Math.PI * 2)
-      symmetryCtx.strokeStyle = 'rgba(244, 63, 94, 0.3)'
+
+      // Create gradient for outer circle
+      const circleGradient = symmetryCtx.createLinearGradient(-radius, -radius, radius, radius)
+      circleGradient.addColorStop(0, 'rgba(244, 63, 94, 0.4)')
+      circleGradient.addColorStop(1, 'rgba(244, 63, 94, 0.2)')
+
+      symmetryCtx.strokeStyle = circleGradient
       symmetryCtx.lineWidth = 2
       symmetryCtx.stroke()
 
-      // Draw inner connections
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2
-        const x = Math.cos(angle) * radius * 0.7
-        const y = Math.sin(angle) * radius * 0.7
+      // Draw secondary circle with opposite rotation
+      symmetryCtx.rotate(-rotation * 2)
+      symmetryCtx.beginPath()
+      symmetryCtx.arc(0, 0, radius * 0.85, 0, Math.PI * 2)
+      symmetryCtx.strokeStyle = 'rgba(244, 63, 94, 0.15)'
+      symmetryCtx.lineWidth = 1
+      symmetryCtx.stroke()
+
+      // Reset rotation for nodes
+      symmetryCtx.rotate(rotation)
+
+      // Update node positions
+      for (const node of nodePositions) {
+        // Calculate position with pulsing radius
+        const pulseAmount = 0.05 * Math.sin(pulsePhase + node.pulseOffset)
+        const nodeRadius = radius * (0.7 + pulseAmount)
+        node.x = Math.cos(node.angle) * nodeRadius
+        node.y = Math.sin(node.angle) * nodeRadius
+      }
+
+      // Draw connections between adjacent nodes
+      symmetryCtx.beginPath()
+      for (let i = 0; i < nodePositions.length; i++) {
+        const current = nodePositions[i]
+        const next = nodePositions[(i + 1) % nodePositions.length]
+
+        symmetryCtx.moveTo(current.x, current.y)
+        symmetryCtx.lineTo(next.x, next.y)
+      }
+      symmetryCtx.closePath()
+      symmetryCtx.strokeStyle = 'rgba(244, 63, 94, 0.3)'
+      symmetryCtx.lineWidth = 1
+      symmetryCtx.stroke()
+
+      // Draw inner connections to center
+      for (const node of nodePositions) {
+        // Create gradient for connections
+        const gradient = symmetryCtx.createLinearGradient(
+          0, 0, node.x, node.y
+        )
+        gradient.addColorStop(0, 'rgba(244, 63, 94, 0.7)')
+        gradient.addColorStop(1, 'rgba(244, 63, 94, 0.3)')
 
         symmetryCtx.beginPath()
         symmetryCtx.moveTo(0, 0)
-        symmetryCtx.lineTo(x, y)
-        symmetryCtx.strokeStyle = 'rgba(244, 63, 94, 0.5)'
+        symmetryCtx.lineTo(node.x, node.y)
+        symmetryCtx.strokeStyle = gradient
         symmetryCtx.lineWidth = 1.5
         symmetryCtx.stroke()
 
-        // Draw node
+        // Draw node with glow
+        const nodeGlow = symmetryCtx.createRadialGradient(
+          node.x, node.y, 0,
+          node.x, node.y, 8
+        )
+        nodeGlow.addColorStop(0, 'rgba(244, 63, 94, 0.8)')
+        nodeGlow.addColorStop(1, 'rgba(244, 63, 94, 0)')
+
         symmetryCtx.beginPath()
-        symmetryCtx.arc(x, y, 4, 0, Math.PI * 2)
+        symmetryCtx.arc(node.x, node.y, 8, 0, Math.PI * 2)
+        symmetryCtx.fillStyle = nodeGlow
+        symmetryCtx.fill()
+
+        // Draw actual node
+        symmetryCtx.beginPath()
+        symmetryCtx.arc(node.x, node.y, 4, 0, Math.PI * 2)
         symmetryCtx.fillStyle = 'rgba(244, 63, 94, 0.8)'
         symmetryCtx.fill()
       }
 
-      // Draw center node
+      // Draw center node with pulsing effect
+      const centerPulse = 0.2 * Math.sin(pulsePhase * 1.5) + 1
+      const centerGlow = symmetryCtx.createRadialGradient(
+        0, 0, 0,
+        0, 0, 12 * centerPulse
+      )
+      centerGlow.addColorStop(0, 'rgba(244, 63, 94, 0.9)')
+      centerGlow.addColorStop(1, 'rgba(244, 63, 94, 0)')
+
       symmetryCtx.beginPath()
-      symmetryCtx.arc(0, 0, 6, 0, Math.PI * 2)
+      symmetryCtx.arc(0, 0, 12 * centerPulse, 0, Math.PI * 2)
+      symmetryCtx.fillStyle = centerGlow
+      symmetryCtx.fill()
+
+      symmetryCtx.beginPath()
+      symmetryCtx.arc(0, 0, 6 * centerPulse, 0, Math.PI * 2)
       symmetryCtx.fillStyle = 'rgba(244, 63, 94, 1)'
       symmetryCtx.fill()
 
       // Restore context
       symmetryCtx.restore()
 
-      rotation += 0.005
       requestAnimationFrame(drawSymmetryLogo)
     }
 
-    drawSymmetryLogo()
+    requestAnimationFrame(drawSymmetryLogo)
+
+    // Clean up on destroy
+    return {
+      destroy() {
+        resizeObserver.disconnect()
+      }
+    }
   }
 </script>
 
@@ -471,8 +716,72 @@
 
 </section>
 
-<!-- Community Section -->
+
+
+<!-- Roadmap Section -->
 <section class="w-full max-w-7xl py-16 border-t border-secondary-800/50">
+  <div class="text-center mb-12">
+    <h2 class="text-3xl font-bold text-white mb-4">Roadmap</h2>
+    <p class="text-xl text-rose-500 font-bold mb-6">Building the Future of Distributed AI</p>
+    <p class="text-secondary-300 max-w-3xl mx-auto">We're rebuilding Symmetry from the ground up to create a truly distributed network with enhanced capabilities for developers.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="card bg-secondary-800/50 backdrop-blur-sm border border-secondary-700/50 hover:border-rose-500/30 transition-all duration-300">
+      <div class="flex items-center justify-center mb-6">
+        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-white text-center mb-2">Truly Distributed</h3>
+      <p class="text-secondary-300 text-center">Rebuilding Symmetry's architecture to create a fully decentralized network that's more resilient and scalable.</p>
+    </div>
+
+    <div class="card bg-secondary-800/50 backdrop-blur-sm border border-secondary-700/50 hover:border-rose-500/30 transition-all duration-300">
+      <div class="flex items-center justify-center mb-6">
+        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-white text-center mb-2">Resource Sharing</h3>
+      <p class="text-secondary-300 text-center">Making it easier for developers to share computational resources, models, and capabilities across the network.</p>
+    </div>
+
+    <div class="card bg-secondary-800/50 backdrop-blur-sm border border-secondary-700/50 hover:border-rose-500/30 transition-all duration-300">
+      <div class="flex items-center justify-center mb-6">
+        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-white text-center mb-2">Agent Capabilities</h3>
+      <p class="text-secondary-300 text-center">Introducing advanced AI agent capabilities to Twinny, enabling more complex and autonomous assistance for developers.</p>
+    </div>
+
+    <div class="card bg-secondary-800/50 backdrop-blur-sm border border-secondary-700/50 hover:border-rose-500/30 transition-all duration-300">
+      <div class="flex items-center justify-center mb-6">
+        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center">
+          <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+      </div>
+      <h3 class="text-xl font-bold text-white text-center mb-2">Enhanced Performance</h3>
+      <p class="text-secondary-300 text-center">Optimizing network performance for faster response times and more efficient resource utilization across the Symmetry network.</p>
+    </div>
+  </div>
+
+  <div class="mt-12 text-center">
+    <p class="text-secondary-300 max-w-3xl mx-auto">Stay tuned for more updates as we continue to develop these features and more!</p>
+  </div>
+
+  <!-- Community Section -->
+<section class="w-full mt-12 max-w-7xl py-16 border-t border-secondary-800/50">
   <div class="text-center max-w-3xl mx-auto">
     <h2 class="text-3xl font-bold text-white mb-6">{$t('common.community_title')}</h2>
     <p class="text-secondary-300 mb-8">{$t('common.community_desc')}</p>
@@ -493,4 +802,5 @@
       </a>
     </div>
   </div>
+</section>
 </section>
