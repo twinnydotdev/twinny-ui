@@ -1,96 +1,56 @@
-<script>
-  import { Marked } from 'marked'
+<svelte:head>
+  <title>privacy — twinny</title>
+  <meta
+    name="description"
+    content="What twinny, twinny-server and this website collect. Short answer: nothing."
+  />
+</svelte:head>
 
-  const marked = new Marked()
-
-  const markdown = marked.parse(`
-  # Privacy Policy for twinny.dev and Symmetry Network
-
-  Last updated: November 28, 2024
-
-  ## Overview
-  This privacy policy describes how twinny.dev ("we", "us", or "our") handles information when you use our services through the Symmetry network integration.
-
-  ## Data Collection and Usage
-  We collect and process the following information:
-  - Inference data sent through the Symmetry network
-  - Connection and session metadata (timestamps, network identifiers, etc.)
-  - Technical information necessary for service operation
-
-  ## Provider Data Collection and Usage
-  While providers on the Symmetry network may state they do not collect data, please be aware:
-  - We cannot verify or guarantee providers' data collection practices
-  - Providers may collect and store data without explicit disclosure
-  - All messages sent through providers should be treated as potentially visible
-  - Exercise caution and assume any transmitted data may be retained
-  - We recommend treating all providers as untrusted parties
-
-  Consider any data sent through the network as potentially visible to:
-  - Network providers
-  - Infrastructure operators
-
-  ## Data Storage and Security
-  While we implement reasonable security measures, please note:
-  - Communications over the Symmetry network may be visible to network participants
-  - We cannot guarantee complete security of data transmission or storage
-  - You are responsible for the content you transmit through the service
-
-  ## Disclaimer of Liability
-  We expressly disclaim liability for:
-  - Data loss, corruption, or breach
-  - Unauthorized access to transmitted content
-  - Service interruptions or failures
-  - Any damages arising from use of the service
-
-  ## Your Responsibilities
-  By using our service, you agree to:
-  - Not transmit sensitive or confidential information
-  - Comply with applicable laws and regulations
-  - Accept all risks associated with using a distributed network
-  - Take appropriate precautions to protect your data
-  - Not transmit hate speech, harassment, or discriminatory content
-  - Not engage in harmful, abusive, or malicious behavior
-  - Take full responsibility for all content transmitted through the service
-  - Not use the service for illegal activities or harmful purposes
-  - Understand that you are solely responsible for your actions and content
-  - Accept that we may terminate service for violation of these terms
-
-  ## Data Retention
-  - Message logs may be retained for technical and operational purposes
-  - We may delete data at any time without notice
-  - You are responsible for maintaining your own backups
-
-  ## Third-Party Services
-  - Data is not shared with third parties without your explicit consent
-
-  ## Changes to Policy
-  We may update this policy at any time. Continued use of the service constitutes acceptance of any changes.
-
-  ## Contact
-  For questions about this privacy policy, contact us on X at [@twinnydotdev](https://x.com/twinnydotdev).
-  `)
-</script>
-
-<div class="max-w-3xl mx-auto px-6 py-8 rounded-lg shadow-md">
-  <div class="prose prose-slate max-w-none text-white">
-    {@html markdown}
+<section class="section">
+  <div class="wrap doc">
+    <span class="label">privacy</span>
+    <h1>What is collected</h1>
+    <h2>the extension</h2>
+    <p>
+      twinny sends prompts to the inference server you configured and to nobody else. It makes no
+      other network requests: no update check, no crash reporting, no usage statistics. Chat history
+      and the workspace index are stored on your machine, under <code>~/.twinny</code>
+      and VS Code's own storage, and are yours to delete.
+    </p>
+    <h2>twinny-server</h2>
+    <p>
+      The gateway records the time, capability, key name, model alias, outcome and duration of each
+      request, in files on the machine it runs on, deleted after 30 days. It never records prompts,
+      completions, headers or backend bodies, and it never contacts twinny, including to check a
+      licence.
+    </p>
+    <h2>this website</h2>
+    <p>
+      Static pages. Fonts are served from this domain. There is no analytics script, no cookie and
+      no third-party request. The server keeps ordinary access logs for a short time to keep the
+      site up.
+    </p>
+    <p class="muted">Questions: <a href="https://x.com/twinnydotdev">@twinnydotdev</a>.</p>
+    <p><a href="/">← back</a></p>
   </div>
-</div>
+</section>
 
 <style>
-  :global(.prose h1) {
-    @apply text-3xl font-bold text-gray-200 mb-8;
+  .doc {
+    max-width: 68ch;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
-
-  :global(.prose h2) {
-    @apply text-xl font-semibold text-gray-200 mb-4 mt-8;
+  h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    margin: 12px 0 10px;
   }
-
-  :global(.prose ul) {
-    @apply my-4 list-disc pl-6;
+  h2 {
+    font-size: 16px;
+    margin-top: 18px;
   }
-
-  :global(.prose li) {
-    @apply mb-2;
+  p {
+    color: var(--ink-2);
   }
 </style>

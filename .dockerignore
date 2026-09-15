@@ -1,4 +1,6 @@
-website/node_modules
-website/db.sqlite3
-backend/models
+node_modules
+build
+.svelte-kit
 .git
+.env
+.env.*

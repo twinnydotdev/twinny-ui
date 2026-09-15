@@ -1,0 +1,342 @@
+/*
+ * twinny.dev — one token layer, shared with the extension's sidebar and the
+ * gateway's admin page. The look is the shape of things: monospace, hairlines,
+ * square corners, no shadows. Colour is spent on one green.
+ */
+@import '@fontsource-variable/martian-mono/wdth.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/400-italic.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+
+:root {
+  color-scheme: dark;
+  --bg: #0d1012;
+  --bg-2: #0a0c0e;
+  --panel: #131719;
+  --panel-2: #171c1f;
+  --line: #1f2629;
+  --line-2: #2a3236;
+  --ink: #d7dee2;
+  --ink-2: #8b979d;
+  --ink-3: #5b666b;
+  --accent: #23d18b;
+  --accent-ink: #0b1f16;
+  --accent-soft: rgba(35, 209, 139, 0.14);
+  --accent-line: rgba(35, 209, 139, 0.45);
+  --bad: #e5484d;
+  --warn: #c98500;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --s3: #199e70;
+  --s4: #c98500;
+  --s5: #d55181;
+  --s6: #9085e9;
+
+  --display: 'Martian Mono Variable', 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-xs: 11px;
+  --fs-sm: 12.5px;
+  --fs: 14px;
+  --fs-md: 16px;
+  --track: 0.08em;
+
+  --w: 1180px;
+  --gutter: 24px;
+  --r: 3px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--fs) / 1.65 var(--mono);
+  font-variant-ligatures: none;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-3);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-2);
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-stretch: 80%;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+code,
+kbd {
+  font-family: var(--mono);
+  font-size: 0.92em;
+}
+kbd {
+  display: inline-block;
+  padding: 0 5px;
+  border: 1px solid var(--line-2);
+  border-bottom-width: 2px;
+  border-radius: var(--r);
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: 0.85em;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ---- primitives ------------------------------------------------------- */
+
+.wrap {
+  width: 100%;
+  max-width: var(--w);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* The uppercase, tracked label every sidebar tab opens with. */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+}
+.label::before {
+  content: '';
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+}
+.label.bare::before {
+  display: none;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition:
+    border-color 0.12s ease,
+    background 0.12s ease,
+    color 0.12s ease,
+    transform 0.12s ease;
+}
+.btn:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+  background: var(--panel-2);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn.primary:hover {
+  background: #33e09a;
+  border-color: #33e09a;
+  color: var(--accent-ink);
+}
+.btn.ghost {
+  background: transparent;
+}
+.btn .k {
+  font-size: 10px;
+  color: currentColor;
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+}
+.pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+
+/* Section spine: every section starts with a hairline and a numbered label. */
+.section {
+  border-top: 1px solid var(--line);
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 24px 48px;
+  align-items: end;
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+.section-head h2 {
+  margin-top: 18px;
+  font-size: clamp(26px, 3.4vw, 40px);
+}
+.section-head p {
+  color: var(--ink-2);
+  font-size: var(--fs);
+  max-width: 46ch;
+}
+@media (max-width: 800px) {
+  .section-head {
+    grid-template-columns: 1fr;
+  }
+}
+
+.muted {
+  color: var(--ink-2);
+}
+.dim {
+  color: var(--ink-3);
+}
+.accent {
+  color: var(--accent);
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reveal on load / scroll. Applied by the `reveal` action; nothing moves under
+   prefers-reduced-motion. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001s !important;
+    animation-iteration-count: 1 !important;
+  }
+}

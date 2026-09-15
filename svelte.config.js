@@ -1,12 +1,9 @@
 import adapter from '@sveltejs/adapter-node'
-
-import { sveltekit } from '@sveltejs/kit/vite'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: [
-    sveltekit(),
-  ],
+  preprocess: vitePreprocess(),
   kit: {
     adapter: adapter()
   }

@@ -1,23 +1,33 @@
-# CLAUDE.md - Twinny UI Codebase Guidelines
+# CLAUDE.md - twinny.dev website
 
-## Build & Dev Commands
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run check` - Type check the codebase
-- `npm run test` - Run all Playwright tests
-- `npm run test:unit` - Run Vitest unit tests
-- `npx playwright test tests/index.test.ts` - Run a specific test
-- `npm run lint` - Run ESLint and Prettier checks
-- `npm run format` - Auto-format with Prettier
-- `npm run migrate` - Run database migrations
+## Commands
 
-## Code Style Guidelines
-- **Formatting**: 2-space tabs, 100-char width, single quotes, no semicolons
-- **Components**: Use Svelte 5 `$props()` syntax for component props
-- **Types**: Use TypeScript interfaces for props and strict type checking
-- **Naming**: camelCase for variables/functions, PascalCase for components
-- **Imports**: Group imports by external/internal, sort alphabetically
-- **CSS**: Use Tailwind for styling with utility classes
-- **Error Handling**: Use try/catch blocks with appropriate error logging
-- **i18n**: Use the sveltekit-i18n package for translations
+- `npm run dev` - dev server
+- `npm run build` - production build to `build/` (adapter-node, pages prerendered)
+- `npm run check` - svelte-check
+- `npm run lint` / `npm run format` - prettier + eslint
+
+## Design
+
+The site follows the twinny extension sidebar and the twinny-server admin page: dark ground
+(`#0d1012`), one green accent (`#23d18b`), monospace everywhere (Martian Mono for display,
+IBM Plex Mono for body), hairline borders, 3px corners, no shadows, no gradients except a faint
+radial glow. All tokens live in `src/app.css`; do not introduce new colours in components.
+
+- Every section opens with a `.label` (uppercase, tracked, green tick) and a `.section-head`.
+- Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
+- Fonts are self-hosted via `@fontsource`; the site makes no third-party requests and has no
+  analytics. Keep it that way.
+- Copy is lowercase-leaning, dry, specific. Claims about the product must match the docs at
+  ../twinny-docs; do not invent features, prices or numbers.
+
+## Code style
+
+- 2-space indent, 100-char width, single quotes, no semicolons (see `.prettierrc`)
+- Svelte 5 runes (`$props()`, `$state`, `$derived`); scoped `<style>` blocks, no Tailwind
+- External URLs only in `src/lib/const.ts`
+
+## Checking layout
+
+Headless Chrome never lays out narrower than 500px. To check phone widths, screenshot a
+wrapper page with an `<iframe width="390">` pointing at the dev server.

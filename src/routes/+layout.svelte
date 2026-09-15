@@ -1,171 +1,340 @@
 <script lang="ts">
-  import { URL_DOCS, URL_GITHUB, URL_TWINNYDOTDEV } from '$lib/const'
-  import { t, locale } from '$lib/translations'
-  import Analytics from '$lib/analytics/index.svelte'
-  import '../app.postcss'
-  import '@fontsource/geist-sans'
+  import '../app.css'
+  import { URL_DOCS, URL_GITHUB, URL_MARKETPLACE, URL_X, URL_DISCUSSIONS } from '$lib/const'
+  import Mark from '$lib/components/Mark.svelte'
 
-  const languages = [
-    { code: 'en', label: 'en' },
-    { code: 'zh-CN', label: '简' },
-    { code: 'zh-TW', label: '繁' },
-    { code: 'ja', label: '日' },
-    { code: 'ko', label: '한' },
-    { code: 'fr', label: 'fr' },
-    { code: 'de', label: 'de' }
+  let { children } = $props()
+  let open = $state(false)
+
+  const nav = [
+    { href: '/#features', label: 'features' },
+    { href: '/#teams', label: 'teams' },
+    { href: '/#plans', label: 'plans' },
+    { href: URL_DOCS, label: 'docs', external: true },
+    { href: URL_GITHUB, label: 'github', external: true }
   ]
-
-  function handleLanguageChange(event: Event) {
-    const select = event.target as HTMLSelectElement
-    locale.set(select.value)
-    document.cookie = `lang=${select.value} ;`
-  }
 </script>
 
 <svelte:head>
-  <title>Twinny - Privacy-First AI Extension & Symmetry Network</title>
-  <meta name="title" content="Twinny - Free AI Extension for VS Code & Symmetry Network" />
+  <title>twinny — the private AI coding assistant for VS Code</title>
   <meta
     name="description"
-    content="The free and private AI extension for Visual Studio Code and home of the Symmetry inference network. Enhance your development with privacy-focused AI assistance."
+    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run. Free and open source. twinny-server gives teams one gateway, a key per developer and usage per person."
   />
-  <meta
-    name="keywords"
-    content="VS Code extension, AI assistant, Symmetry inference network, private AI, code completion, developer tools, privacy-focused AI"
-  />
-
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Twinny - Private AI Extension & Symmetry Network" />
+  <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />
   <meta
     property="og:description"
-    content="Free, privacy-focused AI extension for VS Code. Home of the Symmetry inference network for enhanced development workflows."
+    content="Runs on your hardware. Nothing leaves the building. Free for individuals and teams up to five."
   />
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Twinny - VS Code AI Extension & Symmetry" />
-  <meta
-    name="twitter:description"
-    content="Free and private AI coding assistant, featuring the Symmetry inference network for smarter development."
-  />
-
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet" />
-
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@twinnydotdev" />
   <script type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "SoftwareApplication",
-      "name": "Twinny",
+      "name": "twinny",
       "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "VS Code",
-      "description": "Free and private AI extension for Visual Studio Code, featuring the Symmetry inference network for enhanced development"
+      "operatingSystem": "Visual Studio Code",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "Private AI coding assistant for Visual Studio Code: autocomplete, chat, inline edit and code review on models you run yourself."
     }
   </script>
 </svelte:head>
 
-<Analytics />
+<a class="skip" href="#main">skip to content</a>
 
-<div class="flex min-h-[100vh] flex-col px-4 sm:px-6 text-secondary-100">
-  <header class="relative z-10 py-6">
-    <div class="container mx-auto">
-      <div class="flex justify-between items-center">
-        <a href="/" class="flex items-center group" aria-label="Home">
-          <h1
-            class="text-xl font-bold group-hover:text-rose-500 transition-colors duration-300"
-            itemscope
-            itemtype="http://schema.org/SoftwareApplication"
-          >
-            <span itemprop="name" class="text-secondary-100">
-              {$t('common.title')}
-            </span>
-          </h1>
-        </a>
+<header class="top" class:open>
+  <div class="wrap row">
+    <a href="/" class="brand" aria-label="twinny home" onclick={() => (open = false)}>
+      <Mark size={20} />
+      <span>twinny</span>
+    </a>
 
-        <nav aria-label="Main navigation" class="flex items-center space-x-6">
-          <a
-            class="text-sm font-medium hover:text-rose-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-rose-500 after:transition-all hover:after:w-full"
-            href="/symmetry"
-            aria-label="Symmetry"
-          >
-            {$t('common.symmetry')}
-          </a>
-          <a
-            class="text-sm font-medium hover:text-rose-500 transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-rose-500 after:transition-all hover:after:w-full"
-            href={URL_DOCS}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            aria-label="Documentation"
-          >
-            {$t('common.docs')}
-          </a>
-
-          <div class="relative">
-            <select
-              class="appearance-none text-sm font-medium py-1 pl-2 pr-8 rounded-lg bg-secondary-800 border border-secondary-700 focus:outline-none focus:ring-1 focus:ring-rose-500"
-              on:change={handleLanguageChange}
-              value={$locale}
-              aria-label="Select language"
-            >
-              {#each languages as { code, label }}
-                <option class="bg-secondary-800" value={code}>
-                  {label}
-                </option>
-              {/each}
-            </select>
-            <div class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-secondary-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main class="flex grow flex-col items-center justify-center">
-    <slot />
-  </main>
-
-  <footer class="py-6 border-t border-secondary-800">
-    <div class="container mx-auto">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+    <nav aria-label="Main" class="links">
+      {#each nav as item}
         <a
-          href="/sponsor"
-          class="flex items-center group space-x-1 hover:text-rose-500 transition-colors"
-          aria-label="Sponsor project"
+          href={item.href}
+          target={item.external ? '_blank' : undefined}
+          rel={item.external ? 'noopener noreferrer' : undefined}
+          onclick={() => (open = false)}>{item.label}</a
         >
-          <span class="text-rose-500 transition-colors" aria-hidden="true">❤️</span>
-          <span>{$t('common.sponsor')}</span>
-        </a>
+      {/each}
+    </nav>
 
-        <div class="flex items-center space-x-6">
-          <a
-            href='/blog'
-            class="text-sm font-medium hover:text-rose-500 transition-colors"
-            aria-label="Blog"
-          >
-            {$t('common.blog')}
-          </a>
-          <a
-            class="text-sm font-medium hover:text-rose-500 transition-colors"
-            href={URL_GITHUB}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            aria-label="GitHub repository"
-          >
-            {$t('common.github')}
-          </a>
-          <a
-            href={URL_TWINNYDOTDEV}
-            class="text-sm font-medium hover:text-rose-500 transition-colors"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            aria-label="Contact us"
-          >
-            {$t('common.contact')}
-          </a>
-        </div>
+    <div class="cta">
+      <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">
+        install
+        <span class="k">VS CODE</span>
+      </a>
+    </div>
+
+    <button class="burger" aria-label="Menu" aria-expanded={open} onclick={() => (open = !open)}>
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  {@render children()}
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="/" class="brand" aria-label="twinny home">
+          <Mark size={18} />
+          <span>twinny</span>
+        </a>
+        <p class="muted">
+          The private AI coding assistant for VS Code. MIT licensed. Made by developers who read
+          their own logs.
+        </p>
+        <p class="dim">© {new Date().getFullYear()} twinny</p>
+      </div>
+      <div>
+        <div class="label bare">product</div>
+        <ul>
+          <li><a href="/#features">features</a></li>
+          <li><a href="/#teams">teams</a></li>
+          <li><a href="/#plans">plans</a></li>
+          <li>
+            <a href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">marketplace</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="label bare">learn</div>
+        <ul>
+          <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
+          <li>
+            <a
+              href="{URL_DOCS}getting-started/quick-start/"
+              target="_blank"
+              rel="noopener noreferrer">quick start</a
+            >
+          </li>
+          <li>
+            <a
+              href="{URL_DOCS}providers/supported-models/"
+              target="_blank"
+              rel="noopener noreferrer">supported models</a
+            >
+          </li>
+          <li>
+            <a href="{URL_DOCS}teams/overview/" target="_blank" rel="noopener noreferrer"
+              >twinny-server</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="label bare">community</div>
+        <ul>
+          <li><a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">github</a></li>
+          <li>
+            <a href={URL_DISCUSSIONS} target="_blank" rel="noopener noreferrer">discussions</a>
+          </li>
+          <li><a href={URL_X} target="_blank" rel="noopener noreferrer">@twinnydotdev</a></li>
+          <li><a href="/privacy">privacy</a></li>
+        </ul>
       </div>
     </div>
-  </footer>
-</div>
+    <div class="foot-line">
+      <span class="dim">$ twinny --version</span>
+      <span class="accent"
+        >this site makes no third-party requests. fonts are self-hosted, there is no analytics.</span
+      >
+    </div>
+  </div>
+</footer>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 8px;
+    top: -60px;
+    z-index: 100;
+    padding: 8px 12px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: 0;
+  }
+  .skip:focus {
+    top: 8px;
+  }
+
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 84%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 60px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .brand:hover {
+    color: var(--accent);
+  }
+  .links {
+    display: flex;
+    gap: 26px;
+    margin-left: 8px;
+  }
+  .links a {
+    border: 0;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.02em;
+    position: relative;
+  }
+  .links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -4px;
+    height: 1px;
+    background: var(--accent);
+    transition: right 0.18s ease;
+  }
+  .links a:hover {
+    color: var(--ink);
+  }
+  .links a:hover::after {
+    right: 0;
+  }
+  .cta {
+    margin-left: auto;
+  }
+  .cta .btn {
+    height: 36px;
+    padding-inline: 14px;
+  }
+  .burger {
+    display: none;
+    width: 36px;
+    height: 36px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    align-items: center;
+  }
+  .burger span {
+    display: block;
+    width: 18px;
+    height: 1px;
+    background: var(--ink);
+    transition: transform 0.2s ease;
+  }
+  .open .burger span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+  .open .burger span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  @media (max-width: 760px) {
+    .row {
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .cta {
+      display: none;
+    }
+    .burger {
+      display: flex;
+      margin-left: auto;
+    }
+    .links {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      gap: 0;
+      margin: 0 0 8px;
+      border-top: 1px solid var(--line);
+    }
+    .links a {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--fs);
+    }
+    .links a::after {
+      display: none;
+    }
+    .open .links {
+      display: flex;
+    }
+  }
+
+  .foot {
+    border-top: 1px solid var(--line);
+    padding-block: 56px 28px;
+    background: var(--bg-2);
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .foot-brand p {
+    max-width: 38ch;
+    margin-top: 16px;
+    font-size: var(--fs-sm);
+  }
+  .foot-brand .dim {
+    margin-top: 24px;
+    font-size: var(--fs-xs);
+  }
+  .foot ul {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .foot li a {
+    border: 0;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+  }
+  .foot li a:hover {
+    color: var(--accent);
+  }
+  .foot-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-xs);
+  }
+  @media (max-width: 760px) {
+    .foot-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .foot-brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
