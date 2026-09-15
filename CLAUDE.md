@@ -10,15 +10,16 @@
 ## Design
 
 The site follows the twinny extension sidebar and the twinny-server admin page: dark ground
-(`#0d1012`), one green accent (`#23d18b`), monospace everywhere (Martian Mono for display,
-IBM Plex Mono for body), hairline borders, 3px corners, no shadows, no gradients except a faint
+(`#0d1012`), one green accent (`#23d18b`), Geist for headings and body, IBM Plex Mono for labels, buttons, code and
+every UI mock, hairline borders, 3px corners, no shadows, no gradients except a faint
 radial glow. All tokens live in `src/app.css`; do not introduce new colours in components.
 
 - Every section opens with a `.label` (uppercase, tracked, green tick) and a `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`; the site makes no third-party requests and has no
   analytics. Keep it that way.
-- Copy is lowercase-leaning, dry, specific. Claims about the product must match the docs at
+- Copy is short, dry, specific and vendor-neutral: no model or runtime names on the page.
+- Prices and seat rules live in `src/lib/const.ts`; checkout URLs there are placeholders. Claims about the product must match the docs at
   ../twinny-docs; do not invent features, prices or numbers.
 
 ## Code style

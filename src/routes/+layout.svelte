@@ -9,17 +9,18 @@
   const nav = [
     { href: '/#features', label: 'features' },
     { href: '/#teams', label: 'teams' },
-    { href: '/#plans', label: 'plans' },
+    { href: '/#security', label: 'security' },
+    { href: '/#pricing', label: 'pricing' },
     { href: URL_DOCS, label: 'docs', external: true },
     { href: URL_GITHUB, label: 'github', external: true }
   ]
 </script>
 
 <svelte:head>
-  <title>twinny — the private AI coding assistant for VS Code</title>
+  <title>twinny — the AI coding assistant that stays inside your network</title>
   <meta
     name="description"
-    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run. Free and open source. twinny-server gives teams one gateway, a key per developer and usage per person."
+    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run. Open source, self-hosted, no telemetry. Team seats from $8 a month."
   />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />
@@ -88,8 +89,7 @@
           <span>twinny</span>
         </a>
         <p class="muted">
-          The private AI coding assistant for VS Code. MIT licensed. Made by developers who read
-          their own logs.
+          The AI coding assistant that stays inside your network. Open source, MIT licensed.
         </p>
         <p class="dim">© {new Date().getFullYear()} twinny</p>
       </div>
@@ -98,7 +98,8 @@
         <ul>
           <li><a href="/#features">features</a></li>
           <li><a href="/#teams">teams</a></li>
-          <li><a href="/#plans">plans</a></li>
+          <li><a href="/#security">security</a></li>
+          <li><a href="/#pricing">pricing</a></li>
           <li>
             <a href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">marketplace</a>
           </li>
@@ -142,7 +143,6 @@
       </div>
     </div>
     <div class="foot-line">
-      <span class="dim">$ twinny --version</span>
       <span class="accent"
         >this site makes no third-party requests. fonts are self-hosted, there is no analytics.</span
       >
@@ -202,6 +202,7 @@
   .links a {
     border: 0;
     color: var(--ink-2);
+    font-family: var(--mono);
     font-size: var(--fs-sm);
     letter-spacing: 0.02em;
     position: relative;
@@ -315,12 +316,14 @@
   .foot li a {
     border: 0;
     color: var(--ink-2);
+    font-family: var(--mono);
     font-size: var(--fs-sm);
   }
   .foot li a:hover {
     color: var(--accent);
   }
   .foot-line {
+    font-family: var(--mono);
     display: flex;
     flex-wrap: wrap;
     gap: 8px 20px;

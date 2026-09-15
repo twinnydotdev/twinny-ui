@@ -113,7 +113,7 @@
         <div class="chips"><span>@git · 2 files · +41 −6</span></div>
       </div>
       <div class="msg bot">
-        <span class="who">twinny <span class="dim">· qwen2.5-coder:7b</span></span>
+        <span class="who">twinny <span class="dim">· chat-14b</span></span>
         <p>
           The diff splits paths on <code>'/'</code>. On Windows <code>git status</code> still prints
           forward slashes, but <code>path.join</code> in the test builds the expected path with
@@ -136,7 +136,7 @@
 
   <div class="status">
     <span class="accent">&lt;/&gt; twinny</span>
-    <span>fim · ollama · qwen2.5-coder:7b</span>
+    <span>fim · coder-7b · local</span>
     <span class="hide-sm">chat · gateway :8765</span>
     <span class="spacer"></span>
     <span class="hide-sm">TypeScript</span>

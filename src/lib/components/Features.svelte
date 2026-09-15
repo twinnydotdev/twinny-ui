@@ -5,8 +5,8 @@
   const features = [
     {
       n: '01',
-      title: 'autocomplete',
-      body: 'Fill-in-the-middle suggestions as you type, streamed as ghost text. twinny sees the code around the cursor, your open files and your recent edits, and stops the stream when the suggestion reaches a sensible end.',
+      title: 'Autocomplete',
+      body: 'Fill-in-the-middle suggestions as you type, streamed as ghost text and cut off at a sensible end. Tuned to work well with a 7B model.',
       demo: [
         ['dim', 'const user = await db.users.'],
         ['ghost', 'findUnique({ where: { id } })']
@@ -15,8 +15,8 @@
     },
     {
       n: '02',
-      title: 'chat that knows the repo',
-      body: 'Type @ to attach a file, a symbol, the current problems, the git diff, the terminal’s last output, or a search of the workspace index. Every source is bounded, so a small model is never swamped.',
+      title: 'Chat that knows the repo',
+      body: 'Type @ to attach a file, a symbol, the problems panel, the git diff, the terminal, or a search of the workspace index.',
       demo: [
         ['acc', '@files  @symbols  @workspace'],
         ['acc', '@problems  @git  @terminal']
@@ -25,8 +25,8 @@
     },
     {
       n: '03',
-      title: 'inline edit',
-      body: 'Ctrl+I, describe the change, and the result streams into the editor as a diff. Accept or reject per hunk, refine with another instruction, and nothing is kept until you say so.',
+      title: 'Inline edit',
+      body: 'Ctrl+I, describe the change, review it as a diff in the editor. Accept or reject per hunk. Nothing is kept until you say so.',
       demo: [
         ['del', '- for (let i = 0; i < xs.length; i++)'],
         ['add', '+ for (const x of xs)']
@@ -35,43 +35,34 @@
     },
     {
       n: '04',
-      title: 'workspace index',
-      body: 'Embeds the workspace with your embeddings model into a hybrid keyword and vector index, reranked before it reaches the prompt. Updated on save, rebuilt only when the model changes.',
+      title: 'Workspace index',
+      body: 'A hybrid keyword and vector index of the workspace, reranked before it reaches the prompt and updated on save.',
       demo: [
         ['dim', '1,204 files · 18,932 chunks'],
-        ['acc', 'nomic-embed-text · up to date']
+        ['acc', 'index up to date']
       ],
       doc: 'features/workspace-index/'
     },
     {
       n: '05',
-      title: 'code review',
-      body: 'Review the working tree, the branch against a base, or a GitHub pull request. The diff is split into parts sized for the model’s context window, and the review lands in chat so you can ask follow-ups.',
+      title: 'Code review',
+      body: 'Review the working tree, a branch against its base, or a GitHub pull request. The review lands in chat so you can ask follow-ups.',
       demo: [
-        ['dim', 'review branch  ent → main'],
+        ['dim', 'review branch  feature → main'],
         ['acc', '34 files · 3 parts · streaming']
       ],
       doc: 'features/code-review/'
     },
     {
       n: '06',
-      title: 'terminal',
-      body: 'Describe a command and get one line for your shell and platform, shown before it runs. When a command fails, twinny reads the output, finds the file and line, and offers the fix as a diff.',
+      title: 'Terminal',
+      body: 'Write a command from a description, shown before it runs. When one fails, twinny finds the file and line and offers the fix as a diff.',
       demo: [
         ['dim', '$ npm test  ✗  src/app.ts:42'],
         ['acc', 'fix in editor  ·  ask in chat']
       ],
       doc: 'features/terminal/'
     }
-  ]
-
-  const also = [
-    'commit messages',
-    'next-edit suggestions',
-    'prompt templates',
-    'full-screen chat',
-    'status bar and logs',
-    'per-language toggles'
   ]
 </script>
 
@@ -80,11 +71,10 @@
     <div class="section-head">
       <div>
         <span class="label">features</span>
-        <h2>Everything you would expect. On models you chose.</h2>
+        <h2>Everything you expect from an assistant. Nothing you don't.</h2>
       </div>
       <p>
-        Each feature is a small, explicit thing in the editor, designed to work well with a 7B model
-        on a laptop and to get out of the way.
+        Small, explicit features in the editor. Every one is a plain VS Code command you can rebind.
       </p>
     </div>
 
@@ -107,13 +97,6 @@
         </article>
       {/each}
     </div>
-
-    <div class="also">
-      <span class="label bare">also</span>
-      <ul>
-        {#each also as a}<li>{a}</li>{/each}
-      </ul>
-    </div>
   </div>
 </section>
 
@@ -129,8 +112,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 28px 26px 26px;
+    gap: 14px;
+    padding: 28px 26px 24px;
     background: var(--bg);
     transition: background 0.18s ease;
   }
@@ -156,19 +139,19 @@
     gap: 12px;
   }
   .n {
+    font-family: var(--mono);
     color: var(--accent);
     font-size: var(--fs-xs);
     letter-spacing: 0.1em;
   }
   h3 {
-    font-size: 17px;
-    font-weight: 600;
+    font-size: 19px;
     letter-spacing: -0.02em;
   }
   .card p {
     color: var(--ink-2);
     font-size: var(--fs-sm);
-    line-height: 1.65;
+    line-height: 1.6;
     flex: 1;
   }
   .demo {
@@ -178,11 +161,11 @@
     padding: 10px 12px;
     border: 1px solid var(--line);
     background: var(--bg-2);
+    font-family: var(--mono);
     font-size: 11px;
     line-height: 1.6;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
   .demo span {
     overflow: hidden;
@@ -195,45 +178,23 @@
     color: var(--ink-3);
     font-style: italic;
   }
-  .demo .acc {
+  .demo .acc,
+  .demo .add {
     color: var(--accent);
   }
   .demo .del {
     color: var(--bad);
   }
-  .demo .add {
-    color: var(--accent);
-  }
   .doc {
     align-self: flex-start;
     border: 0;
     color: var(--ink-3);
+    font-family: var(--mono);
     font-size: var(--fs-xs);
     letter-spacing: 0.06em;
   }
   .card:hover .doc {
     color: var(--accent);
-  }
-  .also {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 24px;
-    margin-top: 28px;
-  }
-  .also ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 20px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-size: var(--fs-sm);
-    color: var(--ink-2);
-  }
-  .also li::before {
-    content: '+ ';
-    color: var(--ink-3);
   }
   @media (max-width: 960px) {
     .grid {

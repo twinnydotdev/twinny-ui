@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_MARKETPLACE, URL_GITHUB } from '$lib/const'
+  import { URL_MARKETPLACE, PRICE_TEAM } from '$lib/const'
   import EditorMock from './EditorMock.svelte'
   import Copy from './Copy.svelte'
   import { reveal } from '$lib/reveal'
@@ -11,17 +11,15 @@
     <div class="intro">
       <div class="pills" use:reveal={0}>
         <span class="pill"><i></i>open source · MIT</span>
+        <span class="pill">self-hosted</span>
         <span class="pill">VS Code</span>
-        <span class="pill">runs on your hardware</span>
       </div>
       <h1 use:reveal={80}>
-        AI pair programmer.<br />
-        <span class="quiet">Runs locally,</span> minds its own business.
+        The coding assistant that <span class="quiet">never leaves</span> your network.
       </h1>
       <p class="lede" use:reveal={160}>
-        Autocomplete, chat, inline edit and code review in VS Code, on models you run: Ollama,
-        llama.cpp, LM Studio, QVAC, or any OpenAI-compatible server. Your code never leaves the
-        building, and there is no account to make.
+        Autocomplete, chat, inline edit and code review in VS Code, on models you run. Any
+        OpenAI-compatible server, on a laptop or in your data centre. No account, no telemetry.
       </p>
       <div class="ctas" use:reveal={240}>
         <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">
@@ -30,11 +28,8 @@
         <Copy text="npx twinny-server init" label="for your team" />
       </div>
       <p class="fine" use:reveal={300}>
-        Free for individuals and teams up to five. <a
-          href={URL_GITHUB}
-          target="_blank"
-          rel="noopener noreferrer">Read the source</a
-        >, it is short.
+        Free for individuals and teams of five. Team seats from ${PRICE_TEAM} a month.
+        <a href="#pricing">Pricing</a>.
       </p>
     </div>
 
@@ -43,8 +38,7 @@
       <div class="caption">
         <span class="label">live</span>
         <span class="muted"
-          >a fill-in-the-middle suggestion, streamed and accepted. built from HTML, not a
-          screenshot.</span
+          >a completion, streamed and accepted. built from HTML, not a screenshot.</span
         >
       </div>
     </div>
@@ -90,21 +84,20 @@
     margin-bottom: 28px;
   }
   h1 {
-    font-size: clamp(34px, 4.4vw, 54px);
+    font-size: clamp(38px, 4.6vw, 60px);
     font-weight: 600;
-    font-stretch: 78%;
-    letter-spacing: -0.03em;
-    line-height: 1.06;
+    letter-spacing: -0.045em;
+    line-height: 1.02;
   }
   .quiet {
-    color: var(--ink-2);
+    color: var(--accent);
   }
   .lede {
     margin-top: 24px;
-    max-width: 50ch;
+    max-width: 46ch;
     color: var(--ink-2);
     font-size: var(--fs-md);
-    line-height: 1.6;
+    line-height: 1.55;
   }
   .ctas {
     display: flex;
@@ -126,6 +119,7 @@
     flex-wrap: wrap;
     gap: 6px 16px;
     margin-top: 14px;
+    font-family: var(--mono);
     font-size: var(--fs-xs);
   }
   @media (max-width: 1100px) {

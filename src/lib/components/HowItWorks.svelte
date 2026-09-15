@@ -3,18 +3,18 @@
   import { URL_DOCS_QUICKSTART } from '$lib/const'
   const steps = [
     {
-      t: 'install the extension',
-      d: 'From the VS Code marketplace. No sign-up, no key, no telemetry prompt.',
-      c: 'code --install-extension rjmacarthy.twinny'
+      t: 'Install the extension',
+      d: 'From the VS Code marketplace. No sign-up, no key, no prompt to send telemetry.',
+      c: '$ code --install-extension rjmacarthy.twinny'
     },
     {
-      t: 'point it at a server',
-      d: 'On first run twinny looks for Ollama, LM Studio, llama.cpp or QVAC on localhost and offers what it finds. Or add any OpenAI-compatible endpoint.',
-      c: 'ollama pull qwen2.5-coder:7b'
+      t: 'Point it at a server',
+      d: 'On first run twinny finds inference servers on localhost and offers them. Or paste any OpenAI-compatible endpoint.',
+      c: 'provider  http://localhost:8080/v1  ✓ connected'
     },
     {
-      t: 'type',
-      d: 'Suggestions appear as you pause. Open the sidebar to chat, press Ctrl+I to edit in place. Everything is a plain VS Code command you can rebind.',
+      t: 'Type',
+      d: 'Suggestions appear as you pause. Open the sidebar to chat, press Ctrl+I to edit in place.',
       c: '</> twinny · ready'
     }
   ]
@@ -25,15 +25,11 @@
     <div class="section-head">
       <div>
         <span class="label">getting started</span>
-        <h2>Three steps, no account.</h2>
+        <h2>Three steps. No account.</h2>
       </div>
       <p>
-        There is nothing to sign in to because there is nothing on our side. The extension talks to
-        the server you name and nobody else. <a
-          href={URL_DOCS_QUICKSTART}
-          target="_blank"
-          rel="noopener noreferrer">Quick start</a
-        >.
+        There is nothing to sign in to because there is nothing on our side.
+        <a href={URL_DOCS_QUICKSTART} target="_blank" rel="noopener noreferrer">Quick start</a>.
       </p>
     </div>
     <ol>
@@ -42,7 +38,9 @@
           <span class="n num">0{i + 1}</span>
           <h3>{s.t}</h3>
           <p>{s.d}</p>
-          <code><span class="dollar">{i === 2 ? '' : '$'}</span>{s.c}</code>
+          <code>
+            {#if s.c.startsWith('$')}<span class="dollar">$</span>{s.c.slice(1)}{:else}{s.c}{/if}
+          </code>
         </li>
       {/each}
     </ol>
@@ -57,13 +55,12 @@
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: s;
   }
   li {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     padding-top: 22px;
     border-top: 1px solid var(--line-2);
   }
@@ -77,24 +74,24 @@
     background: var(--accent);
   }
   .n {
+    font-family: var(--mono);
     color: var(--ink-3);
     font-size: var(--fs-xs);
     letter-spacing: 0.1em;
   }
   h3 {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 20px;
     letter-spacing: -0.02em;
   }
   li p {
     color: var(--ink-2);
     font-size: var(--fs-sm);
-    line-height: 1.65;
+    line-height: 1.6;
     flex: 1;
   }
   code {
     display: block;
-    margin-top: 6px;
+    margin-top: 8px;
     padding: 10px 12px;
     border: 1px solid var(--line);
     background: var(--bg-2);
@@ -106,10 +103,6 @@
   }
   .dollar {
     color: var(--accent);
-    margin-right: 8px;
-  }
-  .dollar:empty {
-    margin: 0;
   }
   @media (max-width: 800px) {
     ol {

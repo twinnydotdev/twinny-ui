@@ -7,7 +7,7 @@
 <section class="section closing">
   <div class="wrap inner" use:reveal={0}>
     <div class="glyph" aria-hidden="true"><Mark size={56} /></div>
-    <h2>Install it. Point it at a model. That is the whole onboarding.</h2>
+    <h2>Install it. Point it at a model. Keep your code where it is.</h2>
     <div class="ctas">
       <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer"
         >install for VS Code</a

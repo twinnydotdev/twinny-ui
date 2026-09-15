@@ -5,32 +5,22 @@
 
   const points = [
     [
-      'a key per developer',
-      'Created and revoked on the admin page or the command line, effective in a second, stored as hashes. A leaving developer frees their seat at once.'
+      'A key per developer',
+      'Issued and revoked live, stored as hashes. Offboarding is one command.'
     ],
     [
-      'usage per person and per model',
-      'Requests, failures and token counts by key and model. Never prompts, never completions, never headers.'
+      'Usage per person',
+      'Requests, failures and tokens by developer and model. Never the content.'
     ],
+    ['One connection', 'A developer requests a key from VS Code, you approve a short code, done.'],
     [
-      'one connection for the team',
-      'A developer enters the address and requests a key. They read you a short code, you approve it, the key arrives in VS Code by itself.'
+      'Team defaults and policy',
+      'Set the models once. Restrict which providers developers may add.'
     ],
-    [
-      'team defaults and policy',
-      'Set the chat, autocomplete and embeddings models once. Optionally restrict which provider kinds developers may add, enforced in their VS Code.'
-    ],
-    [
-      'any backend, live',
-      'Ollama, llama.cpp, LM Studio, QVAC or an OpenAI-compatible server. Change a model on the admin page and the next request uses it.'
-    ],
-    [
-      'one process, no dependencies',
-      'Node 18 or newer. One JSON config file. Docker image and compose file included. Nothing phones home, including to twinny.'
-    ]
+    ['Any backend, live', 'Swap the model on the admin page. The next request uses it.'],
+    ['One process', 'Node 18 or newer, one JSON file, a Docker image. Nothing phones home.']
   ]
 
-  // Usage by developer for the last seven days, as the admin page draws it.
   const devs = [
     { name: 'alice', v: [62, 28, 10], total: 1284 },
     { name: 'bo', v: [40, 45, 15], total: 968 },
@@ -38,7 +28,7 @@
     { name: 'dana', v: [30, 60, 10], total: 640 },
     { name: 'eli', v: [55, 35, 10], total: 296 }
   ]
-  const models = ['coder', 'chat-14b', 'embed']
+  const models = ['coder', 'chat', 'embed']
   const colors = ['var(--s1)', 'var(--s6)', 'var(--s3)']
 </script>
 
@@ -47,18 +37,18 @@
     <div class="section-head">
       <div>
         <span class="label">teams · twinny-server</span>
-        <h2>One gateway on your GPU box. The whole team behind it.</h2>
+        <h2>One gateway in your data centre. The whole team behind it.</h2>
       </div>
       <p>
-        twinny-server runs on the machine with the models and serves chat, autocomplete and
-        embeddings to every developer. Keys, usage, an admin page and a licence, in one process.
+        twinny-server sits between developers and your inference servers. Keys, usage, policy and an
+        admin page, in one process you run.
       </p>
     </div>
 
     <div
       class="flow"
       use:reveal={0}
-      aria-label="developer laptops connect over HTTPS to twinny-server, which talks to your model backends"
+      aria-label="developer laptops connect over HTTPS to twinny-server, which talks to your inference servers"
     >
       <div class="node">
         <span class="label bare">developer laptops</span>
@@ -67,15 +57,15 @@
       </div>
       <div class="pipe"><span>HTTPS</span></div>
       <div class="node hot">
-        <span class="label bare">your GPU machine</span>
+        <span class="label bare">your network</span>
         <strong>twinny-server</strong>
-        <span class="muted">keys · usage · admin · policy · licence</span>
+        <span class="muted">keys · usage · policy · admin</span>
       </div>
-      <div class="pipe"><span>localhost</span></div>
+      <div class="pipe"><span>private</span></div>
       <div class="node">
-        <span class="label bare">backends</span>
-        <strong>Ollama · llama.cpp · LM Studio</strong>
-        <span class="muted">QVAC · OpenAI-compatible</span>
+        <span class="label bare">your inference servers</span>
+        <strong>Any OpenAI-compatible backend</strong>
+        <span class="muted">on-prem GPUs or a private cloud</span>
       </div>
     </div>
 
@@ -90,10 +80,10 @@
 <span class="d">$</span> npx twinny-server init
 <span class="d">$</span> npx twinny-server keys create alice
 <span class="o">key for alice (shown once): twk_5f3a…9c</span>
-<span class="d">$</span> npx twinny-server serve --config twinny.gateway.json
-<span class="o">listening on 127.0.0.1:8765 · 3 aliases · 1 key active</span>
-<span class="o">ollama <span class="ok">ok</span> · llama.cpp <span class="ok">ok</span></span>
-<span class="o">admin page: http://127.0.0.1:8765/admin</span>
+<span class="d">$</span> npx twinny-server serve
+<span class="o">listening on 127.0.0.1:8765 · 3 aliases · 1 key</span>
+<span class="o">backend gpu-1 <span class="ok">ok</span> · gpu-2 <span class="ok">ok</span></span>
+<span class="o">admin: http://127.0.0.1:8765/admin</span>
 
 <span class="c"># in VS Code: Providers → Connect to team</span></pre>
         <div class="bar bottom">
@@ -156,8 +146,7 @@
         >teams documentation</a
       >
       <span class="muted"
-        >Free for up to five developers. Nothing is gated behind the licence except seats and
-        policy.</span
+        >Free for five developers. The licence only changes the seat count and switches on policy.</span
       >
     </div>
   </div>
@@ -180,13 +169,14 @@
     padding: 18px 20px;
     border: 1px solid var(--line-2);
     background: var(--bg);
-    font-size: var(--fs-sm);
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
   }
   .node strong {
     font-family: var(--display);
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
     margin-top: 6px;
   }
   .node.hot {
@@ -215,6 +205,7 @@
     padding: 2px 6px;
     background: var(--bg-2);
     color: var(--ink-3);
+    font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -231,6 +222,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 20px;
     margin-top: 20px;
+    font-family: var(--mono);
   }
   .bar {
     display: flex;
@@ -320,9 +312,9 @@
   .v {
     margin-top: 2px;
     font-family: var(--display);
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
   }
   .v small {
     font-family: var(--mono);
@@ -394,32 +386,31 @@
   .points {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 32px 40px;
-    margin: 64px 0 0;
+    gap: 28px 40px;
+    margin: 56px 0 0;
     padding: 0;
     list-style: none;
   }
   .points li {
-    padding-top: 16px;
+    padding-top: 14px;
     border-top: 1px solid var(--line-2);
   }
   .points h3 {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-size: 16px;
+    letter-spacing: -0.015em;
   }
   .points p {
-    margin-top: 8px;
+    margin-top: 6px;
     color: var(--ink-2);
     font-size: var(--fs-sm);
-    line-height: 1.65;
+    line-height: 1.6;
   }
   .foot-cta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 14px 24px;
-    margin-top: 48px;
+    margin-top: 44px;
     font-size: var(--fs-sm);
   }
 

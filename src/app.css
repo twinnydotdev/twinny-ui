@@ -3,7 +3,7 @@
  * gateway's admin page. The look is the shape of things: monospace, hairlines,
  * square corners, no shadows. Colour is spent on one green.
  */
-@import '@fontsource-variable/martian-mono/wdth.css';
+@import '@fontsource-variable/geist';
 @import '@fontsource/ibm-plex-mono/400.css';
 @import '@fontsource/ibm-plex-mono/400-italic.css';
 @import '@fontsource/ibm-plex-mono/500.css';
@@ -33,13 +33,14 @@
   --s5: #d55181;
   --s6: #9085e9;
 
-  --display: 'Martian Mono Variable', 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --display: 'Geist Variable', 'Helvetica Neue', Arial, sans-serif;
+  --sans: 'Geist Variable', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --fs-xs: 11px;
-  --fs-sm: 12.5px;
-  --fs: 14px;
-  --fs-md: 16px;
+  --fs-sm: 13px;
+  --fs: 15px;
+  --fs-md: 17px;
   --track: 0.08em;
 
   --w: 1180px;
@@ -62,8 +63,8 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 400 var(--fs) / 1.65 var(--mono);
-  font-variant-ligatures: none;
+  font: 400 var(--fs) / 1.6 var(--sans);
+  font-feature-settings: 'ss01', 'cv11';
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -112,10 +113,9 @@ h3,
 h4 {
   margin: 0;
   font-family: var(--display);
-  font-weight: 500;
-  font-stretch: 80%;
-  letter-spacing: -0.02em;
-  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
   text-wrap: balance;
 }
 
@@ -165,6 +165,7 @@ button {
 
 /* The uppercase, tracked label every sidebar tab opens with. */
 .label {
+  font-family: var(--mono);
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -185,6 +186,7 @@ button {
 }
 
 .btn {
+  font-family: var(--mono);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -235,6 +237,7 @@ button {
 }
 
 .pill {
+  font-family: var(--mono);
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -273,12 +276,13 @@ button {
 }
 .section-head h2 {
   margin-top: 18px;
-  font-size: clamp(26px, 3.4vw, 40px);
+  font-size: clamp(30px, 3.8vw, 46px);
 }
 .section-head p {
   color: var(--ink-2);
-  font-size: var(--fs);
-  max-width: 46ch;
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  max-width: 44ch;
 }
 @media (max-width: 800px) {
   .section-head {

@@ -11,3 +11,13 @@ export const URL_GITHUB_SERVER =
   'https://github.com/twinnydotdev/twinny/tree/main/packages/twinny-server'
 export const URL_DISCUSSIONS = 'https://github.com/twinnydotdev/twinny/discussions'
 export const URL_X = 'https://x.com/twinnydotdev'
+
+// Checkout. Until a payment page exists these point at the licensing docs.
+export const URL_BUY_TEAM = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
+export const URL_BUY_ENTERPRISE = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
+
+// Pricing, per seat per month, billed yearly.
+export const PRICE_TEAM = 8
+export const PRICE_ENTERPRISE = 12
+export const FREE_SEATS = 5
+export const ENTERPRISE_MIN_SEATS = 25
