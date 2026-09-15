@@ -8,7 +8,8 @@
     PRICE_TEAM,
     PRICE_ENTERPRISE,
     FREE_SEATS,
-    ENTERPRISE_MIN_SEATS
+    ENTERPRISE_MIN_SEATS,
+    COMPANY
   } from '$lib/const'
 
   let seats = $state(20)
@@ -77,6 +78,7 @@
         </header>
         <ul>
           <li>everything in team</li>
+          <li>recording: keep prompts and replies on your gateway for audit and training export</li>
           <li>several gateways under one licence</li>
           <li>priority support with a named contact</li>
           <li>procurement paperwork: security questionnaire, DPA, invoicing</li>
@@ -116,7 +118,8 @@
         </div>
       </div>
       <p class="fine">
-        Prices in USD. Seats are added or removed at renewal; keys are revocable at any time.
+        Pay by card. The licence token appears on your licence page and by email; paste it into the
+        admin page. Renewals reissue the same licence. Prices in USD, issued by {COMPANY}.
         <a href={URL_DOCS_LICENSING} target="_blank" rel="noopener noreferrer"
           >How licensing works</a
         >.

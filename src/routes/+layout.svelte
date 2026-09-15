@@ -1,6 +1,14 @@
 <script lang="ts">
   import '../app.css'
-  import { URL_DOCS, URL_GITHUB, URL_MARKETPLACE, URL_X, URL_DISCUSSIONS } from '$lib/const'
+  import {
+    URL_DOCS,
+    URL_GITHUB,
+    URL_MARKETPLACE,
+    URL_X,
+    URL_DISCUSSIONS,
+    URL_COMPANY,
+    COMPANY
+  } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
 
   let { children } = $props()
@@ -38,6 +46,11 @@
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Visual Studio Code",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": {
+        "@type": "Organization",
+        "name": "rjmacarthy.xyz",
+        "url": "https://rjmacarthy.xyz"
+      },
       "description": "Private AI coding assistant for Visual Studio Code: autocomplete, chat, inline edit and code review on models you run yourself."
     }
   </script>
@@ -89,9 +102,13 @@
           <span>twinny</span>
         </a>
         <p class="muted">
-          The AI coding assistant that stays inside your network. Open source, MIT licensed.
+          The AI coding assistant that stays inside your network. Open source, MIT licensed. Made by <a
+            href={URL_COMPANY}
+            target="_blank"
+            rel="noopener noreferrer">{COMPANY}</a
+          >.
         </p>
-        <p class="dim">© {new Date().getFullYear()} twinny</p>
+        <p class="dim">© {new Date().getFullYear()} {COMPANY}</p>
       </div>
       <div>
         <div class="label bare">product</div>

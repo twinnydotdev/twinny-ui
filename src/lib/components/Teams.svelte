@@ -18,7 +18,10 @@
       'Set the models once. Restrict which providers developers may add.'
     ],
     ['Any backend, live', 'Swap the model on the admin page. The next request uses it.'],
-    ['One process', 'Node 18 or newer, one JSON file, a Docker image. Nothing phones home.']
+    [
+      'Recording, if you want it',
+      'Keep prompts and replies on your gateway for audit, review and training data. Off by default, disclosed to every developer.'
+    ]
   ]
 
   const devs = [
@@ -146,7 +149,8 @@
         >teams documentation</a
       >
       <span class="muted"
-        >Free for five developers. The licence only changes the seat count and switches on policy.</span
+        >Free for five developers. The licence only changes the seat count and switches on policy
+        and recording.</span
       >
     </div>
   </div>

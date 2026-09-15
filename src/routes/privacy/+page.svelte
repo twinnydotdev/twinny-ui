@@ -19,10 +19,21 @@
     </p>
     <h2>twinny-server</h2>
     <p>
-      The gateway records the time, capability, key name, model alias, outcome and duration of each
-      request, in files on the machine it runs on, deleted after 30 days. It never records prompts,
-      completions, headers or backend bodies, and it never contacts twinny, including to check a
-      licence.
+      By default the gateway records the time, capability, key name, model alias, outcome and
+      duration of each request, in files on the machine it runs on, deleted after 30 days. It never
+      contacts twinny or rjmacarthy.xyz, including to check a licence.
+    </p>
+    <p>
+      An administrator with a licence can switch on recording of request content per route: chat,
+      autocomplete or embeddings. Records stay on the gateway, are deleted after 90 days by default,
+      and every developer sees what is recorded before they connect and while they are connected.
+      Whether to record is the team's decision, not ours.
+    </p>
+    <h2>buying a licence</h2>
+    <p>
+      Checkout runs on Stripe. rjmacarthy.xyz keeps a record of each licence issued: organisation
+      name, seat count, expiry and the email the token was sent to. Nothing about your gateway or
+      its use is ever sent to us.
     </p>
     <h2>this website</h2>
     <p>
@@ -30,7 +41,10 @@
       no third-party request. The server keeps ordinary access logs for a short time to keep the
       site up.
     </p>
-    <p class="muted">Questions: <a href="https://x.com/twinnydotdev">@twinnydotdev</a>.</p>
+    <p class="muted">
+      twinny is made by <a href="https://rjmacarthy.xyz">rjmacarthy.xyz</a>. Questions:
+      <a href="https://x.com/twinnydotdev">@twinnydotdev</a>.
+    </p>
     <p><a href="/">← back</a></p>
   </div>
 </section>

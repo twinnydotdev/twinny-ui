@@ -22,7 +22,7 @@
     ],
     [
       'What is recorded?',
-      'Time, capability, key, alias, outcome and duration, in files on the gateway, deleted after 30 days. Never prompts, completions or headers.'
+      'By default, metadata: time, capability, key, alias, outcome, duration. Content is a separate switch per route, off unless an admin turns it on, kept on your gateway, disclosed to developers and deleted after 90 days.'
     ],
     [
       'How are keys handled?',
@@ -81,7 +81,9 @@
             <span class="r num muted">{d}</span>
           </div>
         {/each}
-        <div class="note">This is every field. There is no other table.</div>
+        <div class="note">
+          Every field, by default. Content recording is a separate switch, and it is off.
+        </div>
       </div>
 
       <div class="compare panel" use:reveal={100}>

@@ -11,8 +11,11 @@ export const URL_GITHUB_SERVER =
   'https://github.com/twinnydotdev/twinny/tree/main/packages/twinny-server'
 export const URL_DISCUSSIONS = 'https://github.com/twinnydotdev/twinny/discussions'
 export const URL_X = 'https://x.com/twinnydotdev'
+export const URL_COMPANY = 'https://rjmacarthy.xyz'
+export const COMPANY = 'rjmacarthy.xyz'
 
-// Checkout. Until a payment page exists these point at the licensing docs.
+// Checkout. The licence service (twinny-license serve) turns a Stripe Checkout into a token;
+// point these at the Stripe payment links once they exist. Until then, the licensing docs.
 export const URL_BUY_TEAM = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
 export const URL_BUY_ENTERPRISE = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
 

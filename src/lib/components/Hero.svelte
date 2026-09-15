@@ -19,7 +19,8 @@
       </h1>
       <p class="lede" use:reveal={160}>
         Autocomplete, chat, inline edit and code review in VS Code, on models you run. Any
-        OpenAI-compatible server, on a laptop or in your data centre. No account, no telemetry.
+        OpenAI-compatible server, on a laptop or in your data centre. No account, nothing phones
+        home.
       </p>
       <div class="ctas" use:reveal={240}>
         <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">
