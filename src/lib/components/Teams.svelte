@@ -6,22 +6,31 @@
   const points = [
     [
       'A key per developer',
-      'Issued and revoked live, stored as hashes. Offboarding is one command.'
+      'Requested from VS Code, approved with a short code, stored as a hash, revoked live. Offboarding is one click.'
     ],
     [
       'Usage per person',
-      'Requests, failures and tokens by developer and model. Never the content.'
+      'Requests, failures and tokens by developer, model and the machine that served them. Never the content.'
     ],
-    ['One connection', 'A developer requests a key from VS Code, you approve a short code, done.'],
     [
       'Team defaults and policy',
       'Set the models once. Restrict which providers developers may add.'
     ],
     ['Any backend, live', 'Swap the model on the admin page. The next request uses it.'],
     [
+      'Pooled computers, under your control',
+      'Only a named key can share. Sharers see one line of consent, admins see who serves what and can disconnect a machine.'
+    ],
+    [
       'Recording, if you want it',
       'Keep prompts and replies on your gateway for audit, review and training data. Off by default, disclosed to every developer.'
     ]
+  ]
+
+  const peers = [
+    ['alice@desktop', 'coder · embed', '1 / 2', 312],
+    ['bo@mbp', 'coder', '0 / 2', 188],
+    ['chen@lab-1', 'coder · chat', '2 / 2', 540]
   ]
 
   const devs = [
@@ -43,8 +52,8 @@
         <h2>One gateway in your data centre. The whole team behind it.</h2>
       </div>
       <p>
-        twinny-server sits between developers and your inference servers. Keys, usage, policy and an
-        admin page, in one process you run.
+        twinny-server sits between developers and your inference servers, or the team's own
+        computers. Keys, usage, policy and an admin page, in one process you run.
       </p>
     </div>
 
@@ -68,7 +77,7 @@
       <div class="node">
         <span class="label bare">your inference servers</span>
         <strong>Any OpenAI-compatible backend</strong>
-        <span class="muted">on-prem GPUs or a private cloud</span>
+        <span class="muted">on-prem GPUs, a private cloud, or teammates' computers</span>
       </div>
     </div>
 
@@ -80,17 +89,20 @@
           <span class="dim">bash</span>
         </div>
         <pre><span class="c"># on the machine with the models</span>
-<span class="d">$</span> npx twinny-server init
-<span class="d">$</span> npx twinny-server keys create alice
-<span class="o">key for alice (shown once): twk_5f3a…9c</span>
-<span class="d">$</span> npx twinny-server serve
+<span class="d">$</span> npx twinny-server quickstart
+<span class="o">wrote twinny.gateway.json</span>
+<span class="o">admin key (shown once): twk_5f3a…9c</span>
 <span class="o">listening on 127.0.0.1:8765 · 3 aliases · 1 key</span>
-<span class="o">backend gpu-1 <span class="ok">ok</span> · gpu-2 <span class="ok">ok</span></span>
+<span class="o"
+            >backend gpu-1 <span class="ok">ok</span> · gpu-2 <span class="ok">ok</span
+            > · team <span class="ok">3 sharing</span></span
+          >
 <span class="o">admin: http://127.0.0.1:8765/admin</span>
 
+<span class="c"># or the container: ghcr.io/twinnydotdev/twinny-server</span>
 <span class="c"># in VS Code: Providers → Connect to team</span></pre>
         <div class="bar bottom">
-          <Copy text="npx twinny-server init" />
+          <Copy text="npx twinny-server quickstart" />
           <a href={URL_GITHUB_SERVER} target="_blank" rel="noopener noreferrer">package source</a>
         </div>
       </div>
@@ -99,7 +111,7 @@
         <div class="bar">
           <span class="t">twinny<span class="accent">-server</span> · admin</span>
           <span class="spacer"></span>
-          <span class="pill"><i></i>2 backends ok</span>
+          <span class="pill"><i></i>2 backends ok · 3 sharing</span>
         </div>
         <div class="tiles">
           <div class="tile">
@@ -135,6 +147,69 @@
       </div>
     </div>
 
+    <div class="pool" id="pool">
+      <div class="pool-text" use:reveal={0}>
+        <span class="label">team pool</span>
+        <h3>No GPU server yet? Pool the computers the team already has.</h3>
+        <p>
+          A developer flips <em>Share this computer</em> in VS Code. Their extension connects out to the
+          gateway and serves the models on their local server to the rest of the team, least loaded first.
+          No port to open, no firewall rule, no extra seat.
+        </p>
+        <ul>
+          <li>Prompts stream through the sharer's machine and are not stored there.</li>
+          <li>Every developer is told which models may run on a teammate's computer.</li>
+          <li>A sharer going offline fails over to the next machine with the model.</li>
+        </ul>
+      </div>
+
+      <div class="pool-mocks">
+        <div class="share panel" use:reveal={80} aria-label="share card in VS Code, illustration">
+          <div class="bar">
+            <span class="t">twinny · providers</span>
+            <span class="spacer"></span>
+            <span class="dim">VS Code</span>
+          </div>
+          <div class="share-body">
+            <div class="share-head">
+              <span class="switch" aria-hidden="true"><i></i></span>
+              <strong>Share this computer with the team</strong>
+            </div>
+            <div class="kv"><span class="l">local server</span><span>localhost:11434</span></div>
+            <div class="kv"><span class="l">at once</span><span>2 requests</span></div>
+            <p class="status">
+              <i class="dot"></i>Online · sharing coder, embed · <span class="num">14</span> served
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="peers panel"
+          use:reveal={160}
+          aria-label="admin page, sharing now, illustration"
+        >
+          <div class="bar">
+            <span class="t">admin · sharing now</span>
+            <span class="spacer"></span>
+            <span class="pill"><i></i>3 computers</span>
+          </div>
+          <div class="phead">
+            <span>who</span><span>models</span><span class="r">busy</span><span class="r"
+              >served</span
+            >
+          </div>
+          {#each peers as [who, m, busy, served], i}
+            <div class="prow" style="--d: {i * 80}ms">
+              <span>{who}</span>
+              <span class="muted">{m}</span>
+              <span class="r num">{busy}</span>
+              <span class="r num muted">{served}</span>
+            </div>
+          {/each}
+        </div>
+      </div>
+    </div>
+
     <ul class="points">
       {#each points as [t, d], i}
         <li use:reveal={i * 50}>
@@ -149,8 +224,8 @@
         >teams documentation</a
       >
       <span class="muted"
-        >Free for five developers. The licence only changes the seat count and switches on policy
-        and recording.</span
+        >Free for five developers, pooling included. The licence only changes the seat count and
+        switches on policy and recording.</span
       >
     </div>
   </div>
@@ -387,6 +462,169 @@
     }
   }
 
+  .pool {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 40px;
+    align-items: start;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line-2);
+  }
+  .pool-text h3 {
+    margin-top: 14px;
+    font-size: clamp(22px, 2.6vw, 30px);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .pool-text p {
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.65;
+  }
+  .pool-text em {
+    font-style: normal;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .pool-text ul {
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+  .pool-text li::before {
+    content: '+';
+    margin-right: 10px;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .pool-mocks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: var(--mono);
+    min-width: 0;
+  }
+  .share-body {
+    padding: 16px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .share-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .share-head strong {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .switch {
+    position: relative;
+    flex: none;
+    width: 34px;
+    height: 18px;
+    border: 1px solid var(--accent-line);
+    background: var(--accent-soft);
+    border-radius: 999px;
+  }
+  .switch i {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: flip 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both;
+  }
+  @keyframes flip {
+    from {
+      transform: translateX(0);
+      background: var(--ink-3);
+    }
+    to {
+      transform: translateX(16px);
+    }
+  }
+  .kv {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+    color: var(--ink);
+  }
+  .kv .l {
+    align-self: center;
+  }
+  .status {
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-2);
+    font-size: 11.5px;
+  }
+  .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    vertical-align: 1px;
+  }
+  .peers {
+    font-size: 12px;
+    overflow: hidden;
+  }
+  .phead,
+  .prow {
+    display: grid;
+    grid-template-columns: 120px 1fr 56px 64px;
+    gap: 12px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .phead {
+    color: var(--ink-2);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .prow {
+    animation: in 0.5s ease both;
+    animation-delay: var(--d);
+  }
+  .prow:last-child {
+    border-bottom: 0;
+  }
+  .prow:hover {
+    background: var(--panel-2);
+  }
+  .r {
+    text-align: right;
+  }
+  @keyframes in {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+  }
+
   .points {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -419,7 +657,8 @@
   }
 
   @media (max-width: 960px) {
-    .two {
+    .two,
+    .pool {
       grid-template-columns: minmax(0, 1fr);
     }
     .points {
@@ -445,10 +684,20 @@
     .tiles {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+    .phead,
+    .prow {
+      grid-template-columns: 104px 1fr 48px 56px;
+      gap: 8px;
+      padding-inline: 12px;
+      font-size: 11px;
+    }
   }
   @media (max-width: 560px) {
     .points {
       grid-template-columns: minmax(0, 1fr);
+    }
+    .admin .bar .pill {
+      display: none;
     }
   }
 </style>

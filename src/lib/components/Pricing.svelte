@@ -29,8 +29,8 @@
         <h2>Per seat, per year. No quote, no call.</h2>
       </div>
       <p>
-        A seat is an active key on your gateway. Revoke a key and the seat is free again. Every
-        feature is in every tier; you are paying for seats and policy.
+        A seat is an active key on your gateway. Revoke a key and the seat is free again. The editor
+        and the gateway are the same in every tier; you are paying for seats, policy and recording.
       </p>
     </div>
 
@@ -45,6 +45,7 @@
           <li>the whole extension, MIT</li>
           <li>twinny-server with admin page and usage</li>
           <li>any provider, local or hosted</li>
+          <li>pool teammates' computers as a backend</li>
         </ul>
         <a class="btn" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">install</a>
       </article>

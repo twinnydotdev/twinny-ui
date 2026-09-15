@@ -28,7 +28,7 @@
   <title>twinny — the AI coding assistant that stays inside your network</title>
   <meta
     name="description"
-    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run. Open source, self-hosted, no telemetry. Team seats from $8 a month."
+    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run or pool from your team's computers. Open source, self-hosted, no telemetry. Team seats from $8 a month."
   />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />

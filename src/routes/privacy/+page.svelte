@@ -29,6 +29,12 @@
       and every developer sees what is recorded before they connect and while they are connected.
       Whether to record is the team's decision, not ours.
     </p>
+    <p>
+      A developer can share their computer with the team. Teammates' prompts then run on that
+      machine through the local server the sharer chose, streamed back through the gateway and not
+      kept on the sharer's machine. Usage records name the machine that served each request. Every
+      developer is told which models may run on a teammate's computer before they connect.
+    </p>
     <h2>buying a licence</h2>
     <p>
       Checkout runs on Stripe. rjmacarthy.xyz keeps a record of each licence issued: organisation

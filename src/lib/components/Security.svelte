@@ -14,11 +14,11 @@
   const faq = [
     [
       'Does anything leave our network?',
-      'No. The extension talks to the server you configure and the gateway talks to its backends. No update check, no crash reporter, no usage ping, no licence check.'
+      'No. The extension talks to the server you configure and the gateway talks to its backends. No update check, no crash reporter, no usage ping, no licence check. It runs air-gapped: Node 18 and your inference server are the whole dependency list.'
     ],
     [
-      'Can it run air-gapped?',
-      'Yes. Node 18 and your inference server are the whole dependency list. The licence is a signed token you install once.'
+      'Is pooling teammates’ computers safe?',
+      'The sharer connects out to the gateway with their own key; nothing dials in. Prompts stream through the machine and are not stored there. Developers are told which models may run on a teammate’s computer, and admins can disconnect any of them.'
     ],
     [
       'What is recorded?',
@@ -40,6 +40,7 @@
 
   const compare = [
     ['Where prompts go', 'A vendor’s cloud', 'Your own servers'],
+    ['Whose GPUs', 'The vendor’s', 'Yours, or pooled from the team'],
     ['Who picks the model', 'The vendor', 'You'],
     ['Telemetry', 'On by default', 'None. There is no endpoint.'],
     ['Air-gapped', 'No', 'Yes'],

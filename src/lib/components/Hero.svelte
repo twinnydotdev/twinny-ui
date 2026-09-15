@@ -19,14 +19,14 @@
       </h1>
       <p class="lede" use:reveal={160}>
         Autocomplete, chat, inline edit and code review in VS Code, on models you run. Any
-        OpenAI-compatible server, on a laptop or in your data centre. No account, nothing phones
-        home.
+        OpenAI-compatible server, on a laptop, in your data centre, or pooled from the team's own
+        computers. No account, nothing phones home.
       </p>
       <div class="ctas" use:reveal={240}>
         <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">
           install for VS Code
         </a>
-        <Copy text="npx twinny-server init" label="for your team" />
+        <Copy text="npx twinny-server quickstart" label="for your team" />
       </div>
       <p class="fine" use:reveal={300}>
         Free for individuals and teams of five. Team seats from ${PRICE_TEAM} a month.
