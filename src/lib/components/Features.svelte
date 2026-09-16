@@ -1,6 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/reveal'
   import { URL_DOCS } from '$lib/const'
+  import { pointer } from '$lib/motion'
 
   const features = [
     {
@@ -78,7 +79,7 @@
       </p>
     </div>
 
-    <div class="grid">
+    <div class="grid" use:pointer>
       {#each features as f, i}
         <article class="card" use:reveal={i * 60}>
           <header>
@@ -87,8 +88,8 @@
           </header>
           <p>{f.body}</p>
           <div class="demo" aria-hidden="true">
-            {#each f.demo as [kind, line]}
-              <span class={kind}>{line}</span>
+            {#each f.demo as [kind, line], k}
+              <span class={kind} class:last={k === f.demo.length - 1}>{line}</span>
             {/each}
           </div>
           <a class="doc" href="{URL_DOCS}{f.doc}" target="_blank" rel="noopener noreferrer"
@@ -102,14 +103,31 @@
 
 <style>
   .grid {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
     background: var(--line);
     border: 1px solid var(--line);
   }
+  /* The hairlines between cards light up around the pointer. Cards are opaque,
+     so only the 1px gaps show the glow. */
+  .grid::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: radial-gradient(
+      440px circle at var(--mx, -999px) var(--my, -999px),
+      var(--accent),
+      transparent 65%
+    );
+    opacity: calc(var(--hover, 0) * 0.9);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
   .card {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -184,6 +202,51 @@
   }
   .demo .del {
     color: var(--bad);
+  }
+  /* On hover the demo replays: ghost text types in, the last line lands. */
+  .card:hover .demo .ghost {
+    animation: type 0.8s steps(26) both;
+  }
+  .card:hover .demo .ghost::after {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 1em;
+    margin-left: 2px;
+    vertical-align: -0.15em;
+    background: var(--accent);
+    animation: blink 0.9s steps(1) infinite;
+  }
+  .card:hover .demo .last:not(.ghost) {
+    animation: land 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both;
+  }
+  .card:hover .demo .del {
+    animation: strike 0.5s ease 0.3s forwards;
+  }
+  @keyframes type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @keyframes land {
+    from {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+  }
+  @keyframes strike {
+    to {
+      opacity: 0.45;
+      text-decoration: line-through;
+    }
   }
   .doc {
     align-self: flex-start;

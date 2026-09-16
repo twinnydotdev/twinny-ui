@@ -90,7 +90,7 @@
         <li>
           <span class="kw">return</span> (...args: <span class="ty">unknown</span>[]) =&gt; &#123;
         </li>
-        {#each ghostLines as line, n}
+        {#each ghostLines as _, n}
           {#if n < shown.length}
             <li class="g" class:cursor={n === shown.length - 1 && phase === 'typing'}>
               {shown[n]}

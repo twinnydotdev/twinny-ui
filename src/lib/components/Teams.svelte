@@ -2,6 +2,7 @@
   import { reveal } from '$lib/reveal'
   import Copy from './Copy.svelte'
   import { URL_DOCS_TEAMS, URL_GITHUB_SERVER } from '$lib/const'
+  import { countup } from '$lib/motion'
 
   const points = [
     [
@@ -115,21 +116,25 @@
         </div>
         <div class="tiles">
           <div class="tile">
-            <span class="l">requests · 7d</span><span class="v num">4,000</span>
+            <span class="l">requests · 7d</span><span class="v num" use:countup={{ to: 4000 }}
+              >4,000</span
+            >
           </div>
           <div class="tile">
             <span class="l">developers</span><span class="v num">5 <small>/ 5 seats</small></span>
           </div>
           <div class="tile"><span class="l">failures</span><span class="v num">3</span></div>
           <div class="tile">
-            <span class="l">p50 latency</span><span class="v num">412<small>ms</small></span>
+            <span class="l">p50 latency</span><span class="v num"
+              ><span use:countup={{ to: 412, ms: 900 }}>412</span><small>ms</small></span
+            >
           </div>
         </div>
         <div class="chart">
           <span class="l">usage by developer</span>
           <ul>
-            {#each devs as d}
-              <li>
+            {#each devs as d, i}
+              <li style="--i: {i}">
                 <span class="name">{d.name}</span>
                 <span class="bar-row" style="--w: {(d.total / devs[0].total) * 100}%">
                   {#each d.v as pct, i}
@@ -259,9 +264,28 @@
     margin-top: 6px;
   }
   .node.hot {
+    position: relative;
     border-color: var(--accent-line);
     background: var(--panel);
     box-shadow: inset 0 0 0 1px var(--accent-soft);
+  }
+  .node.hot::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+    animation: pulse 2.2s ease-out infinite;
+  }
+  @keyframes pulse {
+    60%,
+    100% {
+      box-shadow: 0 0 0 9px transparent;
+    }
   }
   .pipe {
     position: relative;
@@ -278,6 +302,37 @@
     height: 1px;
     background: repeating-linear-gradient(90deg, var(--accent) 0 6px, transparent 6px 12px);
     animation: dash 1.2s linear infinite;
+  }
+  /* A packet crosses each pipe in turn. */
+  .pipe::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin-top: -3px;
+    background: var(--accent);
+    animation: packet 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+  .flow > .pipe:nth-child(4)::after {
+    animation-delay: 1.3s;
+  }
+  @keyframes packet {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(106px);
+      opacity: 0;
+    }
   }
   .pipe span {
     position: relative;
@@ -432,7 +487,11 @@
     width: var(--w);
     height: 12px;
     transform-origin: left;
-    animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    transform: scaleX(0);
+  }
+  :global(.admin.in) .bar-row {
+    animation: grow 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    animation-delay: calc(var(--i) * 70ms);
   }
   .bar-row i {
     display: block;
@@ -457,8 +516,8 @@
     vertical-align: -1px;
   }
   @keyframes grow {
-    from {
-      transform: scaleX(0);
+    to {
+      transform: scaleX(1);
     }
   }
 
@@ -548,16 +607,15 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--accent);
-    animation: flip 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both;
+    background: var(--ink-3);
+  }
+  :global(.share.in) .switch i {
+    animation: flip 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s forwards;
   }
   @keyframes flip {
-    from {
-      transform: translateX(0);
-      background: var(--ink-3);
-    }
     to {
       transform: translateX(16px);
+      background: var(--accent);
     }
   }
   .kv {
@@ -606,6 +664,9 @@
     text-transform: uppercase;
   }
   .prow {
+    opacity: 0;
+  }
+  :global(.peers.in) .prow {
     animation: in 0.5s ease both;
     animation-delay: var(--d);
   }
@@ -622,6 +683,10 @@
     from {
       opacity: 0;
       transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 
@@ -680,6 +745,28 @@
       width: 1px;
       height: auto;
       background: repeating-linear-gradient(180deg, var(--accent) 0 6px, transparent 6px 12px);
+    }
+    .pipe::after {
+      left: 50%;
+      top: 0;
+      margin: 0 0 0 -3px;
+      animation-name: packet-v;
+    }
+    @keyframes packet-v {
+      0% {
+        transform: translateY(0);
+        opacity: 0;
+      }
+      12% {
+        opacity: 1;
+      }
+      88% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(42px);
+        opacity: 0;
+      }
     }
     .tiles {
       grid-template-columns: repeat(2, minmax(0, 1fr));

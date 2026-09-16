@@ -14,9 +14,10 @@ export const URL_X = 'https://x.com/twinnydotdev'
 export const URL_COMPANY = 'https://rjmacarthy.xyz'
 export const COMPANY = 'rjmacarthy.xyz'
 
-// Checkout. The licence service (twinny-license serve) turns a Stripe Checkout into a token;
-// point these at the Stripe payment links once they exist. Until then, the licensing docs.
-export const URL_BUY_TEAM = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
+// Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence
+// service (twinny-license serve) turns the payment into a token on its claim page.
+// Enterprise is invoice or purchase order, so it lands on the licensing page.
+export const URL_BUY_TEAM = 'https://buy.stripe.com/eVq00igUndD80qW6AR7Zu00'
 export const URL_BUY_ENTERPRISE = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
 
 // Pricing, per seat per month, billed yearly.

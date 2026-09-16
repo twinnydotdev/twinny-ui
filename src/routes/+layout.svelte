@@ -10,9 +10,49 @@
     COMPANY
   } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
+  import { onMount } from 'svelte'
+  import { afterNavigate } from '$app/navigation'
 
   let { children } = $props()
   let open = $state(false)
+  let progress = $state(0)
+  let active = $state('')
+
+  // A hairline under the header fills as you read; the nav underlines the section in view.
+  onMount(() => {
+    const onScroll = () => {
+      const h = document.documentElement
+      const max = h.scrollHeight - h.clientHeight
+      progress = max > 0 ? Math.min(1, h.scrollTop / max) : 0
+    }
+    onScroll()
+    addEventListener('scroll', onScroll, { passive: true })
+    addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      removeEventListener('scroll', onScroll)
+      removeEventListener('resize', onScroll)
+    }
+  })
+
+  let io: IntersectionObserver | undefined
+  afterNavigate(() => {
+    io?.disconnect()
+    active = ''
+    if (typeof IntersectionObserver === 'undefined') return
+    io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) active = e.target.id
+          else if (active === e.target.id) active = ''
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    )
+    for (const id of ['features', 'teams', 'security', 'pricing']) {
+      const el = document.getElementById(id)
+      if (el) io.observe(el)
+    }
+  })
 
   const nav = [
     { href: '/#features', label: 'features' },
@@ -71,6 +111,7 @@
           href={item.href}
           target={item.external ? '_blank' : undefined}
           rel={item.external ? 'noopener noreferrer' : undefined}
+          class:on={!item.external && item.href === `/#${active}`}
           onclick={() => (open = false)}>{item.label}</a
         >
       {/each}
@@ -87,6 +128,7 @@
       <span></span><span></span>
     </button>
   </div>
+  <div class="progress" style="transform: scaleX({progress})" aria-hidden="true"></div>
 </header>
 
 <main id="main">
@@ -237,8 +279,23 @@
   .links a:hover {
     color: var(--ink);
   }
-  .links a:hover::after {
+  .links a:hover::after,
+  .links a.on::after {
     right: 0;
+  }
+  .links a.on {
+    color: var(--ink);
+  }
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    pointer-events: none;
   }
   .cta {
     margin-left: auto;

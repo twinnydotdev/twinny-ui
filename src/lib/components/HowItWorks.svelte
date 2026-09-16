@@ -39,7 +39,9 @@
           <h3>{s.t}</h3>
           <p>{s.d}</p>
           <code>
-            {#if s.c.startsWith('$')}<span class="dollar">$</span>{s.c.slice(1)}{:else}{s.c}{/if}
+            <span class="tx">
+              {#if s.c.startsWith('$')}<span class="dollar">$</span>{s.c.slice(1)}{:else}{s.c}{/if}
+            </span>
           </code>
         </li>
       {/each}
@@ -72,6 +74,55 @@
     width: 40px;
     height: 1px;
     background: var(--accent);
+  }
+  /* A pulse runs the length of each step's rule as it comes into view, in order. */
+  li::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0;
+  }
+  :global(li.in)::after {
+    animation: draw 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--d, 0ms) + 200ms);
+  }
+  @keyframes draw {
+    0% {
+      transform: scaleX(0);
+      opacity: 0.9;
+    }
+    55% {
+      transform: scaleX(1);
+      opacity: 0.6;
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+  .tx {
+    display: inline-block;
+    clip-path: inset(0 100% 0 0);
+  }
+  :global(li.in) .tx {
+    animation: type 0.9s steps(34) both;
+    animation-delay: calc(var(--d, 0ms) + 500ms);
+  }
+  @keyframes type {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tx {
+      clip-path: none;
+    }
   }
   .n {
     font-family: var(--mono);
