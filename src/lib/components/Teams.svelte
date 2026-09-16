@@ -92,7 +92,7 @@
         <pre><span class="c"># on the machine with the models</span>
 <span class="d">$</span> npx twinny-server quickstart
 <span class="o">wrote twinny.gateway.json</span>
-<span class="o">admin key (shown once): twk_5f3a…9c</span>
+<span class="o">admin key (shown once): tsk_5f3a…9c</span>
 <span class="o">listening on 127.0.0.1:8765 · 3 aliases · 1 key</span>
 <span class="o"
             >backend gpu-1 <span class="ok">ok</span> · gpu-2 <span class="ok">ok</span
@@ -101,7 +101,7 @@
 <span class="o">admin: http://127.0.0.1:8765/admin</span>
 
 <span class="c"># or the container: ghcr.io/twinnydotdev/twinny-server</span>
-<span class="c"># in VS Code: Providers → Connect to team</span></pre>
+<span class="c"># then People → invite: one link per developer, opens VS Code</span></pre>
         <div class="bar bottom">
           <Copy text="npx twinny-server quickstart" />
           <a href={URL_GITHUB_SERVER} target="_blank" rel="noopener noreferrer">package source</a>
