@@ -25,7 +25,8 @@
   let v = $state(Math.round(toPos(20)))
   const seats = $derived(toSeats(v))
   const fmt = (n: number) => '$' + Math.round(n).toLocaleString('en')
-  const teamYear = $derived(seats <= FREE_SEATS ? 0 : seats * PRICE_TEAM * 12)
+  // The first five seats are free for everyone; a team pays for the ones beyond them.
+  const teamYear = $derived(Math.max(0, seats - FREE_SEATS) * PRICE_TEAM * 12)
   const entYear = $derived(Math.max(seats, ENTERPRISE_MIN_SEATS) * PRICE_ENTERPRISE * 12)
   const teamShown = Tween.of(() => teamYear, { duration: 320, easing: cubicOut })
   const entShown = Tween.of(() => entYear, { duration: 320, easing: cubicOut })
@@ -78,12 +79,12 @@
             <span class="big">${PRICE_TEAM}</span><span class="per">/ seat / month</span>
           </div>
           <span class="muted"
-            >billed yearly, ${PRICE_TEAM * 12} a seat · from {FREE_SEATS + 1} seats</span
+            >billed yearly, ${PRICE_TEAM * 12} for each seat beyond the free {FREE_SEATS}</span
           >
         </header>
         <ul>
           <li>everything in free</li>
-          <li>as many seats as you buy</li>
+          <li>your first {FREE_SEATS} seats stay free; buy only the ones beyond them</li>
           <li>policy: allowed providers, locked team models</li>
           <li>recording: keep prompts and replies on your gateway for audit and training export</li>
           <li>email support</li>
