@@ -45,10 +45,13 @@
     <p>
       Static pages. Fonts are served from this domain. The site uses Google Analytics to count
       visits; nothing you type into twinny or your gateway ever reaches it. The server keeps
-      ordinary access logs for a short time to keep the site up.
+      ordinary access logs for a short time to keep the site up. The contact form sends what you
+      type as one email to us through Resend, a mail API; the site keeps no copy.
     </p>
     <p class="muted">
-      twinny is made by <a href="https://rjmacarthy.xyz">rjmacarthy.xyz</a>. Questions:
+      twinny is made by <a href="https://rjmacarthy.xyz">rjmacarthy.xyz</a>. Questions: the
+      <a href="/#contact">contact form</a>
+      or
       <a href="https://x.com/twinnydotdev">@twinnydotdev</a>.
     </p>
     <p><a href="/">← back</a></p>

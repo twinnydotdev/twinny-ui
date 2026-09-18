@@ -3,13 +3,13 @@
   import {
     URL_MARKETPLACE,
     URL_BUY_TEAM,
-    URL_BUY_ENTERPRISE,
     URL_DOCS_LICENSING,
     PRICE_TEAM,
     PRICE_ENTERPRISE,
     FREE_SEATS,
     ENTERPRISE_MIN_SEATS,
-    COMPANY
+    COMPANY,
+    URL_DEMO
   } from '$lib/const'
 
   import { Tween } from 'svelte/motion'
@@ -69,6 +69,9 @@
           <li>community support</li>
         </ul>
         <a class="btn" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">install</a>
+        <a class="btn ghost" href={URL_DEMO} target="_blank" rel="noopener noreferrer"
+          >see it live</a
+        >
       </article>
 
       <article class="plan hot" class:pick={pick === 'team'} use:reveal={80}>
@@ -111,11 +114,8 @@
           <li>one organisation licence covering any number of gateways</li>
           <li>priority support with a named contact</li>
           <li>invoice or purchase-order billing</li>
-          <li>help with security questionnaires and procurement paperwork</li>
         </ul>
-        <a class="btn" href={URL_BUY_ENTERPRISE} target="_blank" rel="noopener noreferrer"
-          >contact us</a
-        >
+        <a class="btn" href="#contact">contact us</a>
       </article>
     </div>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_MARKETPLACE, PRICE_TEAM } from '$lib/const'
+  import { URL_MARKETPLACE, PRICE_TEAM, URL_DEMO } from '$lib/const'
   import EditorMock from './EditorMock.svelte'
   import Copy from './Copy.svelte'
   import { reveal } from '$lib/reveal'
@@ -41,6 +41,9 @@
       <div class="ctas" use:reveal={240}>
         <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">
           install for VS Code
+        </a>
+        <a class="btn ghost" href={URL_DEMO} target="_blank" rel="noopener noreferrer">
+          try the live demo
         </a>
         <Copy text="npx twinny-server quickstart" label="for your team" />
       </div>
@@ -264,7 +267,6 @@
       opacity: 1;
       transform: none;
     }
-    .scan,
     .glow,
     .trace .run {
       display: none;

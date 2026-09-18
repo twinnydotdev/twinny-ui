@@ -1,7 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/reveal'
   import Copy from './Copy.svelte'
-  import { URL_DOCS_TEAMS, URL_GITHUB_SERVER } from '$lib/const'
+  import { URL_DOCS_TEAMS, URL_GITHUB_SERVER, URL_DEMO } from '$lib/const'
   import { countup } from '$lib/motion'
 
   const points = [
@@ -104,6 +104,7 @@
 <span class="c"># then People → invite: one link per developer, opens VS Code</span></pre>
         <div class="bar bottom">
           <Copy text="npx twinny-server quickstart" />
+          <a href={URL_DEMO} target="_blank" rel="noopener noreferrer">live admin page</a>
           <a href={URL_GITHUB_SERVER} target="_blank" rel="noopener noreferrer">package source</a>
         </div>
       </div>
@@ -225,6 +226,9 @@
     </ul>
 
     <div class="foot-cta">
+      <a class="btn primary" href={URL_DEMO} target="_blank" rel="noopener noreferrer"
+        >open the live demo</a
+      >
       <a class="btn" href={URL_DOCS_TEAMS} target="_blank" rel="noopener noreferrer"
         >teams documentation</a
       >
@@ -377,6 +381,7 @@
     white-space: nowrap;
   }
   .bar.bottom {
+    flex-wrap: wrap;
     border-bottom: 0;
     border-top: 1px solid var(--line);
     justify-content: space-between;

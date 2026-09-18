@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { URL_MARKETPLACE, URL_DOCS, URL_GITHUB } from '$lib/const'
+  import { URL_MARKETPLACE, URL_DOCS, URL_GITHUB, URL_DEMO } from '$lib/const'
   import Mark from './Mark.svelte'
   import { reveal } from '$lib/reveal'
 </script>
@@ -11,6 +11,9 @@
     <div class="ctas">
       <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer"
         >install for VS Code</a
+      >
+      <a class="btn ghost" href={URL_DEMO} target="_blank" rel="noopener noreferrer"
+        >try the live demo</a
       >
       <a class="btn ghost" href={URL_DOCS} target="_blank" rel="noopener noreferrer"
         >read the docs</a

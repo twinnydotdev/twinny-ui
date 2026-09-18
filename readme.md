@@ -13,6 +13,9 @@ npm run build      # → build/
 node build         # serve the production build (PORT=3000)
 ```
 
+The contact form posts to `/api/contact`, the one server route; it sends the enquiry by email
+through Resend and needs the variables in `.env.example`. Without them it answers 503.
+
 `docker build -t twinny-ui .` builds the same thing into an image.
 
 ## Layout
@@ -22,3 +25,4 @@ node build         # serve the production build (PORT=3000)
 - `src/routes/+layout.svelte` — nav and footer.
 - `src/routes/+page.svelte` — the landing page, composed from `src/lib/components/`.
 - `src/lib/const.ts` — every external URL.
+- `src/routes/api/contact/+server.ts` — the enquiry form's endpoint.

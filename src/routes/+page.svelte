@@ -6,6 +6,7 @@
   import Teams from '$lib/components/Teams.svelte'
   import Security from '$lib/components/Security.svelte'
   import Pricing from '$lib/components/Pricing.svelte'
+  import Contact from '$lib/components/Contact.svelte'
   import Closing from '$lib/components/Closing.svelte'
 </script>
 
@@ -16,4 +17,5 @@
 <Teams />
 <Security />
 <Pricing />
+<Contact />
 <Closing />

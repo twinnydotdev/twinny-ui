@@ -7,7 +7,8 @@
     URL_X,
     URL_DISCUSSIONS,
     URL_COMPANY,
-    COMPANY
+    COMPANY,
+    URL_DEMO
   } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { onMount } from 'svelte'
@@ -59,6 +60,7 @@
     { href: '/#teams', label: 'teams' },
     { href: '/#security', label: 'security' },
     { href: '/#pricing', label: 'pricing' },
+    { href: URL_DEMO, label: 'live demo', external: true },
     { href: URL_DOCS, label: 'docs', external: true },
     { href: URL_GITHUB, label: 'github', external: true }
   ]
@@ -197,6 +199,7 @@
             <a href={URL_DISCUSSIONS} target="_blank" rel="noopener noreferrer">discussions</a>
           </li>
           <li><a href={URL_X} target="_blank" rel="noopener noreferrer">@twinnydotdev</a></li>
+          <li><a href="/#contact">contact</a></li>
           <li><a href="/privacy">privacy</a></li>
         </ul>
       </div>
@@ -325,7 +328,6 @@
   @media (max-width: 760px) {
     .row {
       gap: 16px;
-      flex-wrap: wrap;
     }
     .cta {
       display: none;
@@ -334,24 +336,38 @@
       display: flex;
       margin-left: auto;
     }
+    /* The open menu is a panel under the bar; the page behind it does not move. */
     .links {
       display: none;
-      flex-basis: 100%;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
       flex-direction: column;
       gap: 0;
-      margin: 0 0 8px;
-      border-top: 1px solid var(--line);
+      margin: 0;
+      padding: 0 var(--gutter) 8px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
     }
     .links a {
       padding: 12px 0;
       border-bottom: 1px solid var(--line);
       font-size: var(--fs);
     }
+    .links a:last-child {
+      border-bottom: 0;
+    }
     .links a::after {
       display: none;
     }
     .open .links {
       display: flex;
+    }
+    .top.open {
+      background: var(--bg);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 

@@ -1,5 +1,7 @@
 export const URL_MARKETPLACE =
   'https://marketplace.visualstudio.com/items?itemName=rjmacarthy.Twinny'
+// A real gateway with real models behind it, open to anyone: read-only admin page, guest keys for VS Code.
+export const URL_DEMO = 'https://demo.twinny.dev'
 export const URL_DOCS = 'https://twinnydotdev.github.io/twinny-docs/'
 export const URL_DOCS_TEAMS = 'https://twinnydotdev.github.io/twinny-docs/teams/overview/'
 export const URL_DOCS_LICENSING = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
@@ -16,9 +18,8 @@ export const COMPANY = 'rjmacarthy.xyz'
 
 // Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence
 // service (twinny-license serve) turns the payment into a token on its claim page.
-// Enterprise is invoice or purchase order, so it lands on the licensing page.
+// Enterprise is invoice or purchase order, so it goes through the contact form (#contact).
 export const URL_BUY_TEAM = 'https://buy.stripe.com/eVq00igUndD80qW6AR7Zu00'
-export const URL_BUY_ENTERPRISE = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
 
 // Pricing, per seat per month, billed yearly.
 export const PRICE_TEAM = 6
