@@ -16,8 +16,8 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
 
 - Every section opens with a `.label` (uppercase, tracked, green tick) and a `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
-- Fonts are self-hosted via `@fontsource`; the site makes no third-party requests and has no
-  analytics. Keep it that way.
+- Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in
+  `src/app.html`; do not add other scripts or trackers.
 - Copy is short, dry, specific and vendor-neutral: no model or runtime names on the page.
 - Prices and seat rules live in `src/lib/const.ts`; checkout URLs there are placeholders. Claims about the product must match the docs at
   ../twinny-docs; do not invent features, prices or numbers.

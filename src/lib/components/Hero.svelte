@@ -60,12 +60,6 @@
         <span class="tag br">nothing leaves</span>
         <EditorMock />
       </div>
-      <div class="caption">
-        <span class="label">live</span>
-        <span class="muted"
-          >a completion, streamed and accepted. built from HTML, not a screenshot.</span
-        >
-      </div>
     </div>
   </div>
 </section>
@@ -249,14 +243,6 @@
     bottom: -7px;
     right: 14px;
     color: var(--accent);
-  }
-  .caption {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 16px;
-    margin-top: 14px;
-    font-family: var(--mono);
-    font-size: var(--fs-xs);
   }
   @media (max-width: 1100px) {
     .wrap {

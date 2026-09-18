@@ -3,8 +3,8 @@
 The website for [twinny](https://github.com/twinnydotdev/twinny), the private AI coding
 assistant for VS Code, and twinny-server, its team gateway.
 
-SvelteKit 2 + Svelte 5, no CSS framework, self-hosted fonts, no analytics and no
-third-party requests. Pages are prerendered and served by `@sveltejs/adapter-node`.
+SvelteKit 2 + Svelte 5, no CSS framework, self-hosted fonts. The only third-party request
+is Google Analytics. Pages are prerendered and served by `@sveltejs/adapter-node`.
 
 ```sh
 npm install

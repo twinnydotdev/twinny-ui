@@ -201,11 +201,6 @@
         </ul>
       </div>
     </div>
-    <div class="foot-line">
-      <span class="accent"
-        >this site makes no third-party requests. fonts are self-hosted, there is no analytics.</span
-      >
-    </div>
   </div>
 </footer>
 
@@ -395,16 +390,6 @@
   }
   .foot li a:hover {
     color: var(--accent);
-  }
-  .foot-line {
-    font-family: var(--mono);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    margin-top: 48px;
-    padding-top: 18px;
-    border-top: 1px solid var(--line);
-    font-size: var(--fs-xs);
   }
   @media (max-width: 760px) {
     .foot-grid {

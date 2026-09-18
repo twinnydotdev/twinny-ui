@@ -43,9 +43,9 @@
     </p>
     <h2>this website</h2>
     <p>
-      Static pages. Fonts are served from this domain. There is no analytics script, no cookie and
-      no third-party request. The server keeps ordinary access logs for a short time to keep the
-      site up.
+      Static pages. Fonts are served from this domain. The site uses Google Analytics to count
+      visits; nothing you type into twinny or your gateway ever reaches it. The server keeps
+      ordinary access logs for a short time to keep the site up.
     </p>
     <p class="muted">
       twinny is made by <a href="https://rjmacarthy.xyz">rjmacarthy.xyz</a>. Questions:
