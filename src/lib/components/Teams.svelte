@@ -1,7 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/reveal'
   import Copy from './Copy.svelte'
-  import { URL_DOCS_TEAMS, URL_GITHUB_SERVER, URL_DEMO } from '$lib/const'
+  import { URL_DOCS_TEAMS, URL_DOCS_PLUGINS, URL_GITHUB_SERVER, URL_DEMO } from '$lib/const'
   import { countup } from '$lib/motion'
 
   const points = [
@@ -15,7 +15,7 @@
     ],
     [
       'Team defaults and policy',
-      'Set the models once. Restrict which providers developers may add.'
+      'Set the models once. Restrict which providers developers may add, keep a workspace on local backends, put a team system prompt before every chat.'
     ],
     ['Any backend, live', 'Swap the model on the admin page. The next request uses it.'],
     [
@@ -25,8 +25,33 @@
     [
       'Recording, if you want it',
       'Keep prompts and replies on your gateway for audit, review and training data. Off by default, disclosed to every developer.'
+    ],
+    [
+      'An audit log you can verify',
+      'Every admin change in a hash-chained log with filters and export. Read-only admin keys for the auditor. Prometheus at /metrics.'
+    ],
+    [
+      'Costs, when a model has a price',
+      'Give an alias a price per million tokens and usage shows what each developer, model and period cost.'
+    ],
+    [
+      'A queue, not an error',
+      'When every slot is busy, requests wait briefly, oldest first. A team sharing one GPU sees a pause, not a failure.'
     ]
   ]
+
+  const plugins = [
+    ['GitHub', 'pulls, reviews, issue triage', true],
+    ['GitLab', 'merge requests, reviews, triage', true],
+    ['Gitea', 'Forgejo and Codeberg too', false],
+    ['Bitbucket', 'Cloud, app password or token', false],
+    ['Slack', 'reviews, new pulls, failing checks', true],
+    ['Discord', 'the same events, as embeds', false],
+    ['Microsoft Teams', 'Adaptive Cards by webhook', false],
+    ['SSO sign-in', 'Okta, Entra ID, Google, Keycloak', true],
+    ['Shared context', 'one team index for every chat', true],
+    ['Backups', 'nightly, to disk or S3, encrypted', true]
+  ] as const
 
   const peers = [
     ['alice@desktop', 'coder · embed', '1 / 2', 312],
@@ -54,7 +79,7 @@
       </div>
       <p>
         twinny-server sits between developers and your inference servers, or the team's own
-        computers. Keys, usage, policy and an admin page, in one process you run.
+        computers. Keys, usage, policy, plugins and an admin page, in one process you run.
       </p>
     </div>
 
@@ -72,7 +97,7 @@
       <div class="node hot">
         <span class="label bare">your network</span>
         <strong>twinny-server</strong>
-        <span class="muted">keys · usage · policy · admin</span>
+        <span class="muted">keys · usage · policy · plugins · admin</span>
       </div>
       <div class="pipe"><span>private</span></div>
       <div class="node">
@@ -216,6 +241,48 @@
       </div>
     </div>
 
+    <div class="plugins" id="plugins">
+      <div class="plugins-text" use:reveal={0}>
+        <span class="label">plugins</span>
+        <h3>Pull requests reviewed by the models you already run.</h3>
+        <p>
+          Switch a plugin on from the admin page and the gateway does more than serve completions.
+          Watch your repositories and every open pull request is listed with its checks, approvals
+          and where you stand. <em>review now</em> sends the diff to one of your own chat models; the
+          review can be posted back to the host as a comment, a change request or an approval. Idle GPUs
+          review new pulls and triage issues in the background, never slowing a developer down.
+        </p>
+        <ul>
+          <li>Slack, Discord or Teams hear about reviews, new pulls and failing checks.</li>
+          <li>Developers sign in with your identity provider instead of an invite.</li>
+          <li>One shared index of the team's repositories, searched from every chat.</li>
+          <li>Nightly backups of the gateway to a directory or an S3 bucket.</li>
+        </ul>
+        <a class="doc" href={URL_DOCS_PLUGINS} target="_blank" rel="noopener noreferrer"
+          >plugins documentation →</a
+        >
+      </div>
+
+      <div
+        class="store panel"
+        use:reveal={80}
+        aria-label="plugin store on the admin page, illustration"
+      >
+        <div class="bar">
+          <span class="t">admin · plugins</span>
+          <span class="spacer"></span>
+          <span class="pill"><i></i>{plugins.filter((p) => p[2]).length} on</span>
+        </div>
+        {#each plugins as [name, what, on], i}
+          <div class="srow" style="--d: {i * 60}ms">
+            <span class="sw" class:on aria-hidden="true"><i></i></span>
+            <span class="sname">{name}</span>
+            <span class="muted swhat">{what}</span>
+          </div>
+        {/each}
+      </div>
+    </div>
+
     <ul class="points">
       {#each points as [t, d], i}
         <li use:reveal={i * 50}>
@@ -234,7 +301,7 @@
       >
       <span class="muted"
         >Free for five developers, pooling included. The licence only changes the seat count and
-        switches on policy and recording.</span
+        switches on policy, recording and plugins.</span
       >
     </div>
   </div>
@@ -695,6 +762,128 @@
     }
   }
 
+  .plugins {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 40px;
+    align-items: start;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line-2);
+  }
+  .plugins-text h3 {
+    margin-top: 14px;
+    font-size: clamp(22px, 2.6vw, 30px);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .plugins-text p {
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.65;
+  }
+  .plugins-text em {
+    font-style: normal;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .plugins-text ul {
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+  }
+  .plugins-text li::before {
+    content: '+';
+    margin-right: 10px;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .plugins-text .doc {
+    display: inline-block;
+    margin-top: 18px;
+    border: 0;
+    color: var(--ink-3);
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.06em;
+  }
+  .plugins-text .doc:hover {
+    color: var(--accent);
+  }
+  .store {
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .srow {
+    display: grid;
+    grid-template-columns: 30px 128px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    opacity: 0;
+  }
+  .srow:last-child {
+    border-bottom: 0;
+  }
+  .srow:hover {
+    background: var(--panel-2);
+  }
+  :global(.store.in) .srow {
+    animation: in 0.5s ease both;
+    animation-delay: var(--d);
+  }
+  .sname {
+    color: var(--ink);
+  }
+  .swhat {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sw {
+    position: relative;
+    display: block;
+    width: 28px;
+    height: 15px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: var(--bg-2);
+  }
+  .sw i {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--ink-3);
+  }
+  .sw.on {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  :global(.store.in) .sw.on i {
+    animation: flip-sm 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--d) + 250ms);
+  }
+  @keyframes flip-sm {
+    to {
+      transform: translateX(13px);
+      background: var(--accent);
+    }
+  }
+
   .points {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -728,7 +917,8 @@
 
   @media (max-width: 960px) {
     .two,
-    .pool {
+    .pool,
+    .plugins {
       grid-template-columns: minmax(0, 1fr);
     }
     .points {
@@ -779,6 +969,12 @@
     .phead,
     .prow {
       grid-template-columns: 104px 1fr 48px 56px;
+      gap: 8px;
+      padding-inline: 12px;
+      font-size: 11px;
+    }
+    .srow {
+      grid-template-columns: 30px 112px 1fr;
       gap: 8px;
       padding-inline: 12px;
       font-size: 11px;

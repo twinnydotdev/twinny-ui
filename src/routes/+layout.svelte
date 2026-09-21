@@ -8,7 +8,8 @@
     URL_DISCUSSIONS,
     URL_COMPANY,
     COMPANY,
-    URL_DEMO
+    URL_DEMO,
+    URL_DOCS_CHANGELOG
   } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { onMount } from 'svelte'
@@ -70,7 +71,7 @@
   <title>twinny — the AI coding assistant that stays inside your network</title>
   <meta
     name="description"
-    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run or pool from your team's computers. Open source, self-hosted, no telemetry. Team seats from $8 a month."
+    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run or pool from your team's computers. Open source, self-hosted, no telemetry. Free for five developers; team seats from $6 a month."
   />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />
@@ -170,6 +171,9 @@
         <div class="label bare">learn</div>
         <ul>
           <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
+          <li>
+            <a href={URL_DOCS_CHANGELOG} target="_blank" rel="noopener noreferrer">changelog</a>
+          </li>
           <li>
             <a
               href="{URL_DOCS}getting-started/quick-start/"

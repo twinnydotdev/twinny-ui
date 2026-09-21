@@ -48,8 +48,8 @@
       </div>
       <p>
         A seat is an active key on your gateway. Revoke a key and the seat is free again. Everything
-        in the extension and the gateway is in every tier; you pay for seats, policy, recording and
-        support. Where the usual tools ask $19 a seat, twinny asks ${PRICE_TEAM}.
+        in the extension and the gateway is in every tier; you pay for seats, policy, recording,
+        plugins and support. Where the usual tools ask $19 a seat, twinny asks ${PRICE_TEAM}.
       </p>
     </div>
 
@@ -88,7 +88,11 @@
         <ul>
           <li>everything in free</li>
           <li>your first {FREE_SEATS} seats stay free; buy only the ones beyond them</li>
-          <li>policy: allowed providers, locked team models</li>
+          <li>policy: team-only providers, locked models, routing rules, a team system prompt</li>
+          <li>
+            plugins: pull requests and issues reviewed by your own models, Slack, SSO sign-in,
+            shared context, backups
+          </li>
           <li>recording: keep prompts and replies on your gateway for audit and training export</li>
           <li>email support</li>
           <li>
