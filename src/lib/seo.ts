@@ -1,7 +1,7 @@
 // Structured data, emitted as a string: Svelte reads the braces of inline JSON as expressions,
 // so a literal <script type="application/ld+json"> in a component renders empty.
 import { URL_SITE, URL_MARKETPLACE, PRICE_TEAM, FREE_SEATS, TRIAL_DAYS } from './const'
-import { INSTALLS, RATING, RATING_COUNT } from './stats'
+import { DOWNLOADS, RATING, RATING_COUNT } from './stats'
 
 export const jsonLd = (data: unknown) =>
   `<script type="application/ld+json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`
@@ -46,7 +46,7 @@ export const softwareApplication = () => ({
   interactionStatistic: {
     '@type': 'InteractionCounter',
     interactionType: 'https://schema.org/DownloadAction',
-    userInteractionCount: INSTALLS
+    userInteractionCount: DOWNLOADS
   },
   author: { '@type': 'Organization', name: 'twinny', url: URL_SITE }
 })

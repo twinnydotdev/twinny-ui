@@ -28,15 +28,27 @@ try {
   const stats = (await r.json()).results?.[0]?.extensions?.[0]?.statistics ?? []
   const stat = (name) => stats.find((s) => s.statisticName === name)?.value
   const installs = stat('install')
+  const downloads = stat('downloadCount')
   const rating = stat('averagerating')
   const ratingCount = stat('ratingcount')
   if (Number.isFinite(installs) && installs > 0) next.installs = Math.round(installs)
+  if (Number.isFinite(downloads) && downloads > 0) next.marketplaceDownloads = Math.round(downloads)
   if (Number.isFinite(rating) && Number.isFinite(ratingCount) && ratingCount > 0) {
     next.rating = Math.round(rating * 10) / 10
     next.ratingCount = Math.round(ratingCount)
   }
 } catch (e) {
   console.warn('stats: marketplace not read,', e instanceof Error ? e.message : e)
+}
+
+try {
+  const r = await fetch('https://open-vsx.org/api/rjmacarthy/twinny', {
+    signal: withTimeout(10000)
+  })
+  const downloads = (await r.json()).downloadCount
+  if (Number.isFinite(downloads) && downloads > 0) next.openVsxDownloads = downloads
+} catch (e) {
+  console.warn('stats: open vsx not read,', e instanceof Error ? e.message : e)
 }
 
 try {
@@ -53,7 +65,9 @@ try {
 if (JSON.stringify(next) !== JSON.stringify(current)) {
   next.updated = new Date().toISOString().slice(0, 10)
   writeFileSync(file, JSON.stringify(next, null, 2) + '\n')
-  console.log(`stats: installs ${next.installs}, stars ${next.stars}`)
+  console.log(
+    `stats: installs ${next.installs}, downloads ${next.marketplaceDownloads} + ${next.openVsxDownloads}, stars ${next.stars}`
+  )
 } else {
   console.log('stats: unchanged')
 }
