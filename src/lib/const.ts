@@ -2,14 +2,14 @@ export const URL_MARKETPLACE =
   'https://marketplace.visualstudio.com/items?itemName=rjmacarthy.Twinny'
 // A real gateway with real models behind it, open to anyone: read-only admin page, guest keys for VS Code.
 export const URL_DEMO = 'https://demo.twinny.dev'
-export const URL_DOCS = 'https://twinnydotdev.github.io/twinny-docs/'
-export const URL_DOCS_TEAMS = 'https://twinnydotdev.github.io/twinny-docs/teams/overview/'
-export const URL_DOCS_LICENSING = 'https://twinnydotdev.github.io/twinny-docs/teams/licensing/'
+export const URL_DOCS = 'https://docs.twinny.dev/'
+export const URL_DOCS_TEAMS = 'https://docs.twinny.dev/teams/overview/'
+export const URL_DOCS_LICENSING = 'https://docs.twinny.dev/teams/licensing/'
 export const URL_DOCS_QUICKSTART =
-  'https://twinnydotdev.github.io/twinny-docs/getting-started/quick-start/'
-export const URL_DOCS_PROVIDERS = 'https://twinnydotdev.github.io/twinny-docs/providers/'
-export const URL_DOCS_PLUGINS = 'https://twinnydotdev.github.io/twinny-docs/teams/plugins/'
-export const URL_DOCS_CHANGELOG = 'https://twinnydotdev.github.io/twinny-docs/reference/whats-new/'
+  'https://docs.twinny.dev/getting-started/quick-start/'
+export const URL_DOCS_PROVIDERS = 'https://docs.twinny.dev/providers/'
+export const URL_DOCS_PLUGINS = 'https://docs.twinny.dev/teams/plugins/'
+export const URL_DOCS_CHANGELOG = 'https://docs.twinny.dev/reference/whats-new/'
 export const URL_GITHUB = 'https://github.com/twinnydotdev/twinny'
 export const URL_GITHUB_SERVER =
   'https://github.com/twinnydotdev/twinny/tree/main/packages/twinny-server'
