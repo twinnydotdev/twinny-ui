@@ -30,10 +30,10 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
 - `/changelog` and `/changelog.xml` render `src/lib/changelog.md`, a copy of the extension
   repository's CHANGELOG.md refreshed by `scripts/changelog.mjs` at build time; the sitemap
   takes `lastmod` from git.
-- Download and star counts come from `src/lib/stats.json`, refreshed by `scripts/stats.mjs` at
-  build time and shown rounded down ("420,000+"). The headline number is downloads summed
-  across the Visual Studio Marketplace and Open VSX, since the extension is on both and that
-  is the one figure both stores report. Do not type numbers into components.
+- Install and star counts come from `src/lib/stats.json`, refreshed by `scripts/stats.mjs` at
+  build time and shown rounded down ("220,000+"). The headline number is Marketplace installs
+  plus Open VSX downloads (Open VSX reports nothing else); the Marketplace download count is
+  kept in the file but not shown, as it counts updates. Do not type numbers into components.
 - The "in the open" block (`Maker.svelte`) names nobody: no maintainer name, no photo, no team,
   no "one person" framing. It is the public record only: installs, stars, year, licence.
 - Prices, seat rules and the trial's size live in `src/lib/const.ts` (the trial must match

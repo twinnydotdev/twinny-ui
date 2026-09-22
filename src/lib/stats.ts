@@ -4,8 +4,12 @@ import stats from './stats.json'
 
 /** Marketplace installs alone; the Marketplace's own headline number. */
 export const INSTALLS = stats.installs
-/** Downloads across the two stores the extension is on: the Visual Studio Marketplace and Open VSX. */
-export const DOWNLOADS = stats.marketplaceDownloads + stats.openVsxDownloads
+/**
+ * Installs across the two stores the extension is on: the Marketplace's install count plus
+ * Open VSX's download count (the only figure Open VSX reports). The Marketplace's own download
+ * count is higher because it includes updates; it is kept in the file but not shown.
+ */
+export const INSTALLS_ALL = stats.installs + stats.openVsxDownloads
 export const STARS = stats.stars
 /** The Marketplace's average rating and how many people gave one. */
 export const RATING = stats.rating

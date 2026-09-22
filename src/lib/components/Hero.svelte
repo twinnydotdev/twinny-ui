@@ -1,6 +1,6 @@
 <script lang="ts">
   import { URL_MARKETPLACE, PRICE_TEAM, URL_DEMO, MAINTAINED_SINCE, URL_GITHUB } from '$lib/const'
-  import { DOWNLOADS, STARS, fmt } from '$lib/stats'
+  import { INSTALLS_ALL, STARS, fmt } from '$lib/stats'
   import EditorMock from './EditorMock.svelte'
   import Copy from './Copy.svelte'
   import { reveal } from '$lib/reveal'
@@ -53,7 +53,7 @@
         <a href="#pricing">Pricing</a>.
       </p>
       <p class="proof" use:reveal={340}>
-        <span><b class="num">{fmt(DOWNLOADS)}</b> downloads</span>
+        <span><b class="num">{fmt(INSTALLS_ALL)}</b> installs</span>
         <span
           ><b class="num">{fmt(STARS)}</b>
           <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">stars on GitHub</a></span

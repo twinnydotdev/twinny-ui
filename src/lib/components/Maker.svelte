@@ -7,10 +7,10 @@
     URL_DOCS_CHANGELOG,
     URL_X
   } from '$lib/const'
-  import { DOWNLOADS, STARS, fmt } from '$lib/stats'
+  import { INSTALLS_ALL, STARS, fmt } from '$lib/stats'
 
   const facts = [
-    [fmt(DOWNLOADS), 'downloads, Marketplace and Open VSX'],
+    [fmt(INSTALLS_ALL), 'installs, Marketplace and Open VSX'],
     [fmt(STARS), 'stars on GitHub'],
     [String(MAINTAINED_SINCE), 'in development, in public, since'],
     ['MIT', 'the extension, the gateway and the licence check']
