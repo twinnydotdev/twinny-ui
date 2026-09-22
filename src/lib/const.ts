@@ -5,6 +5,7 @@ export const URL_OPENVSX = 'https://open-vsx.org/extension/rjmacarthy/twinny'
 // A real gateway with real models behind it, open to anyone: read-only admin page, guest keys for VS Code.
 export const URL_DEMO = 'https://demo.twinny.dev'
 export const URL_DOCS = 'https://docs.twinny.dev/'
+export const URL_BLOG = 'https://blog.twinny.dev/'
 export const URL_DOCS_TEAMS = 'https://docs.twinny.dev/teams/overview/'
 export const URL_DOCS_LICENSING = 'https://docs.twinny.dev/teams/licensing/'
 export const URL_DOCS_QUICKSTART = 'https://docs.twinny.dev/getting-started/quick-start/'

@@ -2,6 +2,7 @@
   import '../app.css'
   import {
     URL_DOCS,
+    URL_BLOG,
     URL_GITHUB,
     URL_MARKETPLACE,
     URL_OPENVSX,
@@ -67,6 +68,7 @@
     { href: '/#pricing', label: 'pricing' },
     { href: URL_DEMO, label: 'live demo', external: true },
     { href: URL_DOCS, label: 'docs', external: true },
+    { href: URL_BLOG, label: 'blog', external: true },
     { href: URL_GITHUB, label: 'github', external: true }
   ]
 </script>
@@ -176,6 +178,7 @@
         <ul>
           <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
           <li><a href="/changelog">changelog</a></li>
+          <li><a href={URL_BLOG} target="_blank" rel="noopener noreferrer">blog</a></li>
           <li>
             <a
               href="{URL_DOCS}getting-started/quick-start/"
