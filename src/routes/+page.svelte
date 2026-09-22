@@ -9,36 +9,24 @@
   import Pricing from '$lib/components/Pricing.svelte'
   import Contact from '$lib/components/Contact.svelte'
   import Closing from '$lib/components/Closing.svelte'
+  import { jsonLd, softwareApplication, faqPage, HOME_FAQ } from '$lib/seo'
 </script>
 
 <svelte:head>
-  <title>twinny — the AI coding assistant that stays inside your network</title>
+  <title>twinny: self-hosted AI coding assistant for VS Code</title>
   <meta
     name="description"
-    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run or pool from your team's computers. Open source, self-hosted, no telemetry. Free for five developers; team seats from $6 a month."
+    content="Local AI code completion, chat, inline edit and code review in VS Code, on models you run: Ollama, llama.cpp, LM Studio or any OpenAI-compatible server. One gateway for the whole team. Open source, no telemetry. Free for five developers."
   />
-  <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />
+  <meta property="og:title" content="twinny: self-hosted AI coding assistant for VS Code" />
   <meta
     property="og:description"
-    content="Runs on your hardware. Nothing leaves the building. Free for individuals and teams up to five."
+    content="Code completion, chat, inline edit and review on models you run. Nothing leaves your network. Free for individuals and teams of five."
   />
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "twinny",
-      "url": "https://twinny.dev/",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Visual Studio Code",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "author": {
-        "@type": "Organization",
-        "name": "rjmacarthy.xyz",
-        "url": "https://rjmacarthy.xyz"
-      },
-      "description": "Private AI coding assistant for Visual Studio Code: autocomplete, chat, inline edit and code review on models you run yourself."
-    }
-  </script>
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -- our own build-time content -->
+  {@html jsonLd(softwareApplication())}
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -- our own build-time content -->
+  {@html jsonLd(faqPage(HOME_FAQ))}
 </svelte:head>
 
 <Hero />

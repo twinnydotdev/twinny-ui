@@ -9,7 +9,6 @@
     URL_COMPANY,
     COMPANY,
     URL_DEMO,
-    URL_DOCS_CHANGELOG,
     URL_SITE
   } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
@@ -83,6 +82,7 @@
     property="og:image:alt"
     content="twinny — the AI coding assistant that stays inside your network"
   />
+  <link rel="alternate" type="application/rss+xml" title="twinny releases" href="/changelog.xml" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@twinnydotdev" />
   <meta name="twitter:image" content="{URL_SITE}/og.png" />
@@ -162,15 +162,18 @@
           <li><a href="/vs/github-copilot">vs GitHub Copilot</a></li>
           <li><a href="/vs/cursor">vs Cursor</a></li>
           <li><a href="/vs/tabnine">vs Tabnine</a></li>
+          <li><a href="/with/ollama">with Ollama</a></li>
+          <li><a href="/with/llama-cpp">with llama.cpp</a></li>
+          <li><a href="/with/lm-studio">with LM Studio</a></li>
+          <li><a href="/for/air-gapped">air-gapped</a></li>
+          <li><a href="/for/regulated-teams">regulated teams</a></li>
         </ul>
       </div>
       <div>
         <div class="label bare">learn</div>
         <ul>
           <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
-          <li>
-            <a href={URL_DOCS_CHANGELOG} target="_blank" rel="noopener noreferrer">changelog</a>
-          </li>
+          <li><a href="/changelog">changelog</a></li>
           <li>
             <a
               href="{URL_DOCS}getting-started/quick-start/"

@@ -26,8 +26,15 @@ try {
     }
   )
   const stats = (await r.json()).results?.[0]?.extensions?.[0]?.statistics ?? []
-  const installs = stats.find((s) => s.statisticName === 'install')?.value
+  const stat = (name) => stats.find((s) => s.statisticName === name)?.value
+  const installs = stat('install')
+  const rating = stat('averagerating')
+  const ratingCount = stat('ratingcount')
   if (Number.isFinite(installs) && installs > 0) next.installs = Math.round(installs)
+  if (Number.isFinite(rating) && Number.isFinite(ratingCount) && ratingCount > 0) {
+    next.rating = Math.round(rating * 10) / 10
+    next.ratingCount = Math.round(ratingCount)
+  }
 } catch (e) {
   console.warn('stats: marketplace not read,', e instanceof Error ? e.message : e)
 }
@@ -43,7 +50,7 @@ try {
   console.warn('stats: github not read,', e instanceof Error ? e.message : e)
 }
 
-if (next.installs !== current.installs || next.stars !== current.stars) {
+if (JSON.stringify(next) !== JSON.stringify(current)) {
   next.updated = new Date().toISOString().slice(0, 10)
   writeFileSync(file, JSON.stringify(next, null, 2) + '\n')
   console.log(`stats: installs ${next.installs}, stars ${next.stars}`)

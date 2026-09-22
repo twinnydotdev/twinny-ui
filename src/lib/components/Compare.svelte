@@ -3,6 +3,7 @@
   import { CHECKED } from '$lib/compare'
   import { URL_MARKETPLACE, URL_DEMO, URL_SITE } from '$lib/const'
   import { reveal } from '$lib/reveal'
+  import { jsonLd, breadcrumbs } from '$lib/seo'
 
   let { rival }: { rival: Rival } = $props()
 </script>
@@ -13,6 +14,13 @@
   <meta property="og:title" content={rival.title} />
   <meta property="og:description" content={rival.description} />
   <meta property="og:url" content="{URL_SITE}/vs/{rival.slug}" />
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -- our own build-time content -->
+  {@html jsonLd(
+    breadcrumbs([
+      ['twinny', '/'],
+      [`vs ${rival.name}`, `/vs/${rival.slug}`]
+    ])
+  )}
 </svelte:head>
 
 <section class="section top">

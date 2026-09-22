@@ -18,10 +18,18 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in
   `src/app.html`; do not add other scripts or trackers.
-- Copy is short, dry, specific and vendor-neutral on the home page: no model or runtime names
-  there. The exception is `/vs/<slug>`: comparison pages that name a competitor, built from
-  `src/lib/compare.ts`. Every vendor fact and price there was read from the vendor's own pricing
-  page on the date in `CHECKED`; update both together, never from memory.
+- Copy is short, dry, specific and vendor-neutral in the visible home-page copy: no model or
+  runtime names there. Runtime names are allowed in the home page's meta description and
+  structured data (people search for them), on `/with/<runtime>` and `/for/<situation>` pages
+  built from `src/lib/intent.ts` (facts from the docs' provider pages), and on `/vs/<slug>`
+  comparison pages built from `src/lib/compare.ts`. Every vendor fact and price on a /vs page
+  was read from the vendor's own pricing page on the date in `CHECKED`; update both together.
+- Structured data is emitted through `jsonLd()` in `src/lib/seo.ts`, never as a literal
+  `<script type="application/ld+json">` in a component: Svelte reads its braces and renders it
+  empty.
+- `/changelog` and `/changelog.xml` render `src/lib/changelog.md`, a copy of the extension
+  repository's CHANGELOG.md refreshed by `scripts/changelog.mjs` at build time; the sitemap
+  takes `lastmod` from git.
 - Install and star counts come from `src/lib/stats.json`, refreshed by `scripts/stats.mjs` at
   build time and shown rounded down ("72,000+"). Do not type numbers into components.
 - The "in the open" block (`Maker.svelte`) names nobody: no maintainer name, no photo, no team,

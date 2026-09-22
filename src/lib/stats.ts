@@ -4,6 +4,9 @@ import stats from './stats.json'
 
 export const INSTALLS = stats.installs
 export const STARS = stats.stars
+/** The Marketplace's average rating and how many people gave one. */
+export const RATING = stats.rating
+export const RATING_COUNT = stats.ratingCount
 
 /** 72090 -> "72,000+", 3648 -> "3,600+". Rounds down to two significant figures. */
 export const roughly = (n: number) => {
