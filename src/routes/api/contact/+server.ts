@@ -41,6 +41,7 @@ function validate(input: Record<string, unknown>) {
   const org = str(input.org)
   const seats = str(input.seats)
   const message = str(input.message)
+  const call = ['yes', 'on', 'true'].includes(str(input.call).toLowerCase())
   if (name.length < 2 || name.length > LIMITS.name || /\n/.test(name))
     return { error: 'Please give your name.' }
   if (!EMAIL_RE.test(email) || email.length > LIMITS.email || /[\n,;<>]/.test(email))
@@ -49,7 +50,7 @@ function validate(input: Record<string, unknown>) {
   if (seats && !/^\d{1,6}$/.test(seats)) return { error: 'Developers should be a number.' }
   if (message.length < MIN_MESSAGE) return { error: 'Say a little more in the message.' }
   if (message.length > LIMITS.message) return { error: 'The message is too long.' }
-  return { values: { name, email, org, seats, message } }
+  return { values: { name, email, org, seats, message, call } }
 }
 
 async function send(v: {
@@ -58,8 +59,9 @@ async function send(v: {
   org: string
   seats: string
   message: string
+  call: boolean
 }) {
-  const subject = `[twinny] ${v.org || v.name}${v.seats ? ` · ${v.seats} developers` : ''}`
+  const subject = `[twinny] ${v.org || v.name}${v.seats ? ` · ${v.seats} developers` : ''}${v.call ? ' · wants a call' : ''}`
   const text = [
     `New enquiry via twinny.dev`,
     ``,
@@ -67,6 +69,7 @@ async function send(v: {
     `Email:        ${v.email}`,
     `Organisation: ${v.org || '(not given)'}`,
     `Developers:   ${v.seats || '(not given)'}`,
+    `Wants a call: ${v.call ? 'yes' : 'no'}`,
     ``,
     `Message:`,
     v.message,

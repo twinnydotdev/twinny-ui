@@ -157,6 +157,14 @@
         </ul>
       </div>
       <div>
+        <div class="label bare">compare</div>
+        <ul>
+          <li><a href="/vs/github-copilot">vs GitHub Copilot</a></li>
+          <li><a href="/vs/cursor">vs Cursor</a></li>
+          <li><a href="/vs/tabnine">vs Tabnine</a></li>
+        </ul>
+      </div>
+      <div>
         <div class="label bare">learn</div>
         <ul>
           <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
@@ -192,6 +200,7 @@
             <a href={URL_DISCUSSIONS} target="_blank" rel="noopener noreferrer">discussions</a>
           </li>
           <li><a href={URL_X} target="_blank" rel="noopener noreferrer">@twinnydotdev</a></li>
+          <li><a href="/#maker">who makes this</a></li>
           <li><a href="/#contact">contact</a></li>
           <li><a href="/privacy">privacy</a></li>
         </ul>
@@ -371,7 +380,7 @@
   }
   .foot-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     gap: 32px;
   }
   .foot-brand p {

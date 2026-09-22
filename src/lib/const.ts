@@ -18,6 +18,12 @@ export const URL_X = 'https://x.com/twinnydotdev'
 export const URL_COMPANY = 'https://rjmacarthy.xyz'
 export const COMPANY = 'rjmacarthy.xyz'
 
+// Who makes it. The name-only block on the home page; no photo.
+export const MAKER = 'Richard Macarthy'
+export const MAKER_HANDLE = 'rjmacarthy'
+export const URL_MAKER_GITHUB = 'https://github.com/rjmacarthy'
+export const MAINTAINED_SINCE = 2023
+
 // Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence
 // service (twinny-license serve) turns the payment into a token on its claim page.
 // Enterprise is invoice or purchase order, so it goes through the contact form (#contact).
@@ -28,6 +34,11 @@ export const PRICE_TEAM = 6
 export const PRICE_ENTERPRISE = 10
 export const FREE_SEATS = 5
 export const ENTERPRISE_MIN_SEATS = 50
+
+// The free trial: a Team token for a month, issued by the licence service through /api/trial.
+// Must match TRIAL_DAYS and TRIAL_SEATS in twinny-licence.
+export const TRIAL_DAYS = 30
+export const TRIAL_SEATS = 25
 
 // This site. Canonical URLs, Open Graph and the sitemap are built from it.
 export const URL_SITE = 'https://twinny.dev'

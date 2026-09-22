@@ -9,10 +9,12 @@
     FREE_SEATS,
     ENTERPRISE_MIN_SEATS,
     COMPANY,
-    URL_DEMO
+    URL_DEMO,
+    TRIAL_DAYS
   } from '$lib/const'
 
   import { Tween } from 'svelte/motion'
+  import Trial from './Trial.svelte'
   import { cubicOut } from 'svelte/easing'
 
   // The slider is eased: most teams are under fifty, so the first third of the
@@ -102,6 +104,7 @@
         <a class="btn primary" href={URL_BUY_TEAM} target="_blank" rel="noopener noreferrer"
           >buy seats</a
         >
+        <a class="btn ghost" href="#trial">{TRIAL_DAYS}-day trial, no card</a>
       </article>
 
       <article class="plan" class:pick={pick === 'enterprise'} use:reveal={160}>
@@ -173,6 +176,7 @@
         >.
       </p>
     </div>
+    <Trial />
   </div>
 </section>
 

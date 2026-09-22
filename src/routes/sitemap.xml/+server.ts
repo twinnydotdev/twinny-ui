@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types'
 
 export const prerender = true
 
-const ROUTES = ['/', '/privacy']
+const ROUTES = ['/', '/privacy', '/vs/github-copilot', '/vs/cursor', '/vs/tabnine']
 
 export const GET: RequestHandler = () => {
   const urls = ROUTES.map((path) => `  <url><loc>${URL_SITE}${path}</loc></url>`).join('\n')

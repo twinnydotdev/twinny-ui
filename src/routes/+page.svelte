@@ -5,6 +5,7 @@
   import HowItWorks from '$lib/components/HowItWorks.svelte'
   import Teams from '$lib/components/Teams.svelte'
   import Security from '$lib/components/Security.svelte'
+  import Maker from '$lib/components/Maker.svelte'
   import Pricing from '$lib/components/Pricing.svelte'
   import Contact from '$lib/components/Contact.svelte'
   import Closing from '$lib/components/Closing.svelte'
@@ -46,6 +47,7 @@
 <HowItWorks />
 <Teams />
 <Security />
+<Maker />
 <Pricing />
 <Contact />
 <Closing />

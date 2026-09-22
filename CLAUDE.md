@@ -18,8 +18,16 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in
   `src/app.html`; do not add other scripts or trackers.
-- Copy is short, dry, specific and vendor-neutral: no model or runtime names on the page.
-- Prices and seat rules live in `src/lib/const.ts`; checkout URLs there are placeholders. Claims about the product must match the docs at
+- Copy is short, dry, specific and vendor-neutral on the home page: no model or runtime names
+  there. The exception is `/vs/<slug>`: comparison pages that name a competitor, built from
+  `src/lib/compare.ts`. Every vendor fact and price there was read from the vendor's own pricing
+  page on the date in `CHECKED`; update both together, never from memory.
+- Install and star counts come from `src/lib/stats.json`, refreshed by `scripts/stats.mjs` at
+  build time and shown rounded down ("72,000+"). Do not type numbers into components.
+- The "who makes this" block is name-only by the maintainer's choice: no photo, no fake team.
+- Prices, seat rules and the trial's size live in `src/lib/const.ts` (the trial must match
+  `TRIAL_DAYS`/`TRIAL_SEATS` in ../twinny-licence). `/api/trial` forwards to the licence service
+  with `LICENSE_TRIAL_URL` and `LICENSE_TRIAL_SECRET` from `.env`. Claims about the product must match the docs at
   ../twinny-docs; do not invent features, prices or numbers.
 
 ## Code style

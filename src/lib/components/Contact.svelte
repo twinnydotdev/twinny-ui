@@ -49,7 +49,8 @@
       </div>
       <p>
         {ENTERPRISE_MIN_SEATS} seats or more, an invoice or a purchase order, a named contact. Say who
-        you are and how many developers; you hear back within one business day.
+        you are and how many developers; you hear back within one business day. Rather talk? Tick the
+        box and say when suits.
       </p>
     </div>
 
@@ -73,6 +74,10 @@
       <label class="full">
         <span>message</span>
         <textarea name="message" rows="5" required minlength="10" maxlength="4000"></textarea>
+      </label>
+      <label class="full check">
+        <input name="call" type="checkbox" value="yes" />
+        <span>I would like a call. Twenty minutes, screen share, your questions.</span>
       </label>
       <label class="hp" aria-hidden="true">
         <span>website</span>
@@ -147,6 +152,24 @@
   }
   .full {
     grid-column: 1 / -1;
+  }
+  .check {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+  .check input {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    accent-color: var(--accent);
+    flex: none;
+  }
+  .check span {
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
   }
   .hp {
     position: absolute;

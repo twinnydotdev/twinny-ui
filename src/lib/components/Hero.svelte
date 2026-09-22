@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { URL_MARKETPLACE, PRICE_TEAM, URL_DEMO } from '$lib/const'
+  import { URL_MARKETPLACE, PRICE_TEAM, URL_DEMO, MAINTAINED_SINCE, URL_GITHUB } from '$lib/const'
+  import { INSTALLS, STARS, fmt } from '$lib/stats'
   import EditorMock from './EditorMock.svelte'
   import Copy from './Copy.svelte'
   import { reveal } from '$lib/reveal'
@@ -50,6 +51,14 @@
       <p class="fine" use:reveal={300}>
         Free for individuals and teams of five. Team seats from ${PRICE_TEAM} a month.
         <a href="#pricing">Pricing</a>.
+      </p>
+      <p class="proof" use:reveal={340}>
+        <span><b class="num">{fmt(INSTALLS)}</b> installs</span>
+        <span
+          ><b class="num">{fmt(STARS)}</b>
+          <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">stars on GitHub</a></span
+        >
+        <span>maintained since {MAINTAINED_SINCE}, <a href="#maker">by one person</a></span>
       </p>
     </div>
 
@@ -192,6 +201,22 @@
     margin-top: 18px;
     color: var(--ink-3);
     font-size: var(--fs-sm);
+  }
+  .proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.03em;
+    color: var(--ink-3);
+  }
+  .proof b {
+    color: var(--ink);
+    font-weight: 500;
   }
   .demo {
     min-width: 0;
