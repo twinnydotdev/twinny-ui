@@ -6,8 +6,8 @@ What changed in each release of the twinny extension and `twinny-server`. The ga
 
 Small release: the extension tells the person who could run a gateway that one exists, and the listings say what the product costs.
 
-- **Set up for your team.** The Providers tab has a second team card for whoever has the models: the quick-start command and a link to the gateway page on twinny.dev. The same link is the command _Twinny - Set up for your team_.
-- **One notice, once.** Two weeks after first use on a machine that is not connected to a team, one information message says the gateway exists, with _See how_ and _No thanks_. It is recorded as shown before it appears, so dismissing it is also the end of it. A machine connected to a team never sees it.
+- **Set up for your team.** The Providers tab has a second team card for whoever has the models: the quick-start command and a link to the gateway page on twinny.dev. The same link is the command *Twinny - Set up for your team*.
+- **One notice, once.** Two weeks after first use on a machine that is not connected to a team, one information message says the gateway exists, with *See how* and *No thanks*. It is recorded as shown before it appears, so dismissing it is also the end of it. A machine connected to a team never sees it.
 - The Marketplace description and both READMEs name the team gateway, the price, and the free 30-day trial at twinny.dev. `twinny-server` is republished for its README only; the gateway itself is unchanged.
 
 ## 4.2.0 · 2026-09-21
@@ -60,7 +60,7 @@ Teams. One gateway on your own hardware serves twinny to the whole team.
 - **Invite links** (`vscode://` URI handler) that open VS Code and connect with nothing to paste; one use, seven days, no seat until opened. Sign-in with a short code as the alternative.
 - **Usage per person and per model**: requests, failures, token counts, indexing runs; retention you choose; never the content.
 - **Admin page** at `/admin`: overview, usage charts, people, policy, providers and models (edited live), plan and licence, recordings.
-- **Team GPU pooling.** A developer flips _Share this computer_ and their local server serves the team through a WebSocket to the gateway: no port to open, consent shown, least-loaded first, failover when a sharer goes offline.
+- **Team GPU pooling.** A developer flips *Share this computer* and their local server serves the team through a WebSocket to the gateway: no port to open, consent shown, least-loaded first, failover when a sharer goes offline.
 - **Seat licensing.** Five seats free for good; a signed `twl1.` token bought by card raises the count and switches on policy and recording. Checked locally, no call home, 30-day notice and 14-day grace.
 - **Team policy** (licence): team-gateway-only providers and locked defaults, shown for consent before connecting and enforced by the extension while connected. **Leave team** is one click.
 - **Recording** (licence): keep chat, autocomplete and embedding content on the gateway, disclosed to every developer, reviewed and exported as training data from the admin page.
@@ -69,7 +69,7 @@ Teams. One gateway on your own hardware serves twinny to the whole team.
 
 ## 4.0.20 · 2026-09-17
 
-- Chat: _Add file to context_ did nothing (#503).
+- Chat: *Add file to context* did nothing (#503).
 
 ## 4.0.19 · 2026-09-14
 
@@ -79,19 +79,19 @@ Teams. One gateway on your own hardware serves twinny to the whole team.
 
 - **Workspace index**: models that truncate at 256 tokens are given embedding windows instead of whole chunks; identifiers are split for the keyword column; follow-up questions search with their question; open files are favoured; hits are widened to neighbours. Workspace search sources show under chat replies.
 - **Autocomplete** gets the definitions and signatures of what is being typed from the language server.
-- **Providers**: validation, a _Test provider_ probe on every card, presets, import and export; the provider layer is laid out by feature.
+- **Providers**: validation, a *Test provider* probe on every card, presets, import and export; the provider layer is laid out by feature.
 - Logging through a VS Code `LogOutputChannel`.
 
 ## 4.0.10 to 4.0.13 · 2026-09-10 and 11
 
 - **Mentions**: `@git`, `@terminal` and `@symbol` join `@files`, `@problems` and `@workspace`.
-- **Terminal**: _fix the last error_ with the output attached, and write a command from a description, shown before it runs. Needs VS Code 1.93 shell integration.
+- **Terminal**: *fix the last error* with the output attached, and write a command from a description, shown before it runs. Needs VS Code 1.93 shell integration.
 - **Workspace index** rewritten: an incremental index with a manifest, hybrid BM25 and vector search, a reranker in worker threads, `@workspace` or automatic mode.
 - Dependencies updated.
 
 ## 4.0.7 to 4.0.9 · 2026-09-07 and 08
 
-- **Inline edit**: Ctrl+I streams a merged diff into the editor with Accept and Reject per hunk (CodeLens and keys); _Fix with Twinny_ quick fix.
+- **Inline edit**: Ctrl+I streams a merged diff into the editor with Accept and Reject per hunk (CodeLens and keys); *Fix with Twinny* quick fix.
 - **Autocomplete** takes context from the language server and from recent edits (diff hunks against a baseline per document).
 - Tests written next to the code they cover.
 

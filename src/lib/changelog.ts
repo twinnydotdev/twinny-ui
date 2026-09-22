@@ -35,8 +35,9 @@ const parse = (): Release[] => {
     // Headings inside a release are h3 in the file; the page's own h2 is the version.
     const summary = strip(body.split(/\n\s*\n/)[0] ?? '').replace(/^#+\s*/, '')
     out.push({
-      version: m[1],
-      date: m[2],
+      version: m[2] ?? m[1],
+      label: m[2] ? `${m[1]} to ${m[2]}` : m[1],
+      date: m[3],
       summary,
       html: marked.parse(body, { async: false }) as string
     })
