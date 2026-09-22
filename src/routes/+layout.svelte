@@ -9,16 +9,20 @@
     URL_COMPANY,
     COMPANY,
     URL_DEMO,
-    URL_DOCS_CHANGELOG
+    URL_DOCS_CHANGELOG,
+    URL_SITE
   } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { onMount } from 'svelte'
   import { afterNavigate } from '$app/navigation'
+  import { page } from '$app/state'
 
   let { children } = $props()
   let open = $state(false)
   let progress = $state(0)
   let active = $state('')
+  // One canonical per route, without hash or query: /#pricing is still the home page.
+  let canonical = $derived(URL_SITE + page.url.pathname)
 
   // A hairline under the header fills as you read; the nav underlines the section in view.
   onMount(() => {
@@ -68,35 +72,20 @@
 </script>
 
 <svelte:head>
-  <title>twinny — the AI coding assistant that stays inside your network</title>
-  <meta
-    name="description"
-    content="Autocomplete, chat, inline edit and code review in VS Code, on models you run or pool from your team's computers. Open source, self-hosted, no telemetry. Free for five developers; team seats from $6 a month."
-  />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:url" content={canonical} />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="twinny — the private AI coding assistant for VS Code" />
+  <meta property="og:site_name" content="twinny" />
+  <meta property="og:image" content="{URL_SITE}/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta
-    property="og:description"
-    content="Runs on your hardware. Nothing leaves the building. Free for individuals and teams up to five."
+    property="og:image:alt"
+    content="twinny — the AI coding assistant that stays inside your network"
   />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@twinnydotdev" />
-  <script type="application/ld+json">
-    {
-      "@context": "http://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "twinny",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Visual Studio Code",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "author": {
-        "@type": "Organization",
-        "name": "rjmacarthy.xyz",
-        "url": "https://rjmacarthy.xyz"
-      },
-      "description": "Private AI coding assistant for Visual Studio Code: autocomplete, chat, inline edit and code review on models you run yourself."
-    }
-  </script>
+  <meta name="twitter:image" content="{URL_SITE}/og.png" />
 </svelte:head>
 
 <a class="skip" href="#main">skip to content</a>

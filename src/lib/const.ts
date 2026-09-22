@@ -28,3 +28,6 @@ export const PRICE_TEAM = 6
 export const PRICE_ENTERPRISE = 10
 export const FREE_SEATS = 5
 export const ENTERPRISE_MIN_SEATS = 50
+
+// This site. Canonical URLs, Open Graph and the sitemap are built from it.
+export const URL_SITE = 'https://twinny.dev'

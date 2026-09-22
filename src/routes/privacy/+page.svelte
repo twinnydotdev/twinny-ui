@@ -2,7 +2,12 @@
   <title>privacy — twinny</title>
   <meta
     name="description"
-    content="What twinny, twinny-server and this website collect. Short answer: nothing."
+    content="What twinny, twinny-server and this website collect, and where it stays. The extension talks only to the inference server you configured; the gateway keeps its records on your own machine."
+  />
+  <meta property="og:title" content="privacy — twinny" />
+  <meta
+    property="og:description"
+    content="What twinny, twinny-server and this website collect, and where it stays."
   />
 </svelte:head>
 
