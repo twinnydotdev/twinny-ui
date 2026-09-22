@@ -3,15 +3,18 @@
   import {
     MAINTAINED_SINCE,
     URL_GITHUB,
+    URL_MARKETPLACE,
+    URL_OPENVSX,
     URL_DISCUSSIONS,
     URL_DOCS_CHANGELOG,
     URL_X
   } from '$lib/const'
   import { INSTALLS_ALL, STARS, fmt } from '$lib/stats'
 
-  const facts = [
+  // [big, small, href]: a tile links out when it has somewhere to point.
+  const facts: [string, string, string?][] = [
     [fmt(INSTALLS_ALL), 'installs, Marketplace and Open VSX'],
-    [fmt(STARS), 'stars on GitHub'],
+    [fmt(STARS), 'stars on GitHub', URL_GITHUB],
     [String(MAINTAINED_SINCE), 'in development, in public, since'],
     ['MIT', 'the extension, the gateway and the licence check']
   ]
@@ -32,10 +35,20 @@
       </p>
     </div>
     <div class="facts" use:reveal={0}>
-      {#each facts as [big, small], i}
+      {#each facts as [big, small, href], i}
         <div class="fact" style="--i: {i}">
           <span class="big num">{big}</span>
-          <span class="small">{small}</span>
+          {#if i === 0}
+            <span class="small"
+              >installs,
+              <a href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">Marketplace</a>
+              and <a href={URL_OPENVSX} target="_blank" rel="noopener noreferrer">Open VSX</a></span
+            >
+          {:else if href}
+            <a class="small" {href} target="_blank" rel="noopener noreferrer">{small}</a>
+          {:else}
+            <span class="small">{small}</span>
+          {/if}
         </div>
       {/each}
     </div>
@@ -77,6 +90,18 @@
     font-size: var(--fs-xs);
     letter-spacing: 0.03em;
     color: var(--ink-2);
+  }
+  .small a,
+  a.small {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--line-2);
+    text-underline-offset: 3px;
+  }
+  .small a:hover,
+  a.small:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
   }
   .links {
     margin-top: 22px;

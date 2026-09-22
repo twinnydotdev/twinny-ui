@@ -4,6 +4,7 @@
     URL_DOCS,
     URL_GITHUB,
     URL_MARKETPLACE,
+    URL_OPENVSX,
     URL_X,
     URL_DISCUSSIONS,
     URL_COMPANY,
@@ -154,6 +155,7 @@
           <li>
             <a href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">marketplace</a>
           </li>
+          <li><a href={URL_OPENVSX} target="_blank" rel="noopener noreferrer">open vsx</a></li>
         </ul>
       </div>
       <div>

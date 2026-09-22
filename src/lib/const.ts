@@ -1,5 +1,7 @@
 export const URL_MARKETPLACE =
   'https://marketplace.visualstudio.com/items?itemName=rjmacarthy.Twinny'
+// The same extension on Open VSX, for VSCodium, Cursor, Windsurf, Gitpod and the like.
+export const URL_OPENVSX = 'https://open-vsx.org/extension/rjmacarthy/twinny'
 // A real gateway with real models behind it, open to anyone: read-only admin page, guest keys for VS Code.
 export const URL_DEMO = 'https://demo.twinny.dev'
 export const URL_DOCS = 'https://docs.twinny.dev/'

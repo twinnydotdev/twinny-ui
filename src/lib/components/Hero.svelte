@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { URL_MARKETPLACE, PRICE_TEAM, URL_DEMO, MAINTAINED_SINCE, URL_GITHUB } from '$lib/const'
+  import {
+    URL_MARKETPLACE,
+    URL_OPENVSX,
+    PRICE_TEAM,
+    URL_DEMO,
+    MAINTAINED_SINCE,
+    URL_GITHUB
+  } from '$lib/const'
   import { INSTALLS_ALL, STARS, fmt } from '$lib/stats'
   import EditorMock from './EditorMock.svelte'
   import Copy from './Copy.svelte'
@@ -53,7 +60,11 @@
         <a href="#pricing">Pricing</a>.
       </p>
       <p class="proof" use:reveal={340}>
-        <span><b class="num">{fmt(INSTALLS_ALL)}</b> installs</span>
+        <span
+          ><b class="num">{fmt(INSTALLS_ALL)}</b> installs,
+          <a href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">Marketplace</a> and
+          <a href={URL_OPENVSX} target="_blank" rel="noopener noreferrer">Open VSX</a></span
+        >
         <span
           ><b class="num">{fmt(STARS)}</b>
           <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">stars on GitHub</a></span
