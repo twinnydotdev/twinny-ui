@@ -58,7 +58,7 @@
           ><b class="num">{fmt(STARS)}</b>
           <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">stars on GitHub</a></span
         >
-        <span>maintained since {MAINTAINED_SINCE}, <a href="#maker">by one person</a></span>
+        <span><a href="#maker">in development since {MAINTAINED_SINCE}</a></span>
       </p>
     </div>
 

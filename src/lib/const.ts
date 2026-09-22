@@ -18,10 +18,7 @@ export const URL_X = 'https://x.com/twinnydotdev'
 export const URL_COMPANY = 'https://rjmacarthy.xyz'
 export const COMPANY = 'rjmacarthy.xyz'
 
-// Who makes it. The name-only block on the home page; no photo.
-export const MAKER = 'Richard Macarthy'
-export const MAKER_HANDLE = 'rjmacarthy'
-export const URL_MAKER_GITHUB = 'https://github.com/rjmacarthy'
+// The "in the open" block: no names, no photos, no team; just the public record.
 export const MAINTAINED_SINCE = 2023
 
 // Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence

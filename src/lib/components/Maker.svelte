@@ -1,10 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/reveal'
   import {
-    MAKER,
-    MAKER_HANDLE,
     MAINTAINED_SINCE,
-    URL_MAKER_GITHUB,
     URL_GITHUB,
     URL_DISCUSSIONS,
     URL_DOCS_CHANGELOG,
@@ -15,7 +12,7 @@
   const facts = [
     [fmt(INSTALLS), 'installs from the Marketplace'],
     [fmt(STARS), 'stars on GitHub'],
-    [String(MAINTAINED_SINCE), 'first commit, still the same maintainer'],
+    [String(MAINTAINED_SINCE), 'in development, in public, since'],
     ['MIT', 'the extension, the gateway and the licence check']
   ]
 </script>
@@ -24,14 +21,14 @@
   <div class="wrap">
     <div class="section-head">
       <div>
-        <span class="label">who makes this</span>
-        <h2>One maintainer, in the open.</h2>
+        <span class="label">in the open</span>
+        <h2>Built in public since {MAINTAINED_SINCE}.</h2>
       </div>
       <p>
-        twinny is written and maintained by {MAKER},
-        <a href={URL_MAKER_GITHUB} target="_blank" rel="noopener noreferrer">{MAKER_HANDLE}</a>
-        on GitHub, since {MAINTAINED_SINCE}. No sales team and no investors. The person who answers
-        the form below is the person who wrote the code.
+        Every commit, issue and release is on
+        <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">GitHub</a>, the licence check
+        included. No sales team and no investors. The form below goes straight to the people who
+        make twinny.
       </p>
     </div>
     <div class="facts" use:reveal={0}>

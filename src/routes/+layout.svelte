@@ -200,7 +200,7 @@
             <a href={URL_DISCUSSIONS} target="_blank" rel="noopener noreferrer">discussions</a>
           </li>
           <li><a href={URL_X} target="_blank" rel="noopener noreferrer">@twinnydotdev</a></li>
-          <li><a href="/#maker">who makes this</a></li>
+          <li><a href="/#maker">in the open</a></li>
           <li><a href="/#contact">contact</a></li>
           <li><a href="/privacy">privacy</a></li>
         </ul>

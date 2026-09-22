@@ -24,7 +24,8 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
   page on the date in `CHECKED`; update both together, never from memory.
 - Install and star counts come from `src/lib/stats.json`, refreshed by `scripts/stats.mjs` at
   build time and shown rounded down ("72,000+"). Do not type numbers into components.
-- The "who makes this" block is name-only by the maintainer's choice: no photo, no fake team.
+- The "in the open" block (`Maker.svelte`) names nobody: no maintainer name, no photo, no team,
+  no "one person" framing. It is the public record only: installs, stars, year, licence.
 - Prices, seat rules and the trial's size live in `src/lib/const.ts` (the trial must match
   `TRIAL_DAYS`/`TRIAL_SEATS` in ../twinny-licence). `/api/trial` forwards to the licence service
   with `LICENSE_TRIAL_URL` and `LICENSE_TRIAL_SECRET` from `.env`. Claims about the product must match the docs at
