@@ -94,14 +94,9 @@
   .small a,
   a.small {
     color: var(--ink);
-    text-decoration: underline;
-    text-decoration-color: var(--line-2);
-    text-underline-offset: 3px;
   }
-  .small a:hover,
-  a.small:hover {
-    color: var(--accent);
-    text-decoration-color: var(--accent);
+  a.small {
+    align-self: flex-start;
   }
   .links {
     margin-top: 22px;
