@@ -158,6 +158,10 @@
     align-items: center;
     gap: 12px;
   }
+  .check input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   .check input {
     width: 16px;
     height: 16px;

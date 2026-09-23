@@ -304,6 +304,10 @@
     background: transparent;
     cursor: pointer;
   }
+  input[type='range']:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
   input[type='range']::-webkit-slider-runnable-track {
     height: 1px;
     background: linear-gradient(90deg, var(--accent) var(--p), var(--line-2) var(--p));

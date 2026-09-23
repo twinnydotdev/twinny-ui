@@ -109,7 +109,7 @@
             >~/.twinny/server/usage/</span
           >
         </div>
-        <div class="head">
+        <div class="head" aria-hidden="true">
           <span>time</span><span>cap</span><span>key</span><span>alias</span><span>result</span
           ><span class="r">took</span>
         </div>
@@ -118,6 +118,7 @@
             class="row"
             style="--d: {row.id < seed.length ? i * 70 : 0}ms"
             animate:flip={{ duration: 260 }}
+            aria-hidden="true"
           >
             <span class="dim num">{row.t}</span>
             <span class="cap">{row.c}</span>
@@ -135,10 +136,12 @@
       <div class="compare panel" use:reveal={100}>
         <div class="bar"><span class="t">hosted assistant vs twinny</span></div>
         <table>
-          <thead><tr><th></th><th>hosted</th><th class="us">twinny</th></tr></thead>
+          <thead>
+            <tr><td></td><th scope="col">hosted</th><th scope="col" class="us">twinny</th></tr>
+          </thead>
           <tbody>
             {#each compare as [k, a, b], i}
-              <tr style="--i: {i}"><th>{k}</th><td>{a}</td><td class="us">{b}</td></tr>
+              <tr style="--i: {i}"><th scope="row">{k}</th><td>{a}</td><td class="us">{b}</td></tr>
             {/each}
           </tbody>
         </table>

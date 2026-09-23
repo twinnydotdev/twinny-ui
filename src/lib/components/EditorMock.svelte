@@ -61,7 +61,11 @@
   const shown = $derived(typed.split('\n'))
 </script>
 
-<div class="win" aria-label="twinny in VS Code, illustration">
+<div
+  class="win"
+  role="img"
+  aria-label="twinny in VS Code, illustration: a completion is offered as ghost text and accepted with Tab; the chat answers a question about an @git diff"
+>
   <div class="tabs">
     <span class="tab on"><i class="dot ts"></i>debounce.ts</span>
     <span class="tab"><i class="dot ts"></i>completion.ts</span>

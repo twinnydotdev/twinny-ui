@@ -91,6 +91,8 @@
   <meta name="twitter:image" content="{URL_SITE}/og.png" />
 </svelte:head>
 
+<svelte:window onkeydown={(e) => e.key === 'Escape' && (open = false)} />
+
 <a class="skip" href="#main">skip to content</a>
 
 <header class="top" class:open>
@@ -100,7 +102,7 @@
       <span>twinny</span>
     </a>
 
-    <nav aria-label="Main" class="links">
+    <nav id="site-nav" aria-label="Main" class="links">
       {#each nav as item}
         <a
           href={item.href}
@@ -119,7 +121,13 @@
       </a>
     </div>
 
-    <button class="burger" aria-label="Menu" aria-expanded={open} onclick={() => (open = !open)}>
+    <button
+      class="burger"
+      aria-label="Menu"
+      aria-expanded={open}
+      aria-controls="site-nav"
+      onclick={() => (open = !open)}
+    >
       <span></span><span></span>
     </button>
   </div>
@@ -148,7 +156,7 @@
         <p class="dim">© {new Date().getFullYear()} {COMPANY}</p>
       </div>
       <div>
-        <div class="label bare">product</div>
+        <h2 class="label bare">product</h2>
         <ul>
           <li><a href="/#features">features</a></li>
           <li><a href="/#teams">teams</a></li>
@@ -161,7 +169,7 @@
         </ul>
       </div>
       <div>
-        <div class="label bare">compare</div>
+        <h2 class="label bare">compare</h2>
         <ul>
           <li><a href="/vs/github-copilot">vs GitHub Copilot</a></li>
           <li><a href="/vs/cursor">vs Cursor</a></li>
@@ -174,7 +182,7 @@
         </ul>
       </div>
       <div>
-        <div class="label bare">learn</div>
+        <h2 class="label bare">learn</h2>
         <ul>
           <li><a href={URL_DOCS} target="_blank" rel="noopener noreferrer">documentation</a></li>
           <li><a href="/changelog">changelog</a></li>
@@ -201,7 +209,7 @@
         </ul>
       </div>
       <div>
-        <div class="label bare">community</div>
+        <h2 class="label bare">community</h2>
         <ul>
           <li><a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">github</a></li>
           <li>

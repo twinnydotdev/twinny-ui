@@ -86,6 +86,7 @@
     <div
       class="flow"
       use:reveal={0}
+      role="img"
       aria-label="developer laptops connect over HTTPS to twinny-server, which talks to your inference servers"
     >
       <div class="node">
@@ -134,7 +135,7 @@
         </div>
       </div>
 
-      <div class="admin panel" use:reveal={160} aria-label="admin page, illustration">
+      <div class="admin panel" use:reveal={160} role="img" aria-label="admin page, illustration">
         <div class="bar">
           <span class="t">twinny<span class="accent">-server</span> · admin</span>
           <span class="spacer"></span>
@@ -195,7 +196,12 @@
       </div>
 
       <div class="pool-mocks">
-        <div class="share panel" use:reveal={80} aria-label="share card in VS Code, illustration">
+        <div
+          class="share panel"
+          use:reveal={80}
+          role="img"
+          aria-label="share card in VS Code, illustration"
+        >
           <div class="bar">
             <span class="t">twinny · providers</span>
             <span class="spacer"></span>
@@ -217,6 +223,7 @@
         <div
           class="peers panel"
           use:reveal={160}
+          role="img"
           aria-label="admin page, sharing now, illustration"
         >
           <div class="bar">
@@ -266,6 +273,7 @@
       <div
         class="store panel"
         use:reveal={80}
+        role="img"
         aria-label="plugin store on the admin page, illustration"
       >
         <div class="bar">

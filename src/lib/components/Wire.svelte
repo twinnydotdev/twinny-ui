@@ -24,10 +24,10 @@
   ]
 </script>
 
-<div class="wire" aria-label="in short">
+<div class="wire">
   <div class="tape">
     {#each [0, 1] as copy}
-      <ul aria-hidden={copy === 1}>
+      <ul aria-hidden={copy === 1} aria-label={copy === 0 ? 'in short' : undefined}>
         {#each items as item}
           <li><i></i>{item}</li>
         {/each}
