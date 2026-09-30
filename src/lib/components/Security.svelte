@@ -63,7 +63,7 @@
     ],
     [
       'What is recorded?',
-      'By default, metadata: time, capability, key, alias, outcome, duration. Content is a separate switch per route, off unless an admin turns it on, kept on your gateway, disclosed to developers and deleted after 90 days.'
+      'By default, metadata: time, capability, key, alias, outcome, duration. Content is a separate switch per feature, off unless an admin turns it on, kept on your gateway, disclosed to developers and deleted after the retention you set, 90 days by default.'
     ],
     [
       'How are keys handled?',

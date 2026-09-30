@@ -7,7 +7,7 @@
     {
       n: '01',
       title: 'Autocomplete',
-      body: 'Fill-in-the-middle suggestions as you type, streamed as ghost text and cut off at a sensible end. Tuned to work well with a 7B model.',
+      body: 'Fill-in-the-middle suggestions as you type, streamed as ghost text and cut off at a sensible end. Tuned to work well with a small model.',
       demo: [
         ['dim', 'const user = await db.users.'],
         ['ghost', 'findUnique({ where: { id } })']
