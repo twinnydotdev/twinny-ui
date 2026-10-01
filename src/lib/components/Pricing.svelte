@@ -92,8 +92,8 @@
           <li>your first {FREE_SEATS} seats stay free; buy only the ones beyond them</li>
           <li>policy: team-only providers, locked models, routing rules, a team system prompt</li>
           <li>
-            plugins: pull requests and issues reviewed by your own models, Slack, SSO sign-in,
-            shared context, backups
+            plugins: pull requests and issues reviewed by your own models and shared with your
+            developers, Slack, SSO sign-in, shared context, backups
           </li>
           <li>recording: keep prompts and replies on your gateway for audit and training export</li>
           <li>email support</li>

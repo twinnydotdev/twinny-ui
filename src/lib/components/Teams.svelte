@@ -260,6 +260,7 @@
           review new pulls and triage issues in the background, never slowing a developer down.
         </p>
         <ul>
+          <li>Share a plugin with developers: they review, post and triage with their own key.</li>
           <li>Slack, Discord or Teams hear about reviews, new pulls and failing checks.</li>
           <li>Developers sign in with your identity provider instead of an invite.</li>
           <li>One shared index of the team's repositories, searched from every chat.</li>
