@@ -15,3 +15,4 @@ yarn.lock
 
 # Generated at build by scripts/changelog.mjs
 src/lib/changelog.md
+static/promo/

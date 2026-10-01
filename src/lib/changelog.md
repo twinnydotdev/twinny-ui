@@ -2,6 +2,78 @@
 
 What changed in each release of the twinny extension and `twinny-server`. The gateway is built from the same tree and carries the extension's version number. Newest first. A shorter, feature-by-feature version with links to the documentation is at [What's new](https://docs.twinny.dev/reference/whats-new/).
 
+## 4.2.10 · 2026-09-30
+
+Extension release: twinny starts in WSL again, and the Embeddings tab holds still while indexing.
+
+- **Works in WSL remotes.** Opening a folder through WSL failed activation with `Cannot read properties of undefined (reading 'header')`, so chat never loaded and completions did nothing. LanceDB's native loader read the Node process report to tell glibc from musl, and the VS Code server under WSL returns none. The check now falls back to glibc, and LanceDB loads when the index is first opened rather than at startup, so a native module that fails to load turns embeddings off instead of stopping the extension.
+- **No flicker while indexing.** The line naming the files being embedded came and went between files, making the page below it jump many times a second. It now keeps its place for the whole run.
+
+## 4.2.9 · 2026-09-29
+
+`twinny-server` release: `twinny-server --version` and the gateway's `/twinny/v1` responses report the right version. The 4.2.8 package was published with a bundle built before the version bump, so it called itself 4.2.7. Publishing now refuses a `cli.js` that was not built for the package's version.
+
+## 4.2.8 · 2026-09-28
+
+Extension and `twinny-server` release: plugins shared with developers, opened from VS Code already signed in, an approve button on the pull page, and Qwen3-Coder completions through a gateway.
+
+- **Share plugins with developers.** An admin can share a plugin with every developer or with the people they tick, from the plugin's card under **Plugins → Store** or `PUT /twinny/v1/admin/plugins/<id>/access`. A developer then signs in to the gateway's page with their own key and sees only the plugins shared with them, without their settings. On GitHub, GitLab, Gitea and Bitbucket they read pulls and issues, review, ask about a review, post it as a comment, triage and apply the suggested labels, and set their own username on the host; approving or requesting changes through the token stays with admins, as do repositories, tokens, the GitHub App and the review model. The notifiers, SSO sign-in, shared context and backups are for admins only. Grants are kept by key name in `plugins.json`, every change is audited (`plugin.access-changed`), and a developer's writes are audited under their name, marked `member`. The shared token and a demo's guests never open a plugin.
+- **Your team's plugins, one click from VS Code, signed in.** When an admin shares a plugin with you, VS Code says so once with an **Open** button, and the Providers tab lists it under **Your team's plugins**; admins get **Your gateway's page**. Opening asks the gateway for a one-time code with your key (`POST /twinny/v1/page-link`) and opens the page with the code in the URL fragment; the page trades it for the key once, within a minute (`POST /twinny/v1/page-link/open`), and wipes it from the address bar. Nobody sees, copies or pastes a key, and a developer who joined by invite needs nothing from the admin. **Twinny - Open your team's plugins** in the command palette does the same; against an older gateway it falls back to putting the key on the clipboard.
+- **The page knows who you are on GitHub.** Opened from VS Code, the page fills in your GitHub username from the account VS Code is signed in with, once, so pull requests waiting for your approval appear under **waiting for me**; it never replaces a name you set and is skipped on GitHub Enterprise. Without one, the plugin's page asks **Who are you on GitHub?** at the top until you answer.
+- **Approve from the pull page.** An admin approves a pull request with one button next to its checks, as the repository's token, with no review text posted. GitHub, Gitea and GitLab pin the approval to the commit the page showed. Developers a plugin is shared with do not get the button.
+- **Qwen3-Coder completions through a gateway.** A chat-only FIM model's prompt now reaches `twinny-server` as the chat it was rendered from, instead of being refused, so the backend no longer templates it twice.
+
+## 4.2.7 · 2026-09-24
+
+Extension and `twinny-server` release: the completion model is loaded before you type, and the gateway shields secrets for every client.
+
+- **The completion model is loaded before you type.** When VS Code starts or regains focus, twinny asks a local model server (Ollama, LM Studio, llama.cpp, or an OpenAI-compatible server on this machine) to load the autocomplete model, so the first completion no longer waits for it. With CodeLlama 7B on Ollama, the first completion went from 11 to 17 seconds to 0.06. Nothing is sent when the model has been used in the last four minutes, and hosted APIs are never called. Turn it off with `twinny.warmUpModel`.
+- **The gateway shields secrets too.** `twinny-server` now swaps credentials in prompts for placeholders before a request reaches a backend, and puts them back in the reply, for every client (the extension, the TUI, Neovim). Set it with `policy.secretShield` or on the admin page's **Policy** tab: `offMachine` (the default) covers hosted APIs, backends on other hosts and the team pool; `always` adds backends on the gateway's own host; `off` forwards prompts as they arrive.
+
+## 4.2.6 · 2026-09-24
+
+Extension release: a secret shield keeps credentials out of prompts that leave the machine. `twinny-server` carries the version number only.
+
+- **Secret shield.** API keys, tokens, private keys and passwords in a prompt are replaced with placeholders such as `REDACTED_GITHUB_TOKEN_1` before the request leaves your machine, and put back wherever the reply uses them, so the model never sees the value and the code it writes still works. This covers chat, completions, inline edit and embeddings. It knows the GitHub, GitLab, AWS, Stripe, Slack, OpenAI, Anthropic, Google, Hugging Face and npm token formats, as well as PEM private keys, JWTs, passwords in URLs, and secret-named values in code and `.env` files. Values like `process.env.X` or `<your-key>` are left alone. A chat reply shows **N secrets withheld** and which kinds; completions log it to the Twinny output channel. The `twinny.secretShield` setting controls when it runs: `offMachine` (the default) covers hosted APIs, gateways, paired devices and servers elsewhere on the network, `always` adds local servers, and `off` turns it off.
+
+## 4.2.5 · 2026-09-23
+
+Gateway release: pull-request reviews stop ending mid-sentence, say when they were cut, and can be asked about. The extension carries the version number only.
+
+- **Reviews no longer end mid-sentence.** Ollama's OpenAI-compatible route ignores `think: false` (checked against 0.33), so a reasoning model such as Qwen 3 thought its way through most of the 4,000-token budget and the review that followed was cut off. The request now says it the standard OpenAI way, `reasoning_effort: "none"`, which that route does honour; the extension's chat and developers' requests through the gateway are unchanged.
+- **A cut-off answer says so.** Backends now report why generation stopped, and a review or answer the output cap cut is kept but tagged **cut short**, with the reason (and how much went on thinking) above it.
+- **Ask about a review.** Under a finished review is a box for questions. Each goes to the review model with the pull, the review and the earlier questions, and the exchange is kept on the review as a thread until the pull is reviewed again. Nothing in it is posted to the host. Route: `POST …/pulls/<n>/review/ask { question }`.
+
+## 4.2.4 · 2026-09-23
+
+Chat release: replies carry their details, and the chat gains the controls it was missing. `twinny-server` carries the version number only; the gateway is unchanged.
+
+- **Replies say who wrote them.** Under each reply: the model, how long it took and, when the backend reports token counts, tokens per second. A reply you stopped says so. The details are saved with the conversation and never sent to the model; older conversations show nothing.
+- **Continue a stopped reply.** The last reply, if you stopped it, has a *Continue* button that asks the model to carry on without starting over.
+- **Earlier prompts with ↑ and ↓.** From an empty composer, the arrow keys step through what you have sent, across conversations, as in a shell. Typing into a recalled prompt makes it your draft.
+- **Esc stops a reply** while the composer has focus.
+- **Insert at cursor.** Code blocks in replies have *insert* next to *apply*: the code goes straight into the editor at the cursor, replacing any selection. *Apply* still proposes a diff to review.
+- **Open conversation as Markdown**, from the sidebar's `…` menu or the panel's toolbar: the whole conversation in a new editor, without thinking or composer markup.
+- **Long questions fold.** A message of yours taller than about a dozen lines (an *Explain* over a big selection, pasted code) shows its first lines and *Show more*.
+- **Empty code blocks are not shown.** A fence with only whitespace in it no longer renders as an empty box with buttons.
+- **The sidebar keeps its state when hidden.** Switching to another view and back no longer reloads the chat, so a half-written prompt, a reply still streaming and the scroll position survive.
+
+## 4.2.3 · 2026-09-23
+
+Small release: code completion works with Qwen3-Coder. `twinny-server` carries the version number only; the gateway is unchanged.
+
+- **Qwen3-Coder completes code.** Qwen3-Coder is released only as an instruct model, and it fills the hole when the FIM prompt arrives as the user turn of a chat ("You are a code completion assistant."). Twinny sent it the bare Qwen2.5-Coder markers, and plain text at the end of a file, so completions came back as garbage. Models whose name contains `qwen3-coder` now get a new `qwen3-coder` FIM template, which is also in the template list. Completion endpoints still get a completion request: the chat is written out as ChatML in the prompt, and Ollama is sent `raw: true` so it does not apply the model's template a second time. LiteLLM gets the chat as messages. Custom and repository-level templates are wrapped the same way. The model answers inside a markdown code block whatever the system prompt says, so for this template the opening fence is dropped and the closing one ends the completion. Given a half-typed word the model either repeats it (`c` completed with `const mul`, shown as `cconst`) or starts a fresh line after it, so for this template the prompt now ends before the unfinished word, the chat names what the completion must begin with, and an answer that ignores it is discarded. A short echoed word start is stripped for every model.
+- **A suggestion made in an empty file no longer follows what you type.** The last suggestion shown is kept so that typing its first characters serves the rest without a new request. At the start of a file it had nothing to anchor to and was re-served after any text at all, whether or not the completion cache was on.
+
+## 4.2.2 · 2026-09-23
+
+Small release: prompt templates (`~/.twinny/templates`) are sturdier. `twinny-server` carries the version number only; the gateway is unchanged.
+
+- **A missing or broken template no longer breaks the feature.** Deleting `system.hbs` used to make every template render empty, so Explain, Review and the commit message all failed. A template that is missing, blank or will not parse now falls back to the built-in copy, and the reason goes to the Twinny output channel. Asking for a template that does not exist returns nothing instead of throwing in the background.
+- **Prompts are no longer HTML-escaped.** A review of "Fix `<T>` & co" reached the model as `Fix &lt;T&gt; &amp; co`; values now go in as written.
+- **The template buttons in chat** no longer offer *review-summary*, which needs a review to summarise, and a template of your own whose name merely starts with "system" is listed again.
+- Template names that are not plain file names are refused, and the `eq` helper is available to every template however the extension started.
+
 ## 4.2.1 · 2026-09-22
 
 Small release: the extension tells the person who could run a gateway that one exists, and the listings say what the product costs.

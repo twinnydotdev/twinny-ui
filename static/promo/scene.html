@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>twinny — Nowhere.</title>
+<meta name="viewport" content="width=1920" />
+<style>
+  @font-face { font-family: 'Geist'; src: url(fonts/geist-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Plex'; src: url(fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'Plex'; src: url(fonts/ibm-plex-mono-latin-400-italic.woff2) format('woff2'); font-weight: 400; font-style: italic; }
+  @font-face { font-family: 'Plex'; src: url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2'); font-weight: 500; }
+  @font-face { font-family: 'Plex'; src: url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2'); font-weight: 600; }
+  :root {
+    --bg: #0d1012; --bg-2: #0a0c0e; --panel: #131719; --panel-2: #171c1f; --line: #1f2629; --line-2: #2a3236;
+    --ink: #d7dee2; --ink-2: #8b979d; --ink-3: #5b666b; --accent: #23d18b; --accent-ink: #0b1f16;
+    --accent-soft: rgba(35, 209, 139, 0.14); --accent-line: rgba(35, 209, 139, 0.45); --bad: #e5484d; --bad-soft: rgba(229, 72, 77, 0.14);
+    --s1: #3987e5; --s3: #199e70; --s4: #c98500; --s6: #9085e9;
+    --mono: 'Plex', ui-monospace, monospace; --sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); }
+  body { width: 1920px; height: 1080px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+  .abs { position: absolute; left: 0; top: 0; }
+  .mono { font-family: var(--mono); }
+  .lab { font-family: var(--mono); font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); display: inline-flex; align-items: center; white-space: nowrap; }
+  .lab::before { content: ''; display: inline-block; width: 1.6em; height: 2px; background: var(--accent); margin-right: .8em; }
+  .lab b { color: var(--accent); font-weight: 500; margin-right: .8em; }
+  kbd { font-family: var(--mono); display: inline-block; padding: 0 .5em; border: 1px solid var(--line-2); border-bottom-width: 3px; border-radius: 4px; color: var(--ink); line-height: 1.55; }
+
+  /* ---------- A: type scene (0–5) ---------- */
+  #rows { width: 1920px; height: 1080px; overflow: hidden; }
+  #rows div { position: absolute; left: 0; white-space: pre; font: 400 44px/1 var(--mono); color: var(--ink-3); will-change: auto; }
+  #q { left: 130px; top: 292px; font: 600 212px/0.98 var(--sans); letter-spacing: -.045em; transform-origin: 0 0; white-space: nowrap; }
+  #q span { display: block; position: relative; width: max-content; }
+  #q i { position: absolute; left: -10px; right: -10px; top: 54%; height: 12px; background: var(--accent); transform-origin: 0 50%; }
+  #ans { left: 118px; top: 330px; font: 600 372px/1 var(--sans); letter-spacing: -.05em; white-space: nowrap; transform-origin: 30% 55%; }
+  #car { background: var(--accent); }
+  #wallS { width: 1920px; height: 1080px; overflow: visible; }
+  .tag { position: absolute; padding: 4px 16px; background: var(--bg); font: 500 26px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+  #tag1 { left: 84px; top: 20px; } #tag2 { right: 84px; bottom: 20px; color: var(--accent); }
+  #field { background: var(--accent); }
+
+  /* ---------- world ---------- */
+  #stage3d { width: 1920px; height: 1080px; perspective: 2600px; perspective-origin: 960px 540px; }
+  #world { transform-origin: 0 0; transform-style: preserve-3d; width: 10px; height: 10px; }
+  #world > * { position: absolute; }
+  #floor { background-image: linear-gradient(var(--line-2) 4px, transparent 4px), linear-gradient(90deg, var(--line-2) 4px, transparent 4px); background-size: 325px 325px; }
+  #wallW { border: 7px solid var(--accent-line); }
+  #wallW span { position: absolute; left: 80px; top: -74px; padding: 0 50px; background: var(--bg); font: 500 100px/140px var(--mono); letter-spacing: .1em; color: var(--accent); white-space: nowrap; }
+  #wires { overflow: visible; }
+  #wires path { fill: none; stroke: var(--ink-3); stroke-width: 9; }
+  #wires path.hot { stroke: var(--accent-line); }
+  .pk { background: var(--accent); width: 56px; height: 104px; margin: -52px 0 0 -28px; }
+  .pk.s { width: 40px; height: 40px; margin: -20px 0 0 -20px; background: var(--ink-2); }
+  .plane { background: var(--panel-2); border: 3px solid var(--line-2); border-radius: 8px; overflow: hidden; }
+  .wl { font: 500 96px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+
+  /* editor window E0: 2600 x 1560 */
+  #E0 { left: 0; top: 0; width: 2600px; height: 1560px; background: var(--bg-2); }
+  #E0 .tabs { position: absolute; left: 0; top: 0; right: 0; height: 72px; border-bottom: 2px solid var(--line); display: flex; align-items: stretch; font: 400 28px/72px var(--mono); color: var(--ink-3); background: var(--panel); }
+  #E0 .tabs span { padding: 0 34px; border-right: 2px solid var(--line); }
+  #E0 .tabs .on { color: var(--ink); background: var(--bg-2); box-shadow: inset 0 3px 0 var(--accent); }
+  #E0 .tabs .sp { flex: 1; border: 0; }
+  #E0 .tabs .st { width: 900px; border: 0; border-left: 2px solid var(--line); color: var(--ink-2); letter-spacing: .1em; text-transform: uppercase; font-size: 24px; }
+  #code { position: absolute; left: 0; top: 74px; width: 1700px; bottom: 56px; overflow: hidden; }
+  .ln { position: absolute; left: 0; width: 1700px; height: 64px; font: 400 40px/64px var(--mono); white-space: pre; }
+  .ln .no { position: absolute; left: 0; width: 86px; text-align: right; color: var(--ink-3); opacity: .6; font-size: 30px; }
+  .ln .tx { position: absolute; left: 130px; }
+  .ln .bgk { position: absolute; left: 110px; right: 0; top: 0; bottom: 0; transform-origin: 0 50%; }
+  .ln .gut { position: absolute; left: 98px; width: 6px; top: 0; bottom: 0; background: var(--accent); }
+  .kw { color: var(--s6); } .fn { color: var(--s1); } .ty { color: var(--s3); } .nu { color: var(--s4); }
+  .gh { color: var(--ink-3); font-style: italic; }
+  .del .tx { color: var(--bad); } .add .tx { color: var(--accent); }
+  #wc { width: 5px; height: 50px; background: var(--accent); }
+  #hint { font: 400 28px/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
+  #hint kbd { margin-right: 10px; font-size: 26px; transform-origin: 50% 100%; }
+  #ebar { left: 110px; width: 1500px; height: 84px; background: var(--panel-2); border: 2px solid var(--accent-line); border-radius: 6px; font: 400 34px/80px var(--mono); padding: 0 26px; white-space: pre; transform-origin: 50% 0; display: flex; }
+  #ebar .who { color: var(--accent); margin-right: 24px; }
+  #elens { color: var(--ink-2); font-size: 30px; } #elens b { font-weight: 400; display: inline-block; }
+  #ebar .bt { height: 52px; line-height: 48px; margin: 14px 0 0 16px; padding: 0 22px; border: 2px solid var(--line-2); border-radius: 5px; font-size: 28px; color: var(--ink-2); }
+  #ebar .bt.go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 500; }
+  #codedim { left: 0; top: 74px; width: 1700px; height: 1430px; background: var(--bg-2); }
+  #chat { position: absolute; left: 1700px; top: 74px; width: 900px; bottom: 56px; border-left: 2px solid var(--line); background: var(--panel); padding: 40px; font: 400 32px/1.5 var(--sans); }
+  #chat .who { display: block; font: 500 22px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+  #chat .msg { border: 2px solid var(--line); border-radius: 6px; padding: 26px 28px; margin-bottom: 28px; background: var(--bg-2); }
+  #chat .mention { color: var(--accent); font-family: var(--mono); font-size: 29px; }
+  #chat .chip { display: inline-block; margin-top: 18px; padding: 4px 16px; border: 2px solid var(--line-2); border-radius: 5px; font: 400 24px/1.6 var(--mono); color: var(--ink-2); }
+  #chat pre { margin: 20px 0 0; padding: 18px 22px; background: var(--panel); border: 2px solid var(--line); font: 400 27px/1.6 var(--mono); }
+  #chat code { font-family: var(--mono); font-size: 28px; color: var(--ink); background: var(--panel); padding: 0 8px; }
+  #chat .acts { margin-top: 20px; font: 400 24px/1 var(--mono); color: var(--ink-3); display: flex; gap: 28px; }
+  #chat .acts b { color: var(--accent); font-weight: 500; }
+  #chat .inp { position: absolute; left: 40px; right: 40px; bottom: 40px; height: 84px; border: 2px solid var(--line-2); border-radius: 6px; font: 400 28px/80px var(--mono); padding: 0 24px; color: var(--ink-3); }
+  #E0 .status { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; border-top: 2px solid var(--line); background: var(--panel); font: 400 24px/54px var(--mono); color: var(--ink-3); display: flex; gap: 40px; padding: 0 28px; }
+  #E0 .status b { color: var(--accent); font-weight: 500; }
+
+  /* minis */
+  .mini { width: 1300px; height: 780px; background: var(--bg-2); }
+  .mini i { position: absolute; left: 110px; height: 22px; background: var(--line-2); border-radius: 3px; }
+  .mini i.g { background: var(--accent-line); }
+  .mini .tb { position: absolute; left: 0; right: 0; top: 0; height: 70px; background: var(--panel); border-bottom: 3px solid var(--line); }
+
+  /* model server */
+  #M { width: 1600px; height: 1200px; padding: 90px 100px; }
+  #M .wl { font-size: 62px; display: flex; align-items: center; gap: 30px; }
+  #M .wl::before { content: ''; width: 90px; height: 5px; background: var(--accent); }
+  #M h3 { font: 600 168px/1.02 var(--sans); letter-spacing: -.04em; margin: 70px 0 60px; }
+  #M .chips { display: flex; flex-wrap: wrap; gap: 26px; }
+  #M .chips span { font: 400 54px/1.9 var(--mono); padding: 0 36px; border: 3px solid var(--line-2); border-radius: 8px; color: var(--ink-2); white-space: nowrap; }
+  #M .bars { position: absolute; left: 100px; right: 100px; bottom: 90px; height: 150px; display: flex; align-items: flex-end; gap: 14px; }
+  #M .bars i { flex: 1; background: var(--accent); transform-origin: 50% 100%; }
+
+  /* gateway / admin: 2400 x 1120 */
+  #G { width: 2400px; height: 1120px; border-color: var(--accent-line); }
+  #Gcov { left: 0; top: 0; width: 100%; height: 100%; background: var(--panel); display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+  #Gcov h3 { font: 600 300px/1 var(--sans); letter-spacing: -.045em; margin: 50px 0 60px; white-space: nowrap; }
+  #Gcov h3 b { color: var(--accent); font-weight: 600; }
+  #Gcov p { margin: 0; font: 400 96px/1 var(--mono); color: var(--ink-2); white-space: nowrap; }
+  #adm { left: 0; top: 0; width: 100%; height: 100%; background: var(--bg); font: 400 30px/1.4 var(--mono); }
+  #adm .bar { height: 92px; border-bottom: 2px solid var(--line); background: var(--panel); display: flex; align-items: center; padding: 0 50px; font-size: 32px; }
+  #adm .bar b { color: var(--accent); font-weight: 500; }
+  #adm .bar .sp { flex: 1; }
+  #adm .pill { border: 2px solid var(--line-2); border-radius: 30px; padding: 6px 26px; color: var(--ink-2); font-size: 26px; display: flex; align-items: center; gap: 14px; }
+  #adm .pill::before, .dot { content: ''; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  #adm .col { position: absolute; top: 132px; bottom: 44px; }
+  #adm .l { font-size: 24px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); display: block; }
+  #tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--line); border: 2px solid var(--line); }
+  #tiles div { background: var(--bg); padding: 26px 30px 24px; height: 190px; }
+  #tiles .v { font: 500 76px/1.25 var(--mono); color: var(--ink); display: block; margin-top: 10px; white-space: nowrap; }
+  #tiles small { font-size: 30px; color: var(--ink-3); }
+  .box { border: 2px solid var(--line); padding: 30px 34px; position: relative; }
+  #chart { margin-top: 36px; height: 692px; }
+  #chart .r { display: flex; align-items: center; height: 96px; font-size: 34px; }
+  #chart .r .n { width: 170px; color: var(--ink-2); }
+  #chart .r .b { flex: 1; height: 44px; }
+  #chart .r .b u { display: flex; height: 100%; transform-origin: 0 50%; }
+  #chart .r .b u i { height: 100%; }
+  #chart .r .t { width: 150px; text-align: right; color: var(--ink); }
+  #chart .lg { display: flex; gap: 40px; margin-top: 22px; font-size: 24px; color: var(--ink-3); }
+  #chart .lg i { display: inline-block; width: 20px; height: 20px; margin-right: 12px; vertical-align: -2px; }
+  #keys { height: 520px; }
+  #keys .r { display: grid; grid-template-columns: 170px 1fr 260px; align-items: center; height: 76px; border-bottom: 2px solid var(--line); font-size: 30px; }
+  #keys .r:last-child { border: 0; }
+  #keys .h { color: var(--ink-2); font-size: 27px; }
+  #keys .s { justify-self: end; color: var(--ink-2); display: flex; align-items: center; gap: 14px; }
+  #kbtn { background: var(--accent); color: var(--accent-ink); font-weight: 500; padding: 6px 30px; border-radius: 5px; }
+  #pol { margin-top: 36px; height: 362px; }
+  #pol .r { display: grid; grid-template-columns: 330px 1fr 220px; align-items: center; height: 82px; font-size: 30px; border-bottom: 2px solid var(--line); }
+  #pol .r:last-child { border: 0; } #pol .h { color: var(--ink-2); font-size: 27px; } #pol .s { justify-self: end; color: var(--ink-2); display: flex; align-items: center; gap: 14px; }
+  .sw { width: 76px; height: 40px; border-radius: 22px; border: 2px solid var(--line-2); position: relative; background: var(--panel); flex: none; }
+  .sw i { position: absolute; top: 4px; left: 4px; width: 28px; height: 28px; border-radius: 50%; background: var(--ink-3); }
+
+  /* ---------- screen-space overlays ---------- */
+  #rail { left: 0; top: 910px; width: 1920px; height: 170px; background: var(--bg); border-top: 1px solid var(--line-2); }
+  #rail .in { position: absolute; left: 130px; right: 130px; top: 0; height: 170px; overflow: hidden; }
+  .re { position: absolute; left: 0; right: 0; top: 30px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .re .lab { font-size: 21px; display: flex; margin-bottom: 14px; }
+  .re h2 { margin: 0; font: 600 62px/1.1 var(--sans); letter-spacing: -.035em; white-space: nowrap; }
+  .re .hintr { font: 400 26px/1 var(--mono); color: var(--ink-2); padding-bottom: 14px; white-space: nowrap; }
+  .re kbd { font-size: 26px; margin: 0 4px; }
+  #cards .card { position: absolute; width: 660px; height: 250px; background: var(--panel); border: 1px solid var(--line-2); border-radius: 3px; padding: 30px 34px; }
+  #cards .card::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 2px; background: var(--accent); }
+  #cards .lab { font-size: 19px; }
+  #cards h4 { margin: 14px 0 20px; font: 600 46px/1 var(--sans); letter-spacing: -.03em; }
+  #cards .demo { border: 1px solid var(--line); background: var(--bg-2); padding: 10px 18px; font: 400 23px/1.6 var(--mono); color: var(--ink-3); white-space: pre; }
+  #cards .demo b { color: var(--accent); font-weight: 400; display: block; }
+  #big { left: 130px; top: 76px; }
+  #big > div { position: absolute; left: 0; top: 0; }
+  #big .lab { font-size: 22px; }
+  #big h2 { margin: 20px 0 0; font: 600 96px/1.0 var(--sans); letter-spacing: -.045em; white-space: nowrap; }
+  #big h2 span { display: block; width: max-content; }
+  #nums { left: 130px; top: 0; }
+  .nr { position: absolute; left: 0; display: flex; align-items: baseline; gap: 44px; white-space: nowrap; }
+  .nr b { width: 1060px; flex: none; font: 600 250px/1 var(--sans); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+  .nr small { display: block; font-size: 28px; margin-top: 16px; color: var(--ink-3); position: absolute; }
+  .nr b em { font-style: normal; color: var(--accent); }
+    .nr > span { font: 500 33px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+  #end { width: 1920px; height: 1080px; transform-origin: 960px 520px; }
+  #grid { width: 1920px; height: 1080px; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; -webkit-mask-image: radial-gradient(ellipse 62% 62% at 50% 46%, #000 10%, transparent 100%); }
+  #glow { width: 1920px; height: 1080px; background: radial-gradient(700px 520px at 960px 470px, rgba(35, 209, 139, .085), transparent 70%); }
+  #lock { left: 0; top: 184px; width: 1920px; display: flex; justify-content: center; align-items: center; gap: 44px; }
+  #mark { width: 230px; height: 198px; color: var(--accent); flex: none; }
+  #wm { font: 600 250px/1 var(--sans); letter-spacing: -.055em; padding-bottom: 26px; overflow: hidden; }
+  #wm span { display: block; }
+  #tagl { left: 0; top: 484px; width: 1920px; text-align: center; font: 600 72px/1.15 var(--sans); letter-spacing: -.035em; }
+  #tagl span { display: inline-block; white-space: pre; }
+  #tagl .q { color: var(--accent); position: relative; }
+  #tagl u { position: absolute; left: 0; right: 0; bottom: -6px; height: 4px; background: var(--accent); transform-origin: 0 50%; }
+  #cta { left: 0; top: 656px; width: 1920px; display: flex; justify-content: center; gap: 28px; align-items: center; }
+  #btn { height: 112px; padding: 0 56px; background: var(--accent); color: var(--accent-ink); font: 500 42px/112px var(--mono); border-radius: 4px; letter-spacing: .01em; white-space: nowrap; }
+  #url { height: 112px; padding: 0 48px; border: 1px solid var(--line-2); background: var(--panel); font: 500 48px/110px var(--mono); border-radius: 4px; white-space: pre; min-width: 430px; position: relative; }
+  #url i { display: inline-block; width: 20px; height: 52px; background: var(--accent); vertical-align: -9px; margin-left: 6px; }
+  #fine { left: 0; top: 846px; width: 1920px; text-align: center; font: 400 35px/1 var(--mono); color: var(--ink-2); letter-spacing: .02em; }
+  #fine b { color: var(--ink-3); font-weight: 400; margin: 0 18px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- A: type scene -->
+  <div id="A" class="abs">
+    <div id="rows" class="abs"></div>
+    <div id="cat" class="abs lab" style="left:134px;top:222px;font-size:24px"><b>twinny</b>AI coding assistant for VS Code</div>
+    <div id="q" class="abs"><span id="q1">Where does<i></i></span><span id="q2">your code go?<i></i></span></div>
+    <div id="ans" class="abs">Nowhere.</div>
+  </div>
+
+  <!-- world -->
+  <div id="stage3d" class="abs"><div id="world" class="abs">
+    <div id="floor"></div>
+    <div id="wallW"><span>YOUR NETWORK</span></div>
+    <svg id="wires" width="10" height="10"></svg>
+    <div id="lE" class="wl" style="left:0;top:-170px">you · VS Code + twinny</div>
+    <div id="E0" class="plane">
+      <div class="tabs"><span class="on">debounce.ts</span><span>sum.ts</span><span>git.test.ts</span><span class="sp"></span><span class="st">twinny</span></div>
+      <div id="code"></div>
+      <div id="codedim" class="abs"></div>
+      <div id="chat">
+        <div class="msg" id="mu"><span class="who">you</span><span id="mut"></span><br><span class="chip" id="muc">@git · 2 files · +41 −6</span></div>
+        <div class="msg" id="mb"><span class="who">twinny</span><span id="mbt"></span>
+          <pre id="mbp"><span style="color:var(--bad)">- path.join(dir, name)</span>
+<span style="color:var(--accent)">+ path.posix.join(dir, name)</span></pre>
+          <div class="acts" id="mba"><span>copy</span><span>new file</span><b>apply</b></div>
+        </div>
+        <div class="inp" id="inp">ask about your code… @ to attach</div>
+      </div>
+      <div class="status"><b>&lt;/&gt; twinny</b><span>fim · local</span><span>chat · local</span><span style="flex:1"></span><span>TypeScript</span></div>
+    </div>
+    <div id="minis"></div>
+    <div id="M" class="plane">
+      <div class="wl">your model server</div>
+      <h3>Any OpenAI-<br>compatible<br>backend</h3>
+      <div class="chips"><span>a laptop</span><span>your data centre</span><span>the team's own computers</span></div>
+      <div class="bars" id="mbars"></div>
+    </div>
+    <div id="G" class="plane">
+      <div id="adm" class="abs">
+        <div class="bar"><span>twinny<b>-server</b> · admin</span><span class="sp"></span><span class="pill">backends ok</span></div>
+        <div class="col" style="left:50px;width:1270px">
+          <div id="tiles">
+            <div><span class="l">requests · 7d</span><span class="v" id="t1">0</span></div>
+            <div><span class="l">developers</span><span class="v"><span id="t2">4</span> <small>/ 5 seats</small></span></div>
+            <div><span class="l">failures</span><span class="v" id="t3">0</span></div>
+            <div><span class="l">models</span><span class="v"><span id="t4">0</span> <small>aliases</small></span></div>
+          </div>
+          <div class="box" id="chart"><span class="l">usage by developer</span><div id="crow" style="margin-top:14px"></div>
+            <div class="lg"><span><i style="background:var(--s1)"></i>coder</span><span><i style="background:var(--s6)"></i>chat</span><span><i style="background:var(--s3)"></i>embed</span><span style="flex:1"></span><span>requests, never the content</span></div>
+          </div>
+        </div>
+        <div class="col" style="left:1360px;width:990px">
+          <div class="box" id="keys"><span class="l">keys · one per developer</span><div id="krow" style="margin-top:8px"></div></div>
+          <div class="box" id="pol"><span class="l">sharing now · the team's own computers</span>
+            <div style="margin-top:10px">
+              <div class="r"><span>alice@desktop</span><span class="h">coder · embed</span><span class="s"><i class="dot"></i>serving</span></div>
+              <div class="r"><span>bo@mbp</span><span class="h">coder</span><span class="s"><i class="dot"></i>serving</span></div>
+              <div class="r"><span>chen@lab-1</span><span class="h">coder · chat</span><span class="s"><i class="dot"></i>serving</span></div>
+            </div>
+</div>
+        </div>
+      </div>
+      <div id="Gcov" class="abs"><div class="wl">the gateway</div><h3>twinny<b>-server</b></h3><p>keys · usage · admin page</p></div>
+    </div>
+    <div id="pks"></div>
+  </div></div>
+
+  <!-- overlays -->
+  <div id="cards" class="abs"></div>
+  <div id="big" class="abs">
+    <div id="b1"><span class="lab">where the request goes</span><h2><span>On models</span><span>you run.</span></h2></div>
+    <div id="b2"><span class="lab">teams · twinny-server</span><h2><span>One gateway.</span><span>The whole team behind it.</span></h2></div>
+  </div>
+  <div id="rail" class="abs"><div class="in" id="railin"></div></div>
+  <div id="nums" class="abs">
+    <div class="nr" id="n1" style="top:120px"><b><span id="n1v">0</span><em>+</em></b><span>installs<small>Marketplace + Open VSX</small></span></div>
+    <div class="nr" id="n2" style="top:400px"><b><span id="n2v">0</span><em>+</em></b><span>GitHub stars</span></div>
+    <div class="nr" id="n3" style="top:680px"><b>MIT</b><span>open source · since 2023</span></div>
+  </div>
+  <div id="end" class="abs">
+    <div id="grid" class="abs"></div><div id="glow" class="abs"></div>
+    <div id="lock" class="abs"><svg id="mark" viewBox="0 0 157.34 135.15"><path fill="currentColor" transform="translate(-19.152179,-57.105319)" d="m 42.762493,191.71967 c -7.810118,-1.64822 -14.200905,-6.90969 -17.896321,-14.73383 -1.90821,-4.04018 -2.456055,-6.42349 -2.617748,-11.3881 -0.162598,-4.99237 0.228106,-7.7486 1.769922,-12.48593 1.405015,-4.31701 3.566105,-8.16624 7.840284,-13.96475 l 0.566445,-0.76846 -1.60584,-2.05377 c -5.567129,-7.11999 -8.52938,-12.7888 -10.177611,-19.47674 -3.334217,-13.52908 -1.037601,-26.995754 6.558489,-38.457024 7.276079,-10.97843 17.909238,-17.95488 31.460855,-20.64157 3.38052,-0.67021 4.131474,-0.72374 8.100382,-0.57741 10.134269,0.37364 19.98347,4.00139 28.09307,10.34749 2.41006,1.88597 2.8146,2.07379 3.58638,1.66502 0.34925,-0.18498 1.651,-1.11738 2.89278,-2.072 5.12811,-3.94227 10.54509,-6.57643 17.07444,-8.30292 5.44025,-1.43852 8.38266,-1.82319 12.54783,-1.6404 12.37819,0.54321 24.73577,6.33554 32.77121,15.36074 7.09088,7.9643 11.20641,17.18474 12.55474,28.127664 0.96418,7.82529 -1.46674,19.52975 -5.60377,26.98117 -1.98563,3.57641 -5.26084,8.30638 -6.85665,9.9022 -0.29702,0.29701 -0.53501,0.63527 -0.52887,0.75169 0.006,0.11642 0.96466,1.48167 2.13006,3.03389 4.96974,6.61927 8.01232,15.24281 8.01575,22.71889 0.003,6.32913 -2.33121,13.76955 -5.70331,18.18038 -3.93384,5.1456 -8.57652,8.12452 -14.74501,9.46097 -2.65434,0.57509 -3.2043,0.58067 -55.24983,0.56101 -49.511657,-0.0187 -52.708909,-0.0494 -54.977677,-0.52821 z M 88.63751,181.36162 c 0.36454,-0.13988 0.4194,-2.35354 0.4194,-16.92296 0,-12.62934 -0.0816,-16.76203 -0.33086,-16.76203 -0.18198,0 -1.61073,0.63332 -3.17501,1.40739 -3.2662,1.61624 -8.530371,3.40755 -12.182798,4.1456 -3.799244,0.76773 -11.984341,0.70022 -15.726531,-0.12971 -5.357735,-1.18821 -10.180726,-3.1119 -15.523489,-6.19167 l -1.359793,-0.78383 -1.551503,1.69333 c -3.774493,4.11954 -5.935646,9.3634 -6.225321,15.10525 -0.479159,9.49772 4.29743,17.10856 11.484189,18.29849 1.66694,0.276 43.472036,0.40864 44.171716,0.14014 z m 62.22607,-0.1129 c 2.56672,-0.4062 4.61532,-1.4874 6.61367,-3.49052 4.67146,-4.68261 6.36079,-12.88234 4.22059,-20.48602 -0.99617,-3.53916 -4.73387,-9.63925 -6.62211,-10.80756 -0.33529,-0.20746 -1.05689,0.0935 -2.93657,1.22479 -4.64557,2.79593 -10.26247,4.7881 -16.36329,5.80364 -4.33796,0.7221 -10.78776,0.42624 -15.25118,-0.69959 -4.47917,-1.1298 -7.04442,-2.05241 -10.37036,-3.72976 -4.36663,-2.2022 -3.88187,-4.10131 -3.88187,15.2076 0,12.53066 0.0829,16.6776 0.33867,16.93333 0.44251,0.4425 41.47658,0.48339 44.25245,0.0441 z M 70.994683,133.94447 c 10.100787,-2.00226 18.253257,-9.92274 21.234867,-20.63061 0.52686,-1.89212 0.61036,-2.94164 0.62289,-7.82946 0.016,-6.231684 -0.31343,-8.148714 -2.07468,-12.074224 -1.95705,-4.3619 -6.1745,-9.43862 -9.9975,-12.03442 -5.023548,-3.41096 -11.963367,-5.14247 -18.144901,-4.52722 -6.398229,0.63682 -11.466053,2.89167 -16.103976,7.16523 -2.799489,2.57956 -4.637639,5.04841 -6.319921,8.48841 -1.636506,3.3464 -2.402477,6.15692 -2.851201,10.461724 -0.549555,5.27213 0.250642,10.05822 2.467694,14.7596 3.104366,6.58299 7.219339,10.89081 13.245617,13.86635 5.858558,2.89273 11.48032,3.63136 17.921111,2.35462 z m -18.69466,-22.50299 c -1.644847,-0.60054 -2.439546,-1.22962 -3.332928,-2.63834 -1.053353,-1.66096 -1.273048,-2.87111 -0.857965,-4.7259 0.663796,-2.96616 3.693324,-5.188724 6.602931,-4.844114 3.661853,0.43369 6.427591,4.231364 5.542861,7.610974 -0.931957,3.56004 -4.750954,5.76715 -7.954899,4.59738 z m 24.621327,0.0222 c -1.488014,-0.47164 -3.482403,-2.61189 -3.932753,-4.22038 -1.680834,-6.00335 5.132023,-10.537694 9.812893,-6.53103 5.21973,4.46789 0.65098,12.82152 -5.88014,10.75141 z m 56.30334,22.93796 c 1.397,-0.15847 3.302,-0.49182 4.23333,-0.74078 2.08717,-0.55794 6.40742,-2.54531 8.23474,-3.78809 1.93983,-1.31929 5.57221,-4.90142 7.00771,-6.91075 6.33385,-8.86577 7.3966,-20.86952 2.69677,-30.459854 -3.8667,-7.89027 -11.24614,-13.52487 -20.197,-15.42149 -2.69468,-0.57099 -8.87021,-0.41282 -11.54527,0.29568 -5.014,1.328 -8.46533,3.29629 -12.39135,7.06679 -8.01913,7.7015 -10.95442,18.953004 -7.77164,29.790134 1.3349,4.54523 3.39371,8.05956 6.80434,11.61479 4.67467,4.87287 9.80759,7.57215 16.01392,8.42132 3.43603,0.47014 3.86367,0.47831 6.91445,0.13225 z m -19.25576,-23.15848 c -3.31338,-1.6401 -4.60665,-5.69304 -2.81965,-8.83638 2.49266,-4.384614 8.76084,-4.220604 10.9426,0.28633 1.59408,3.29292 0.13933,6.95114 -3.40164,8.55401 -1.63343,0.73939 -3.22225,0.73806 -4.72131,-0.004 z m 24.83555,0 c -3.40665,-1.68627 -4.68005,-5.4573 -2.95676,-8.75607 1.13894,-2.18018 2.8834,-3.214964 5.39817,-3.202074 2.02276,0.0104 3.04481,0.41433 4.37228,1.728174 1.1557,1.14384 1.84536,2.82779 1.85254,4.52339 0.008,1.88815 -0.35149,2.80026 -1.63338,4.14424 -2.01861,2.11637 -4.70703,2.7136 -7.03285,1.56234 z"/></svg><div id="wm"><span>twinny</span></div></div>
+    <div id="tagl" class="abs"></div>
+    <div id="cta" class="abs"><div id="btn">install for VS Code</div><div id="url"></div></div>
+    <div id="fine" class="abs">Free for individuals and teams of five<b>·</b>open source, MIT</div>
+  </div>
+  <svg id="wallS" class="abs"><path id="wsp" fill="none" stroke="var(--accent)" stroke-width="2"/></svg>
+  <div id="tag1" class="tag">your network</div><div id="tag2" class="tag">nothing leaves</div>
+  <div id="field" class="abs"></div>
+  <div id="car" class="abs"></div>
+</div>
+<script>
+'use strict'
+const DUR = 30, NEUTRAL = false
+const INSTALLS = 240000, STARS = 3600   // src/lib/stats.json through the site's fmt(): 241,565 and 3,659 rounded down
+const $ = id => document.getElementById(id)
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), p = (t, a, b) => cl((t - a) / (b - a)), lerp = (a, b, x) => a + (b - a) * x
+const ss = x => x * x * x * (x * (6 * x - 15) + 10), o3 = x => 1 - (1 - x) ** 3, o5 = x => 1 - (1 - x) ** 5, i3 = x => x * x * x, i2 = x => x * x
+const io = x => x < .5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2
+const back = x => { const c = 1.6; return 1 + (c + 1) * (x - 1) ** 3 + c * (x - 1) ** 2 }
+const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+const fmtN = n => Math.round(n).toLocaleString('en')
+const vis = (el, on) => { const d = on ? '' : 'none'; if (el.style.display !== d) el.style.display = d }
+const cache = new Map()
+const html = (el, h) => { if (cache.get(el) !== h) { cache.set(el, h); el.innerHTML = h } }
+const hl = s => esc(s).replace(/\b(export|function|let|const|return|if|for|of)\b|\b(Fn|Timer|undefined|unknown|number)\b|\b(\d+)\b|\b([a-zA-Z]+)(?=\()/g,
+  (m, kw, ty, nu, fn) => kw ? `<span class="kw">${kw}</span>` : ty ? `<span class="ty">${ty}</span>` : nu ? `<span class="nu">${nu}</span>` : `<span class="fn">${fn}</span>`)
+
+// sound cues, read by the mixer
+const SFX = []
+const cue = (t, type) => SFX.push({ t, type })
+
+/* ================= A: type scene ================= */
+const ROWSRC = [
+  "export function debounce(fn: Fn, wait = 300) {  let timer: Timer | undefined  return (...args) => {",
+  "const user = await db.users.findUnique({ where: { id } })  if (!user) throw new NotFound(id)",
+  "for (const x of xs) total += x  return total  }  export const TAX_RATE = 0.2  import { cart } from './cart'",
+  "async function review(branch: string, base = 'main') {  const diff = await git.diff(base, branch)",
+  "POST /v1/chat/completions  { model, messages, stream: true }  authorization: Bearer ••••••••",
+  "if (timer) clearTimeout(timer)  timer = setTimeout(() => fn(...args), wait)  }  }",
+  "SELECT id, email FROM customers WHERE plan = 'team' ORDER BY created_at DESC LIMIT 50",
+  "const key = process.env.API_KEY  const res = await fetch(url, { headers: { authorization: key } })",
+  "function checkout(items: Item[]) {  const result = calculateTotal(items)  return result * (1 + TAX_RATE)"
+]
+const rows = ROWSRC.map((s, i) => {
+  const d = document.createElement('div'); d.textContent = (s + '    ').repeat(4); d.style.top = (38 + i * 118) + 'px'; $('rows').appendChild(d)
+  return { d, v: (i % 2 ? -1 : 1) * (70 + ((i * 137) % 5) * 28), w: 0, ph: (i * 733) % 1000 }
+})
+const WALL = { x0: 40, y0: 40, x1: 1880, y1: 1040 }
+let W0y = 540
+function wallPt(u) { // clockwise from (x1, W0y); u in 0..1 over the perimeter
+  const { x0, y0, x1, y1 } = WALL, segs = [[x1, W0y], [x1, y1], [x0, y1], [x0, y0], [x1, y0], [x1, W0y]]
+  let L = 0; const ls = []
+  for (let i = 1; i < segs.length; i++) { const l = Math.abs(segs[i][0] - segs[i - 1][0]) + Math.abs(segs[i][1] - segs[i - 1][1]); ls.push(l); L += l }
+  let d = u * L, pts = [segs[0]]
+  for (let i = 0; i < ls.length; i++) {
+    if (d >= ls[i]) { pts.push(segs[i + 1]); d -= ls[i] } else { const k = d / ls[i]; pts.push([lerp(segs[i][0], segs[i + 1][0], k), lerp(segs[i][1], segs[i + 1][1], k)]); break }
+  }
+  return pts
+}
+function setRect(el, r, op = 1) { el.style.transform = `translate(${r[0]}px,${r[1]}px)`; el.style.width = r[2] + 'px'; el.style.height = r[3] + 'px'; el.style.opacity = op }
+const lr = (a, b, k) => a.map((v, i) => lerp(v, b[i], k))
+const rectOf = (el) => { const r = el.getBoundingClientRect(); return [r.left, r.top, r.width, r.height] }
+
+cue(2.0, 'whoosh'); cue(2.2, 'trace'); cue(3.0, 'slam'); cue(4.0, 'swell'); cue(4.5, 'land')
+function sceneA(t) {
+  const on = t < 5.0
+  vis($('A'), on && t < 4.55)
+  if (!on) return
+  // code rows: streaming off the right edge, then stopped by the wall
+  const tau = t < 2.3 ? t : 2.3 + 0.7 * (() => { const u = p(t, 2.3, 3.0); return u - u * u / 2 })()
+  const rowOp = .42 * lerp(1, .6, p(t, 2.9, 3.3)) * (1 - p(t, 4.0, 4.3))
+  for (const r of rows) { const per = r.w / 4; r.d.style.transform = `translateX(${-per + (((r.v * (tau + 2) + r.ph) % per) + per) % per}px)`; r.d.style.opacity = rowOp }
+  $('rows').style.clipPath = t >= 2.2 ? 'inset(41px 41px 41px 41px)' : 'none'
+  // question
+  const q = $('q'), k = ss(p(t, 2.78, 3.02)), push = 1 + .035 * p(t, 0, 2.78)
+  q.style.transform = `translate(${0}px,${lerp(0, -212, k)}px) scale(${lerp(push, .3, k)})`
+  q.style.color = k > .5 ? 'var(--ink-3)' : 'var(--ink)'
+  q.style.opacity = 1 - p(t, 4.0, 4.2)
+  $('q1').firstElementChild.style.transform = `scaleX(${o5(p(t, 2.45, 2.7))})`
+  $('q2').firstElementChild.style.transform = `scaleX(${o5(p(t, 2.53, 2.78))})`
+  $('cat').style.opacity = 1 - p(t, 2.4, 2.6)
+  // answer
+  const a = $('ans'), ka = p(t, 3.0, 3.38), out = i3(p(t, 4.0, 4.4))
+  a.style.opacity = cl(ka * 3) * (1 - p(t, 4.12, 4.36))
+  a.style.transform = `scale(${(lerp(1.45, 1, o5(ka)) + .03 * p(t, 3.4, 4.0)) * (1 + 5 * out)})`
+  a.style.filter = out > 0 ? `blur(${out * 14}px)` : 'none'
+}
+function wallS(t) {
+  // drawn 2.2–2.95, again 23.6–24.3; contracts into the logo 25.7–26.25
+  const A = t < 5, on = (t >= 2.2 && t < 4.5) || (t >= 24.1 && t < 26.08)
+  vis($('wallS'), on); const tg = (A ? p(t, 2.85, 3.05) * (1 - p(t, 4.0, 4.2)) : p(t, 25.2, 25.35) * (1 - p(t, 25.45, 25.55)))
+  $('tag1').style.opacity = $('tag2').style.opacity = on ? tg : 0
+  if (!on) return null
+  const u = A ? io(p(t, 2.2, 2.95)) : io(p(t, 24.1, 25.3))
+  const pts = wallPt(u)
+  let d = 'M' + pts.map(q => q.join(' ')).join('L')
+  const w = $('wsp')
+  if (!A && t > 25.55) {
+    const k = io(p(t, 25.55, 26.0)), m = MARKR, r = lr([WALL.x0, WALL.y0, WALL.x1 - WALL.x0, WALL.y1 - WALL.y0], m, k)
+    d = `M${r[0]} ${r[1]}h${r[2]}v${r[3]}h${-r[2]}z`; w.style.opacity = 1 - p(t, 25.96, 26.08)
+  } else w.style.opacity = A ? 1 : .8
+  w.setAttribute('d', d)
+  return pts[pts.length - 1]
+}
+function caret(t, head) {
+  const c = $('car'), f = $('field')
+  let r = null, op = 1
+  if (t < 2.0) { r = CQ; op = (t * 2) % 1 < .55 ? 1 : 0 }
+  else if (t < 2.2) { const k = i2(p(t, 2.0, 2.2)); r = lr(CQ, [WALL.x1 - 9, W0y - 9, 18, 18], k) }
+  else if (t < 3.3) { r = [head[0] - 9, head[1] - 9, 18, 18] }
+  else if (t < 3.6) { r = lr([WALL.x1 - 9, W0y - 9, 18, 18], CA, o5(p(t, 3.3, 3.6))) }
+  else if (t < 4.0) { r = CA; op = ((t - 3.6) * 2) % 1 < .6 ? 1 : 0 }
+  vis(c, !!r); if (r) setRect(c, r, op)
+  // the swell: caret -> full frame -> the editor's caret
+  const fo = t >= 4.0 && t < 5.0
+  vis(f, fo)
+  if (fo) {
+    const full = [-20, -20, 1960, 1120]
+    if (t < 4.5) setRect(f, lr(CA, full, i3(p(t, 4.0, 4.42))))
+    else { const wr = rectOf($('wc')); setRect(f, lr(full, wr, ss(p(t, 4.5, 5.0)))) }
+  }
+}
+
+/* ================= world ================= */
+const LH = 64, TOP = 30, CW = 24
+const FILE = [
+  'export function debounce(fn: Fn, wait = 300) {', '  let timer: Timer | undefined', '  return (...args: unknown[]) => {',
+  '    if (timer) clearTimeout(timer)', '    timer = setTimeout(() => fn(...args), wait)', '  }', '}', '',
+  'export function sum(xs: number[]) {', '  let total = 0', '  for (let i = 0; i < xs.length; i++) {', '    total += xs[i]', '  }', '  return total', '}', '',
+  'export function clamp(n: number, lo = 0, hi = 1) {', '  if (n < lo) return lo', '  if (n > hi) return hi', '  return n', '}', ''
+]
+const ADD = ['  for (const x of xs) {', '    total += x', '  }']
+const lines = FILE.map((s, i) => {
+  const d = document.createElement('div'); d.className = 'ln'; d.style.transform = `translateY(${30 + i * 64}px)`
+  d.innerHTML = `<div class="bgk"></div><div class="gut"></div><span class="no">${i + 1}</span><span class="tx">${hl(s)}</span>`
+  $('code').appendChild(d); return { d, bg: d.children[0], gut: d.children[1], no: d.children[2], tx: d.children[3], s }
+})
+const adds = ADD.map(s => {
+  const d = document.createElement('div'); d.className = 'ln add'
+  d.innerHTML = `<div class="bgk" style="background:var(--accent-soft)"></div><div class="gut"></div><span class="no">+</span><span class="tx">${esc(s)}</span>`
+  $('code').appendChild(d); return { d, tx: d.children[3], gut: d.children[1], bg: d.children[0], s }
+})
+for (const id of ['wc', 'hint', 'ebar']) { const d = document.createElement('div'); d.id = id; d.className = 'abs'; $('code').appendChild(d) }
+$('hint').innerHTML = '<kbd id="ktab">Tab</kbd>accept'
+$('ebar').innerHTML = '<span class="who">twinny · edit</span><span id="etx"></span><span id="elens"><b id="eacc">Accept</b> | <span>Reject</span></span>'
+
+const TYPED = 'if (', GHOST = [FILE[3].slice(8), FILE[4], FILE[5], FILE[6]], GLEN = GHOST.reduce((a, s) => a + s.length, 0)
+const TYPE_T = [5.3, 5.42, 5.56, 5.68]
+TYPE_T.forEach(t => cue(t, 'key')); cue(5.9, 'ghost'); cue(7.0, 'tab')
+const INSTR = 'use a for…of loop'
+cue(7.7, 'whoosh'); cue(8.15, 'select'); cue(8.45, 'open')
+for (let i = 0; i < INSTR.length; i += 2) cue(8.6 + i * .04, 'key')
+cue(9.5, 'enter'); cue(10.5, 'click'); cue(10.5, 'accept'); cue(10.8, 'whoosh')
+const UMSG = ['why does the test for ', '@git', ' changes fail on windows?']
+const BMSG = 'The test builds the expected path with path.join, which uses \'\\\' on Windows. Use path.posix for both:'
+cue(11.1, 'send'); cue(11.25, 'stream')
+function editor(t) {
+  // --- autocomplete (5–8)
+  const nt = TYPE_T.filter(x => t >= x).length, g = Math.floor(GLEN * p(t, 5.9, 6.7)), acc = t >= 7.0
+  for (let i = 3; i <= 6; i++) {
+    const L = lines[i]
+    let h
+    if (acc) h = hl(L.s)
+    else {
+      let before = GHOST.slice(0, i - 3).reduce((a, s) => a + s.length, 0), n = cl(g - before, 0, GHOST[i - 3].length)
+      const solid = i === 3 ? '    ' + TYPED.slice(0, nt) : ''
+      h = hl(solid) + `<span class="gh">${esc((i === 3 ? '' : '') + GHOST[i - 3].slice(0, n))}</span>`
+    }
+    html(L.tx, h); L.d.style.transform = `translateY(${TOP + i * LH}px)`
+    L.no.style.opacity = (i === 3 || acc || g > 0 && GHOST.slice(0, i - 3).reduce((a, s) => a + s.length, 0) < g) ? .6 : 0
+    const fl = acc ? 1 - p(t, 7.0, 7.9) : 0
+    L.gut.style.opacity = acc ? lerp(.0, 1, cl(fl * 3)) : 0
+    L.bg.style.background = 'var(--accent-soft)'; L.bg.style.opacity = fl; L.bg.style.transform = 'none'
+  }
+  // caret
+  const wc = $('wc')
+  let cx = 130 + (4 + nt) * CW, cy = TOP + 3 * LH + 7
+  if (acc) { cx = 130 + 1 * CW; cy = TOP + 6 * LH + 7 }
+  wc.style.transform = `translate(${cx}px,${cy}px)`
+  wc.style.opacity = t < 5.0 ? 0 : t < 8.0 ? ((t * 2) % 1 < .6 || (t > 5.25 && t < 5.8) ? 1 : 0) : 0
+  // hint + Tab key
+  const hint = $('hint'), hv = p(t, 6.5, 6.75) * (1 - p(t, 7.25, 7.5))
+  hint.style.opacity = hv
+  hint.style.transform = `translate(${130 + 2 * CW + 40}px,${TOP + 6 * LH + 18}px) scale(1.25)`
+  const press = t >= 6.95 && t < 7.15
+  $('ktab').style.cssText = press ? 'background:var(--accent);color:var(--accent-ink);border-color:var(--accent);transform:translateY(3px) scale(.94)' : ''
+
+  // --- inline edit (8–11)
+  const sel = p(t, 8.1, 8.4), bar = o5(p(t, 8.4, 8.62)) * (1 - o3(p(t, 10.62, 10.85))), diff = t >= 9.5, accd = t >= 10.5
+  const addOpen = o5(p(t, 9.5, 9.9)), col = io(p(t, 10.55, 10.9)), BH = 104
+  for (let i = 7; i < lines.length; i++) {
+    const L = lines[i], n = i + 1
+    let y = TOP + i * LH + (n >= 11 ? bar * BH : 0) + (n >= 14 ? (addOpen - col) * 3 * LH : 0)
+    const isDel = n >= 11 && n <= 13
+    if (isDel) {
+      const k = n - 11
+      L.d.className = diff ? 'ln del' : 'ln'
+      html(L.tx, diff ? esc(L.s) : hl(L.s))
+      L.bg.style.background = diff ? 'var(--bad-soft)' : 'var(--accent-soft)'
+      L.bg.style.opacity = diff ? 1 : (sel > 0 ? 1 : 0)
+      L.bg.style.transform = diff ? 'none' : `scaleX(${o5(cl(sel * 1.6 - k * .3))})`
+      L.d.style.opacity = 1 - p(t, 10.5, 10.7)
+      L.no.textContent = diff ? '−' : n
+      y -= col * k * LH
+    } else if (n >= 14) L.no.textContent = n
+    L.d.style.transform = `translateY(${y}px)`
+  }
+  adds.forEach((A, k) => {
+    const y = TOP + 13 * LH + bar * BH + k * LH - col * 3 * LH, a = p(t, 9.5 + k * .1, 9.72 + k * .1)
+    A.d.style.transform = `translate(${(1 - o5(a)) * -40}px,${y}px)`; A.d.style.opacity = diff ? a : 0
+    html(A.tx, accd ? hl(A.s) : esc(A.s)); A.d.className = accd ? 'ln' : 'ln add'
+    A.d.children[2].textContent = accd ? 11 + k : '+'
+    A.bg.style.opacity = 1 - p(t, 10.5, 11.2) * .999; A.gut.style.opacity = accd ? 1 - p(t, 10.9, 11.4) : 0
+  })
+  const eb = $('ebar')
+  eb.style.opacity = cl(bar * 2); eb.style.transform = `translateY(${TOP + 10 * LH + 8}px) scaleY(${lerp(.6, 1, bar)})`
+  const ni = Math.floor(INSTR.length * p(t, 8.6, 9.3))
+  html($('etx'), esc(INSTR.slice(0, ni)) + (( (t * 2) % 1 < .7 || t < 9.3) ? '<span style="color:var(--accent)">▍</span>' : ''))
+  const lens = t >= 9.5
+  $('ebar').firstElementChild.style.display = $('etx').style.display = lens ? 'none' : ''
+  $('elens').style.display = lens ? '' : 'none'; $('elens').style.opacity = p(t, 9.5, 9.7)
+  eb.style.borderColor = lens ? 'transparent' : ''; eb.style.background = lens ? 'transparent' : ''
+  const pa = t >= 10.4 && t < 10.62
+  $('eacc').style.cssText = pa ? 'color:var(--accent-ink);background:var(--accent);padding:0 14px;border-radius:5px;margin-left:-14px' : (t >= 9.5 && t < 10.4 ? 'color:var(--ink)' : '')
+
+  // --- chat (11–14)
+  const full = UMSG.join(''), nu = Math.floor(full.length * p(t, 10.7, 11.05))
+  let h = esc(full.slice(0, Math.min(nu, UMSG[0].length)))
+  if (nu > UMSG[0].length) h += `<span class="mention">${full.slice(UMSG[0].length, Math.min(nu, UMSG[0].length + 4))}</span>`
+  if (nu > UMSG[0].length + 4) h += esc(full.slice(UMSG[0].length + 4, nu))
+  html($('mut'), h + (t < 11.08 ? '<span style="color:var(--accent)">▍</span>' : ''))
+  $('mu').style.opacity = p(t, 10.6, 10.72)
+  $('muc').style.opacity = p(t, 11.05, 11.15)
+  const nb = Math.floor(BMSG.length * p(t, 11.25, 11.95))
+  html($('mbt'), esc(BMSG.slice(0, nb)).replace(/path\.join|path\.posix|'\\'/g, m => `<code>${m}</code>`))
+  const mb = $('mb'); mb.style.opacity = p(t, 11.15, 11.27); mb.style.transform = `translateY(${(1 - o5(p(t, 11.15, 11.4))) * 30}px)`
+  $('mbp').style.opacity = p(t, 11.9, 12.02); $('mba').style.opacity = p(t, 12.02, 12.14)
+  $('inp').style.opacity = t < 10.6 ? 1 : .5
+  $('codedim').style.opacity = .72 * p(t, 12.25, 12.6) * (1 - p(t, 13.4, 13.7))
+}
+
+/* ---- cards (12.5–13.7) ---- */
+const CARDS = [
+  ['04', 'code review', 'Review a branch or a pull request.', 'review branch  feature → main', '34 files · 3 parts · streaming'],
+  ['05', 'workspace index', 'Search the whole workspace.', 'hybrid keyword + vector index', 'updated on save'],
+  ['06', 'terminal', 'Fix the command that failed.', '$ npm test  ✗  src/app.ts:42', 'fix in editor  ·  ask in chat']
+].map((c, i) => {
+  const d = document.createElement('div'); d.className = 'card'
+  d.innerHTML = `<span class="lab"><b>${c[0]}</b>${c[1]}</span><h4>${c[2]}</h4><div class="demo">${esc(c[3])}<b>${esc(c[4])}</b></div>`
+  $('cards').appendChild(d); cue(12.62 + i * .2, 'pop'); return d
+})
+function cards(t) {
+  const on = t >= 12.58 && t < 14.0; vis($('cards'), on); if (!on) return
+  CARDS.forEach((d, i) => {
+    const a = o5(p(t, 12.62 + i * .2, 13.0 + i * .2)), out = i3(p(t, 13.5 + i * .04, 13.82 + i * .04))
+    const x = 80 + i * 40 - out * 900, y = 70 + i * 268 + (1 - a) * 260
+    d.style.transform = `translate(${x}px,${y}px) scale(${lerp(.92, 1, a)})`; d.style.opacity = cl(a * 2.5) * (1 - out)
+    d.style.filter = a < 1 ? `blur(${(1 - a) * 10}px)` : 'none'
+  })
+}
+
+/* ---- network world ---- */
+const MINI_X = [0, 1460, 2920, 4380], MINI_Y = MINI_X, NAMES = ['alice', 'bo', 'chen', 'dana']
+const minis = MINI_X.map((x, k) => {
+  const w = document.createElement('div'); w.style.cssText = `position:absolute;left:${x}px;top:2100px;transform-style:preserve-3d`
+  let bars = '<div class="tb"></div>'
+  for (let j = 0; j < 8; j++) bars += `<i class="${j === (k * 3 + 2) % 8 ? 'g' : ''}" style="top:${130 + j * 76}px;width:${300 + ((j * 211 + k * 97) % 7) * 110}px;left:${110 + ((j + k) % 3) * 50}px"></i>`
+  w.innerHTML = `<div class="wl" style="position:absolute;left:0;top:-140px">${NAMES[k]}</div><div class="plane mini">${bars}</div>`
+  $('minis').appendChild(w); cue(17.55 + k * .14, 'tap'); return w
+})
+const mbars = Array.from({ length: 28 }, (_, i) => { const b = document.createElement('i'); $('mbars').appendChild(b); return b })
+const NS = 'http://www.w3.org/2000/svg'
+const mkPath = (cls) => { const e = document.createElementNS(NS, 'path'); e.setAttribute('pathLength', '1'); if (cls) e.setAttribute('class', cls); $('wires').appendChild(e); return e }
+const wE = mkPath(), wEh = mkPath('hot'), wGM = mkPath(), wGMh = mkPath('hot'), wMini = MINI_Y.map(() => mkPath())
+const PK = Array.from({ length: 16 }, () => { const d = document.createElement('div'); d.className = 'pk'; $('pks').appendChild(d); return d })
+const poly = (pts, u) => { // point at fraction u along a polyline
+  let L = 0; const ls = []; for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); ls.push(l); L += l }
+  let d = cl(u) * L; for (let i = 0; i < ls.length; i++) { if (d <= ls[i] || i === ls.length - 1) { const k = ls[i] ? d / ls[i] : 0; return [lerp(pts[i][0], pts[i + 1][0], k), lerp(pts[i][1], pts[i + 1][1], k)] } d -= ls[i] }
+}
+const dOf = pts => 'M' + pts.map(q => q.join(' ')).join('L')
+cue(13.5, 'whoosh'); cue(14.0, 'slam'); cue(14.7, 'send'); cue(15.1, 'arrive'); cue(15.45, 'send'); cue(15.85, 'arrive'); cue(16.2, 'send'); cue(16.6, 'arrive')
+cue(17.0, 'slam'); cue(17.0, 'thud'); cue(19.5, 'whoosh')
+function network(t) {
+  const on = t >= 13.4 && t < 20.4
+  for (const id of ['floor', 'wallW', 'wires', 'M', 'pks', 'lE', 'minis']) vis($(id), on)
+  vis($('G'), t >= 16.86 && t < 23.9)
+  if (t >= 16.86) {
+    const g = o5(p(t, 16.86, 17.3)); $('G').style.transform = `translate3d(3300px,220px,${(1 - g) * 700}px)`; $('G').style.opacity = cl(g * 2)
+    $('Gcov').style.opacity = 1 - ss(p(t, 19.45, 19.68)); vis($('Gcov'), t < 19.68); $('adm').style.opacity = ss(p(t, 19.62, 19.9))
+  }
+  if (!on) return
+  const sh = io(p(t, 16.45, 16.92)), mx = 3500 + sh * 3000
+  $('M').style.transform = `translate(${mx}px,180px)`; $('M').style.opacity = p(t, 13.5, 13.8)
+  // wall + floor grow to hold the team
+  const k = io(p(t, 17.0, 17.9)), R = lr([-380, -520, 5860, 2600], [-420, -560, 8980, 3860], k)
+  for (const id of ['floor', 'wallW']) { const s = $(id).style; s.left = R[0] + 'px'; s.top = R[1] + 'px'; s.width = R[2] + 'px'; s.height = R[3] + 'px' }
+  $('wallW').style.opacity = p(t, 17.55, 17.95); $('floor').style.opacity = .8 * p(t, 13.6, 14.0); $('lE').style.opacity = p(t, 17.5, 17.9) * (1 - p(t, 19.4, 19.7))
+  // wires
+  const gIn = t >= 17.0
+  const eTo = [[2600, 780], [gIn ? lerp(3500, 3300, sh) : 3500, 780]]
+  const draw = o3(p(t, 14.2, 14.7))
+  wE.setAttribute('d', dOf(eTo)); wE.style.strokeDasharray = `${draw} 1`
+  const gm = [[5700, 780], [mx, 780]]
+  wGM.setAttribute('d', gIn && t > 17.3 ? dOf(gm) : ''); wGM.style.opacity = p(t, 17.3, 17.6)
+  const mroutes = MINI_X.map(x => [[x + 650, 2100], [x + 650, 1800], [2950, 1800], [2950, 780], [3300, 780]])
+  minis.forEach((w, i) => {
+    const a = o5(p(t, 17.5 + i * .14, 18.0 + i * .14)); w.style.transform = `translateZ(${(1 - a) * 600}px)`; w.style.opacity = cl(a * 2)
+    const dr = io(p(t, 17.8 + i * .12, 18.3 + i * .12)); wMini[i].setAttribute('d', dOf(mroutes[i])); wMini[i].style.strokeDasharray = `${dr} 1`
+  })
+  // packets
+  let n = 0
+  const put = (pt, small, op = 1, vert) => { const d = PK[n++]; d.className = small ? 'pk s' : 'pk'; d.style.display = ''; d.style.transform = `translate(${pt[0]}px,${pt[1]}px)${vert ? ' rotate(90deg)' : ''}`; d.style.opacity = op }
+  if (t < 17.0) {
+    for (let c = 0; c < 3; c++) {   // request out, tokens back, three times
+      const a = 14.7 + c * .75
+      if (t >= a && t < a + .4 && a + .4 <= 16.95) put(poly(eTo, io(p(t, a, a + .4))))
+      for (let j = 0; j < 4; j++) { const r0 = a + .42 + j * .07; if (t >= r0 && t < r0 + .3 && r0 + .3 <= 16.95) put(poly([eTo[1], eTo[0]], p(t, r0, r0 + .3)), true) }
+    }
+  } else {
+    if (t >= 18.0) {
+      const u = ((t - 18.0) / 1.0) % 1; put(poly(eTo, u), false, cl(u * 8) * cl((1 - u) * 8))
+      const u2 = ((t - 18.3) / .9 + 10) % 1; if (t > 18.3) put(poly(gm, u2), false, cl(u2 * 8) * cl((1 - u2) * 8))
+      const u3 = ((t - 18.75) / .9 + 10) % 1; if (t > 18.75) put(poly([gm[1], gm[0]], u3), true, cl(u3 * 8) * cl((1 - u3) * 8))
+    }
+    mroutes.forEach((r, i) => { const a = 18.35 + i * .17; if (t >= a) { const u = ((t - a) / 1.15) % 1; put(poly(r, u), false, cl(u * 8) * cl((1 - u) * 8)) } })
+  }
+  for (; n < PK.length; n++) PK[n].style.display = 'none'
+  // model server activity
+  const act = t < 15.1 ? 0 : t < 17.0 ? .55 + .45 * Math.abs(Math.sin((t - 15.1) / .75 * Math.PI)) : t > 18.6 ? .8 : 1 - p(t, 17.0, 17.6)
+  mbars.forEach((b, i) => { const v = .08 + act * (.25 + .75 * Math.abs(Math.sin(i * 1.7 + t * 9) * Math.sin(i * .6 - t * 5))); b.style.transform = `scaleY(${v})`; b.style.opacity = .35 + .65 * act })
+}
+
+/* ---- admin (20–23.6) ---- */
+const DEVS = [['alice', [62, 28, 10], 1284], ['bo', [40, 45, 15], 968], ['chen', [72, 20, 8], 812], ['dana', [30, 60, 10], 640], ['eli', [55, 35, 10], 296]]
+const COL = ['var(--s1)', 'var(--s6)', 'var(--s3)']
+$('crow').innerHTML = DEVS.map(d => `<div class="r"><span class="n">${d[0]}</span><span class="b"><u style="width:${d[2] / 1284 * 100}%">${d[1].map((v, i) => `<i style="flex:${v};background:${COL[i]}"></i>`).join('')}</u></span><span class="t">0</span></div>`).join('')
+$('krow').innerHTML = DEVS.map((d, i) => `<div class="r"><span>${d[0]}</span><span class="h" ${i === 4 ? 'id="kh"' : ''}>tsk_${['5f3a', '91c2', 'e07d', '2ab8', 'c64f'][i]}…</span><span class="s">${i === 4 ? '<span id="kst" style="display:flex;align-items:center;gap:14px"></span>' : '<i class="dot"></i>active'}</span></div>`).join('')
+const crows = [...$('crow').children]
+cue(20.9, 'click'); cue(20.95, 'accept'); cue(21.75, 'bars'); cue(23.2, 'whoosh')
+function admin(t) {
+  if (t < 19.4 || t >= 23.9) return
+  const c = o3(p(t, 20.1, 21.0))
+  html($('t1'), fmtN(4000 * c)); html($('t3'), fmtN(3 * c)); html($('t4'), fmtN(3 * c))
+  const ok = t >= 20.9
+  html($('t2'), ok ? '5' : '4')
+  html($('kst'), ok ? '<i class="dot"></i>active' : `<span id="kbtn" style="${t >= 20.82 ? 'filter:brightness(1.25);transform:scale(.94);display:inline-block' : ''}">approve</span>`)
+  html($('kh'), ok ? 'tsk_c64f…' : 'sign-in code WXYZ-2345')
+  $('krow').children[4].style.background = `rgba(35,209,139,${.14 * (ok ? 1 - p(t, 20.9, 21.6) : 0)})`
+  crows.forEach((r, i) => {
+    const a = o5(p(t, 21.75 + i * .09, 22.4 + i * .09))
+    r.querySelector('u').style.transform = `scaleX(${a})`; html(r.querySelector('.t'), fmtN(DEVS[i][2] * a))
+  })
+}
+
+/* ---- camera ---- */
+const KEYS = [
+  [4.4, { cx: 420, cy: 250, s: 2.3, rx: 0, ry: 0, rz: 0, hy: 540 }, ss],
+  [5.5, { cx: 830, cy: 400, s: 1.16, rx: 7, ry: -11, rz: 0, hy: 455 }],
+  [7.55, { cx: 880, cy: 430, s: 1.22, rx: 5, ry: -7, rz: 0, hy: 455 }, ss],
+  [8.2, { cx: 860, cy: 930, s: 1.1, rx: 5, ry: 10, rz: 0, hy: 455 }],
+  [10.65, { cx: 900, cy: 960, s: 1.15, rx: 3, ry: 6, rz: 0, hy: 455 }, ss],
+  [11.2, { cx: 2130, cy: 330, s: 1.6, rx: 3, ry: -7, rz: 0, hy: 455 }],
+  [12.2, { cx: 2130, cy: 590, s: 1.6, rx: 2, ry: -5, rz: 0, hy: 455 }, ss],
+  [12.62, { cx: 1790, cy: 600, s: 1.04, rx: 3, ry: -9, rz: 0, hy: 455 }],
+  [13.4, { cx: 1780, cy: 610, s: 1.06, rx: 3, ry: -8, rz: 0, hy: 455 }, ss],
+  [14.2, { cx: 3300, cy: 760, s: .52, rx: 34, ry: 0, rz: -12, hy: 730 }],
+  [16.85, { cx: 3520, cy: 780, s: .6, rx: 28, ry: 0, rz: -4, hy: 730 }, ss],
+  [17.8, { cx: 4070, cy: 1520, s: .166, rx: 22, ry: 0, rz: -5, hy: 720 }],
+  [19.4, { cx: 4100, cy: 1520, s: .176, rx: 18, ry: 0, rz: -2, hy: 720 }, ss],
+  [20.35, { cx: 4500, cy: 780, s: .735, rx: 0, ry: 0, rz: 0, hy: 455 }],
+  [23.2, { cx: 4500, cy: 780, s: .755, rx: 0, ry: 0, rz: 0, hy: 455 }, i3],
+  [23.75, { cx: 4500, cy: 780, s: .5, rx: 62, ry: 0, rz: 0, hy: 760 }]
+]
+function camera(t) {
+  const on = t >= 4.4 && t < 23.8; vis($('stage3d'), on); if (!on) return
+  let i = 0; while (i < KEYS.length - 2 && t >= KEYS[i + 1][0]) i++
+  const a = KEYS[i], b = KEYS[i + 1], e = a[2] || (x => x), k = e(p(t, a[0], b[0])), A = a[1], B = b[1]
+  const v = n => lerp(A[n], B[n], k), s = Math.exp(lerp(Math.log(A.s), Math.log(B.s), k))
+  $('world').style.transform = `translate(960px,${v('hy')}px) scale(${s}) rotateX(${v('rx')}deg) rotateY(${v('ry')}deg) rotateZ(${v('rz')}deg) translate(${-v('cx')}px,${-v('cy')}px)`
+  $('stage3d').style.opacity = 1 - p(t, 23.22, 23.46)
+}
+
+/* ---- rail ---- */
+const RAIL = [
+  [5.0, '01', 'autocomplete', 'Suggestions as you type.', 'ghost text, streamed from your model'],
+  [8.0, '02', 'inline edit', 'Say the change. Review the diff.', '<kbd>Ctrl</kbd><kbd>I</kbd> edit the selection'],
+  [11.0, '03', 'chat', 'Chat that knows the repo.', '<kbd>@</kbd> attach files, git, terminal'],
+  [12.6, '04–06', 'more', 'Code review. Workspace index. Terminal.', ''],
+  [20.3, 'teams', 'keys', 'A key per developer.', 'requested from VS Code · approved with a short code'],
+  [21.7, 'teams', 'usage', 'Usage per person. Never the content.', 'requests, failures and tokens']
+].map(r => {
+  const d = document.createElement('div'); d.className = 're'
+  d.innerHTML = `<div><span class="lab"><b>${r[1]}</b>${r[2]}</span><h2>${r[3]}</h2></div><div class="hintr">${r[4]}</div>`
+  $('railin').appendChild(d); return { t: r[0], d }
+})
+function rail(t) {
+  const up = Math.min(o5(p(t, 4.75, 5.1)) * (1 - i3(p(t, 13.45, 13.8))) + o5(p(t, 20.0, 20.35)) * (1 - i3(p(t, 23.15, 23.42))), 1)
+  vis($('rail'), up > 0); if (!up) return
+  $('rail').style.transform = `translateY(${(1 - up) * 172}px)`
+  RAIL.forEach((r, i) => {
+    const nx = RAIL[i + 1], tin = p(t, r.t, r.t + .3), tout = nx && nx.t - r.t < 6 ? p(t, nx.t - .16, nx.t) : 0
+    r.d.style.opacity = cl(tin * 2) * (1 - tout) * (t >= r.t && (!nx || t < nx.t) && !(i === 3 && t > 14) ? 1 : 0)
+    r.d.style.transform = `translateY(${(1 - o5(tin)) * 50 - i2(tout) * 40}px)`
+  })
+}
+
+/* ---- big type (14–20) ---- */
+function big(t) {
+  const on = t >= 13.6 && t < 20.2; vis($('big'), on); if (!on) return
+  const sub = (el, a, b, t0, t1) => {
+    const o = 1 - p(t, t1 - .22, t1); el.style.opacity = t >= t0 - .1 && t < t1 ? 1 : 0
+    const sp = el.querySelectorAll('h2 span'), lab = el.querySelector('.lab')
+    lab.style.opacity = p(t, t0, t0 + .2) * o
+    sp.forEach((s, i) => { const k = p(t, t0 + i * b, t0 + i * b + .26); s.style.opacity = cl(k * 3) * o; s.style.transform = `translateX(${(1 - o5(k)) * (i % 2 ? 1 : -1) * a - (1 - o) * 60}px)` })
+  }
+  sub($('b1'), 120, .08, 13.72, 16.8); sub($('b2'), 120, .07, 16.72, 19.62)
+}
+
+/* ---- numbers (23.5–26) ---- */
+cue(23.5, 'hit'); cue(23.75, 'hit'); cue(24.0, 'hit'); cue(24.1, 'trace'); cue(25.65, 'whoosh')
+function nums(t) {
+  const on = t >= 23.45 && t < 26.1; vis($('nums'), on); if (!on) return
+  ;[['n1', 23.5, -1], ['n2', 23.75, 1], ['n3', 24.0, -1]].forEach(([id, t0, dir], i) => {
+    const a = o5(p(t, t0, t0 + .5)), out = i3(p(t, 25.35 + i * .07, 25.7 + i * .07)), dr = (t - 23.5) * 8
+    $(id).style.transform = `translateX(${(1 - a) * dir * 900 + dr - out * 1900}px)`
+    $(id).style.opacity = cl(a * 3) * (1 - p(out, .6, 1)); $(id).style.filter = a < 1 ? `blur(${(1 - a) * 12}px)` : 'none'
+  })
+  html($('n1v'), fmtN(Math.floor(INSTALLS * o3(p(t, 23.5, 24.2)) / 1000) * 1000)); html($('n2v'), fmtN(Math.floor(STARS * o3(p(t, 23.75, 24.4)) / 100) * 100))
+}
+
+/* ---- end card (26–30) ---- */
+const TAG = ['The ', 'coding ', 'assistant ', 'that ', ['never ', 1], ['leaves', 2], ' your ', 'network.']
+$('tagl').innerHTML = TAG.map(w => Array.isArray(w) ? `<span class="q">${w[0]}${w[1] === 1 ? '<u style="right:-0.25em"></u>' : '<u></u>'}</span>` : `<span>${w}</span>`).join('')
+const tagw = [...$('tagl').children]
+cue(26.0, 'lock'); cue(26.5, 'tagline'); cue(27.3, 'pop')
+'twinny.dev'.split('').forEach((_, i) => cue(27.65 + i * .05, 'key'))
+function end(t) {
+  const on = t >= 25.5; vis($('end'), on); if (!on) return
+  $('end').style.transform = `scale(${1 + .04 * p(t, 26, 30)})`
+  $('grid').style.opacity = .75 * p(t, 26.0, 26.8); $('grid').style.backgroundPosition = `${(t - 26) * 5}px ${(t - 26) * -7}px`
+  $('glow').style.opacity = p(t, 26.1, 27)
+  const m = back(p(t, 25.95, 26.4)); $('mark').style.transform = `scale(${lerp(.8, 1, m)})`; $('mark').style.opacity = p(t, 25.94, 26.04)
+  const w = o5(p(t, 26.1, 26.6)); $('wm').style.clipPath = `inset(0 ${(1 - w) * 100}% 0 0)`; $('wm').firstElementChild.style.transform = `translateX(${(1 - w) * -60}px)`
+  tagw.forEach((s, i) => { const k = p(t, 26.5 + i * .06, 26.9 + i * .06); s.style.opacity = k; s.style.transform = `translateY(${(1 - o5(k)) * 34}px)`; const u = s.querySelector('u'); if (u) u.style.transform = `scaleX(${o5(p(t, 27.05 + (i - 4) * .12, 27.45 + (i - 4) * .12))})` })
+  const b = back(p(t, 27.3, 27.65)); $('btn').style.transform = `scale(${lerp(.8, 1, b)})`; $('btn').style.opacity = p(t, 27.3, 27.45)
+  $('btn').style.boxShadow = `0 0 0 ${lerp(0, 14, p(t, 27.5, 28.2))}px rgba(35,209,139,${.22 * (1 - p(t, 27.5, 28.2))})`
+  const n = Math.floor(10 * p(t, 27.62, 28.12))
+  html($('url'), 'twinny.dev'.slice(0, n) + ((t < 28.15 || ((t - 28.15) * 2) % 1 < .55) ? '<i></i>' : '<i style="opacity:0"></i>'))
+  $('url').style.opacity = p(t, 27.45, 27.65); $('url').style.transform = `translateX(${(1 - o5(p(t, 27.45, 27.8))) * -40}px)`
+  $('fine').style.opacity = p(t, 28.1, 28.5)
+}
+
+let CQ, CA, MARKR
+function measure() {
+  for (const r of rows) r.w = r.d.getBoundingClientRect().width
+  // caret homes: after "?" and after "Nowhere."
+  seekRaw(0); const q2 = $('q2').getBoundingClientRect(); CQ = [q2.right + 26, q2.top + 34, 30, 164]; W0y = q2.top + 34 + 82
+  seekRaw(3.9); const a = $('ans').getBoundingClientRect(); CA = [a.right + 34, a.top + 62, 46, 268]
+  seekRaw(29); const m = $('mark').getBoundingClientRect(); const sc = 1 + .04 * .75
+  MARKR = [960 + (m.left - 960) / sc - 6, 520 + (m.top - 520) / sc - 6, m.width / sc + 12, m.height / sc + 12]
+}
+function seekRaw(t) {
+  sceneA(t); camera(t)
+  if (t >= 4.3 && t < 24) { editor(t); network(t); admin(t) }
+  cards(t); rail(t); big(t); nums(t); end(t)
+  const head = wallS(t); if (CQ) caret(t, head)
+}
+function seek(t) { seekRaw(Math.max(0, Math.min(DUR, t))) }
+window.seek = seek; window.SFX = SFX; window.DUR = DUR
+window.ready = document.fonts.ready.then(() => Promise.all(['600 100px Geist', '400 40px Plex', 'italic 400 40px Plex', '500 40px Plex'].map(f => document.fonts.load(f)))).then(() => { measure(); seek(0) })
+if (!location.search.includes('render')) window.ready.then(() => {
+  // preview only: wall-clock playback, click to pause, ?t=12.5 to hold a frame
+  const q = new URLSearchParams(location.search)
+  if (q.has('t')) return seek(+q.get('t'))
+  let t0 = performance.now(), paused = false, at = 0
+  addEventListener('click', () => { paused = !paused; if (!paused) t0 = performance.now() - at * 1000 })
+  const loop = () => { if (!paused) { at = ((performance.now() - t0) / 1000) % DUR; seek(at) } requestAnimationFrame(loop) }
+  loop()
+})
+</script>
+</body>
+</html>

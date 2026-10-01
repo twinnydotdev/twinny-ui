@@ -1,6 +1,7 @@
 <script lang="ts">
   import Hero from '$lib/components/Hero.svelte'
   import Wire from '$lib/components/Wire.svelte'
+  import Watch from '$lib/components/Watch.svelte'
   import Features from '$lib/components/Features.svelte'
   import HowItWorks from '$lib/components/HowItWorks.svelte'
   import Teams from '$lib/components/Teams.svelte'
@@ -31,6 +32,7 @@
 
 <Hero />
 <Wire />
+<Watch />
 <Features />
 <HowItWorks />
 <Teams />
