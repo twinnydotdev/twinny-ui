@@ -135,13 +135,14 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     return answer(429, false, 'Too many messages from this connection. Try again later.')
   }
 
+  // answer() throws a redirect for plain form posts, so it is never called inside a try.
+  const raw = await request.text().catch(() => null)
+  if (raw === null) return answer(400, false, 'Could not read the form.')
+  if (raw.length > MAX_BODY) return answer(413, false, 'The message is too large.')
+  if (type !== 'application/json' && !isForm) return answer(415, false, 'Unsupported content type.')
   let data: Record<string, unknown>
   try {
-    const raw = await request.text()
-    if (raw.length > MAX_BODY) return answer(413, false, 'The message is too large.')
-    if (type === 'application/json') data = JSON.parse(raw)
-    else if (isForm) data = Object.fromEntries(new URLSearchParams(raw))
-    else return answer(415, false, 'Unsupported content type.')
+    data = isForm ? Object.fromEntries(new URLSearchParams(raw)) : JSON.parse(raw)
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('shape')
   } catch {
     return answer(400, false, 'Could not read the form.')
@@ -163,15 +164,15 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     log('503 not-configured')
     return answer(503, false, 'The form is not set up yet, so the message was not sent.')
   }
-  try {
-    const r = await send(v.values)
-    if (r.ok) {
-      log('200 sent', 'id=' + r.id)
-      return answer(200, true)
-    }
-    log('502 upstream', 'status=' + r.status, 'error=' + r.error)
-  } catch (e) {
-    log('502 upstream', e instanceof Error ? e.name : 'error')
+  const r = await send(v.values).catch((e: unknown) => ({
+    ok: false as const,
+    status: 0,
+    error: e instanceof Error ? e.name : 'error'
+  }))
+  if (r.ok) {
+    log('200 sent', 'id=' + r.id)
+    return answer(200, true)
   }
+  log('502 upstream', 'status=' + r.status, 'error=' + r.error)
   return answer(502, false, 'The email service did not accept the message. Try again.')
 }
