@@ -104,7 +104,7 @@ export const RIVALS: Rival[] = [
     phrase: 'an open-source alternative to Tabnine',
     title: 'twinny vs Tabnine: on-prem without the enterprise contract',
     description:
-      'Tabnine offers private and air-gapped deployment on its enterprise tier. twinny is on-prem by design, open source, free for five developers and $6 a seat after that.',
+      'Tabnine offers private and air-gapped deployment on its enterprise tier. twinny is on-prem by design, open source, free for five developers and $15 a seat after that.',
     intro:
       'Tabnine is the closest of the established tools: it can be deployed on your own infrastructure, air-gapped if needed, on its enterprise tier. twinny starts from that position for everyone. The difference is the contract, the price, and the source.',
     rows: [

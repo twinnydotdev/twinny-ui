@@ -26,11 +26,11 @@ export const MAINTAINED_SINCE = 2023
 // Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence
 // service (twinny-license serve) turns the payment into a token on its claim page.
 // Enterprise is invoice or purchase order, so it goes through the contact form (#contact).
-export const URL_BUY_TEAM = 'https://buy.stripe.com/eVq00igUndD80qW6AR7Zu00'
+export const URL_BUY_TEAM = 'https://buy.stripe.com/cNi6oGfQj6aG8Xs3oF7Zu03'
 
 // Pricing, per seat per month, billed yearly.
-export const PRICE_TEAM = 6
-export const PRICE_ENTERPRISE = 10
+export const PRICE_TEAM = 15
+export const PRICE_ENTERPRISE = 25
 export const FREE_SEATS = 5
 export const ENTERPRISE_MIN_SEATS = 50
 
