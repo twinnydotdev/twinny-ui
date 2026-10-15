@@ -314,7 +314,7 @@ export const INTENTS: Intent[] = [
       ],
       [
         'Does twinny support MCP?',
-        'No. The agent uses its own tools: files, search, git, the language servers and your terminal.'
+        'Yes, in agent mode. Name your MCP servers in the twinny.chatToolsMcpServers setting and their tools join the agent’s own, each call asking before it runs. Servers run on your machine over standard input and output; HTTP servers are not supported yet.'
       ],
       [
         'Is there a JetBrains plugin?',
@@ -361,11 +361,11 @@ export const INTENTS: Intent[] = [
       ],
       [
         'Does twinny have modes like Roo’s?',
-        'No. There is the chat, and agent mode is a switch on it. The system prompt is a template you can edit.'
+        'Two: chat, and agent mode, a switch on the chat (Shift+Tab). There are no custom modes with their own prompt and tools; the system prompt is one template you can edit.'
       ],
       [
         'Does twinny support MCP?',
-        'No. The agent uses its own tools: files, search, git, the language servers and your terminal.'
+        'Yes, in agent mode. Name your MCP servers in the twinny.chatToolsMcpServers setting and their tools join the agent’s own, each call asking before it runs. Servers run on your machine over standard input and output; HTTP servers are not supported yet.'
       ],
       [
         'Is agent mode finished?',
