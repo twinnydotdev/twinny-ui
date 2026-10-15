@@ -1,10 +1,14 @@
-// The pages under /with and /for: one search intent each, built from this file. Facts about a
-// runtime come from its page in ../twinny-docs/src/content/docs/providers; keep them in step.
+// The pages under /with, /for and /from: one search intent each, built from this file. Facts about
+// a runtime come from its page in ../twinny-docs/src/content/docs/providers; keep them in step.
+// The /from pages are for users of tools that stopped. What happened to each was read from its
+// own repository and site on 2026-10-15: github.com/RooCodeInc/Roo-Code (archived 15 May 2026,
+// "shut down on May 15th"), github.com/continuedev/continue (read-only, final 2.0.0 removed
+// usage tracking and sign-in, Apache 2.0) and continue.dev ("Continue was acquired by Cursor").
 import { URL_DOCS, PRICE_TEAM, FREE_SEATS, TRIAL_DAYS } from './const'
 
 export interface Intent {
-  /** URL: /with/<slug> for a runtime, /for/<slug> for a situation. */
-  kind: 'with' | 'for'
+  /** URL: /with/<slug> for a runtime, /for/<slug> for a situation, /from/<slug> for a move. */
+  kind: 'with' | 'for' | 'from'
   slug: string
   /** The search phrase, used in the title. */
   phrase: string
@@ -268,6 +272,108 @@ export const INTENTS: Intent[] = [
     ],
     doc: 'teams/policy/',
     docLabel: 'Team policy in the docs'
+  },
+  {
+    kind: 'from',
+    slug: 'continue',
+    phrase: 'a Continue alternative',
+    title: 'Moving from Continue to twinny: an open-source alternative for VS Code',
+    description:
+      'Continue was acquired by Cursor and its repository is read-only. twinny does the same jobs on your own models: autocomplete, chat, edits, an agent, a team gateway. Open source, free for five developers.',
+    h1: 'Continue is Cursor’s now. Your models still need an editor.',
+    intro:
+      'Continue was acquired by Cursor in 2026. Its repository is read-only and 2.0.0 was the final release. If you chose it because it was open source and ran on your own models, twinny is built for the same reasons and is still maintained: it talks to the same local servers, does the same three jobs, and adds a gateway for teams.',
+    steps: [
+      'Install twinny from the Marketplace or Open VSX. With a local server running, it finds it at first start and sets up chat, autocomplete and embeddings from the models you have.',
+      'Copy the rest across from your Continue config: each model there becomes a twinny provider. A chat role is a chat provider, autocomplete is an autocomplete provider, embed is an embeddings provider. Same host, port and model name.',
+      'Put your rules in the system prompt template, build the workspace index if you used codebase search, and turn on agent mode if you used Continue’s agent.'
+    ],
+    points: [
+      [
+        'The same jobs',
+        'Fill-in-the-middle autocomplete as you type, chat with @ mentions for files and symbols, inline edits shown as a diff, code review, commit messages, and an agent that reads, searches and edits files and runs commands, asking before each command unless you allow it.'
+      ],
+      [
+        'The same servers',
+        'Ollama, LM Studio, llama.cpp, LiteLLM, Open WebUI or any OpenAI-compatible server, on your machine or another. Hosted APIs too, if you want them.'
+      ],
+      [
+        'Shared config without a hub',
+        'Export the provider list as JSON and import it on another machine. For a team, twinny-server hands every developer a key and a policy from one place on your network.'
+      ],
+      TEAM_POINT
+    ],
+    faq: [
+      [
+        'Does my Continue install stop working?',
+        'Not on its own. But the repository is read-only, so it will get no more fixes, including for new versions of VS Code and of the model servers.'
+      ],
+      [
+        'Can twinny read my Continue config file?',
+        'No. Set the providers up once in the Providers tab, then use export and import for the next machine.'
+      ],
+      [
+        'Does twinny support MCP?',
+        'No. The agent uses its own tools: files, search, git, the language servers and your terminal.'
+      ],
+      [
+        'Is there a JetBrains plugin?',
+        'No. twinny is for VS Code and the editors that install from Open VSX, such as VSCodium.'
+      ]
+    ],
+    doc: 'providers/overview/',
+    docLabel: 'Providers in the docs'
+  },
+  {
+    kind: 'from',
+    slug: 'roo-code',
+    phrase: 'a Roo Code alternative',
+    title: 'Moving from Roo Code to twinny: an open-source alternative for VS Code',
+    description:
+      'Roo Code shut down on 15 May 2026 and its repository is archived. twinny is an open-source assistant for VS Code with an agent, autocomplete and chat on your own models. Free for five developers.',
+    h1: 'Roo Code has shut down. Your models still need an editor.',
+    intro:
+      'Roo Code shut down on 15 May 2026 and its repository is archived. If you used it with a model server of your own, twinny runs against the same servers, has an agent that edits files and runs commands, and adds autocomplete as you type and a gateway for teams.',
+    steps: [
+      'Install twinny from the Marketplace or Open VSX. With a local server running, it finds it at first start and sets up chat, autocomplete and embeddings from the models you have.',
+      'Add any other server you had in Roo as a provider: same host, port, model name and key. Hosted APIs are in the presets.',
+      'Turn on agent mode with Shift+Tab in the chat. Choose whether edits apply at once or open as a diff, and whether commands ask first.'
+    ],
+    points: [
+      [
+        'An agent with a leash',
+        'It lists, reads and searches files, asks the language servers, edits, renames and runs commands. Edits can open as a diff to accept; commands ask by default, or run from an allow list you build.'
+      ],
+      [
+        'Autocomplete as well',
+        'A small fill-in-the-middle model suggests code as you type, beside the chat model doing the agent work.'
+      ],
+      [
+        'Runs on what you run',
+        'Ollama, LM Studio, llama.cpp, LiteLLM or any OpenAI-compatible server. Agent mode wants a capable coder model with 8k tokens of context or more.'
+      ],
+      TEAM_POINT
+    ],
+    faq: [
+      [
+        'Does my Roo Code install stop working?',
+        'The extension was shut down and its repository archived, so it gets no more fixes, including for new versions of VS Code and of the model servers.'
+      ],
+      [
+        'Does twinny have modes like Roo’s?',
+        'No. There is the chat, and agent mode is a switch on it. The system prompt is a template you can edit.'
+      ],
+      [
+        'Does twinny support MCP?',
+        'No. The agent uses its own tools: files, search, git, the language servers and your terminal.'
+      ],
+      [
+        'Is agent mode finished?',
+        'It is marked experimental in the docs. Small models call tools badly; use a capable coder model.'
+      ]
+    ],
+    doc: 'features/agent-mode/',
+    docLabel: 'Agent mode in the docs'
   }
 ]
 

@@ -21,7 +21,8 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
 - Copy is short, dry, specific and vendor-neutral in the visible home-page copy: no model or
   runtime names there. Runtime names are allowed in the home page's meta description and
   structured data (people search for them), on `/with/<runtime>` and `/for/<situation>` pages
-  built from `src/lib/intent.ts` (facts from the docs' provider pages), and on `/vs/<slug>`
+  built from `src/lib/intent.ts` (facts from the docs' provider pages), on `/from/<tool>`
+  pages for tools that stopped (what happened, read from the tool's own repository and site), and on `/vs/<slug>`
   comparison pages built from `src/lib/compare.ts`. Every vendor fact and price on a /vs page
   was read from the vendor's own pricing page on the date in `CHECKED`; update both together.
 - Structured data is emitted through `jsonLd()` in `src/lib/seo.ts`, never as a literal

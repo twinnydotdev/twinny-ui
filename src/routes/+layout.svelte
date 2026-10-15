@@ -179,6 +179,8 @@
           <li><a href="/with/lm-studio">with LM Studio</a></li>
           <li><a href="/for/air-gapped">air-gapped</a></li>
           <li><a href="/for/regulated-teams">regulated teams</a></li>
+          <li><a href="/from/continue">from Continue</a></li>
+          <li><a href="/from/roo-code">from Roo Code</a></li>
         </ul>
       </div>
       <div>

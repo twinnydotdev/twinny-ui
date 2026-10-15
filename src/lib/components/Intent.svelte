@@ -21,7 +21,7 @@
   {@html jsonLd(
     breadcrumbs([
       ['twinny', '/'],
-      [intent.kind === 'with' ? 'with' : 'for', path],
+      [intent.kind, path],
       [intent.h1, path]
     ])
   )}
@@ -29,7 +29,7 @@
 
 <section class="section top">
   <div class="wrap">
-    <span class="label">{intent.kind === 'with' ? 'twinny with' : 'twinny for'}</span>
+    <span class="label">{intent.kind === 'from' ? 'moving from' : `twinny ${intent.kind}`}</span>
     <h1>{intent.h1}</h1>
     <p class="lede">{intent.intro}</p>
     <div class="ctas">
