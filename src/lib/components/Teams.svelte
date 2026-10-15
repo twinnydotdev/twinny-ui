@@ -15,7 +15,7 @@
     ],
     [
       'Team defaults and policy',
-      'Set the models once. Restrict which providers developers may add, keep a workspace on local backends, put a team system prompt before every chat.'
+      'Set the models once. Restrict which providers developers may add, keep a workspace on local backends, put a team system prompt before every chat. Decide what the agent may do: ask before every command, wait for review, keep out of paths.'
     ],
     ['Any backend, live', 'Swap the model on the admin page. The next request uses it.'],
     [

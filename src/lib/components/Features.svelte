@@ -6,6 +6,18 @@
   const features = [
     {
       n: '01',
+      title: 'Agent mode',
+      body: 'Shift+Tab and the chat model works in the workspace: reads, searches, asks the language servers, edits files and runs commands, each step shown in the reply. Commands ask before they run. Undo any file a reply changed. It follows AGENTS.md and takes MCP servers. Experimental; it wants a capable coder model.',
+      demo: [
+        ['dim', 'grep "userId"  ·  read_file src/auth.ts'],
+        ['dim', 'edit_file src/auth.ts  ·  run npm test  ✓'],
+        ['acc', '2 files changed +14 −3  ·  undo all']
+      ],
+      doc: 'features/agent-mode/',
+      wide: true
+    },
+    {
+      n: '02',
       title: 'Autocomplete',
       body: 'Fill-in-the-middle suggestions as you type, streamed as ghost text and cut off at a sensible end. Tuned to work well with a small model.',
       demo: [
@@ -15,7 +27,7 @@
       doc: 'features/code-completion/'
     },
     {
-      n: '02',
+      n: '03',
       title: 'Chat that knows the repo',
       body: 'Type @ to attach a file, a symbol, the problems panel, the git diff, the terminal, or a search of the workspace index.',
       demo: [
@@ -25,7 +37,7 @@
       doc: 'features/chat/'
     },
     {
-      n: '03',
+      n: '04',
       title: 'Inline edit',
       body: 'Ctrl+I, describe the change, review it as a diff in the editor. Accept or reject per hunk. Nothing is kept until you say so.',
       demo: [
@@ -35,7 +47,7 @@
       doc: 'features/inline-edit/'
     },
     {
-      n: '04',
+      n: '05',
       title: 'Workspace index',
       body: 'A hybrid keyword and vector index of the workspace, reranked before it reaches the prompt and updated on save.',
       demo: [
@@ -45,7 +57,7 @@
       doc: 'features/workspace-index/'
     },
     {
-      n: '05',
+      n: '06',
       title: 'Code review',
       body: 'Review the working tree, a branch against its base, or a GitHub pull request. The review lands in chat so you can ask follow-ups.',
       demo: [
@@ -55,7 +67,7 @@
       doc: 'features/code-review/'
     },
     {
-      n: '06',
+      n: '07',
       title: 'Terminal',
       body: 'Write a command from a description, shown before it runs. When one fails, twinny finds the file and line and offers the fix as a diff.',
       demo: [
@@ -81,7 +93,7 @@
 
     <div class="grid" use:pointer>
       {#each features as f, i}
-        <article class="card" use:reveal={i * 60}>
+        <article class="card" class:wide={f.wide} use:reveal={i * 60}>
           <header>
             <span class="n num">{f.n}</span>
             <h3>{f.title}</h3>
@@ -137,6 +149,10 @@
   }
   .card:hover {
     background: var(--panel);
+  }
+  /* The one wide card spans the row, so seven cards fill three columns and two. */
+  .wide {
+    grid-column: 1 / -1;
   }
   .card::before {
     content: '';

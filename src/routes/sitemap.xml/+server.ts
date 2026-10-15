@@ -13,6 +13,7 @@ export const prerender = true
 const ROUTES: [string, string[]][] = [
   ['/', ['src/routes/+page.svelte', 'src/lib/components', 'src/lib/const.ts']],
   ['/privacy', ['src/routes/privacy']],
+  ['/security', ['src/routes/security']],
   ['/changelog', ['src/lib/changelog.md']],
   ...RIVALS.map((r): [string, string[]] => [
     `/vs/${r.slug}`,

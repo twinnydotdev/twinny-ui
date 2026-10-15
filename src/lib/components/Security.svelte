@@ -162,7 +162,8 @@
         href={URL_GITHUB}
         target="_blank"
         rel="noopener noreferrer">source</a
-      >.
+      >. Every connection, what is kept and what an admin controls:
+      <a href="/security">the security page</a>.
     </p>
   </div>
 </section>
