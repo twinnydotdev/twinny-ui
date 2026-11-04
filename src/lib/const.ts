@@ -17,8 +17,7 @@ export const URL_GITHUB_SERVER =
   'https://github.com/twinnydotdev/twinny/tree/main/packages/twinny-server'
 export const URL_DISCUSSIONS = 'https://github.com/twinnydotdev/twinny/discussions'
 export const URL_X = 'https://x.com/twinnydotdev'
-export const URL_COMPANY = 'https://rjmacarthy.xyz'
-export const COMPANY = 'rjmacarthy.xyz'
+export const COMPANY = 'twinny'
 
 // The "in the open" block: no names, no photos, no team; just the public record.
 export const MAINTAINED_SINCE = 2023

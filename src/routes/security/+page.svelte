@@ -57,7 +57,7 @@
     ],
     [
       'Extension or gateway',
-      'twinny, rjmacarthy.xyz',
+      'twinny',
       'Never',
       'No telemetry, no update check, no crash reports, no licence check. There is no endpoint.'
     ]
@@ -167,7 +167,7 @@
         </div>
       </div>
       <div class="outside">
-        <div class="line never"><span>→ twinny, rjmacarthy.xyz</span><b>never</b></div>
+        <div class="line never"><span>→ twinny</span><b>never</b></div>
         <div class="line opt">
           <span>→ hosted API, git host, webhooks, identity provider, backup bucket</span><b
             >only what you switch on</b

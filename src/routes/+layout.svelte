@@ -8,7 +8,6 @@
     URL_OPENVSX,
     URL_X,
     URL_DISCUSSIONS,
-    URL_COMPANY,
     COMPANY,
     URL_DEMO,
     URL_SITE
@@ -147,11 +146,7 @@
           <span>twinny</span>
         </a>
         <p class="muted">
-          The AI coding assistant that stays inside your network. Open source, MIT licensed. Made by <a
-            href={URL_COMPANY}
-            target="_blank"
-            rel="noopener noreferrer">{COMPANY}</a
-          >.
+          The AI coding assistant that stays inside your network. Open source, MIT licensed.
         </p>
         <p class="dim">© {new Date().getFullYear()} {COMPANY}</p>
       </div>
