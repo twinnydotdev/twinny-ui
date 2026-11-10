@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Rival } from '$lib/compare'
   import { CHECKED } from '$lib/compare'
-  import { URL_MARKETPLACE, URL_DEMO, URL_SITE } from '$lib/const'
+  import { URL_MARKETPLACE, URL_DEMO, URL_SITE, URL_DOCS } from '$lib/const'
   import { reveal } from '$lib/reveal'
   import { jsonLd, breadcrumbs } from '$lib/seo'
 
@@ -85,9 +85,10 @@
     <span class="label">the same job, on your network</span>
     <h2>Autocomplete, chat, inline edit and code review in VS Code.</h2>
     <p class="lede">
-      Every feature is on the <a href="/#features">home page</a>, the team gateway under
-      <a href="/#teams">teams</a>, and the answers a security review asks for under
-      <a href="/#security">security</a>. Free for five developers, a trial for thirty days, and no
+      Every feature is on the <a href="/#features">home page</a>, the team gateway in the
+      <a href="{URL_DOCS}teams/overview/" target="_blank" rel="noopener noreferrer">docs</a>, and
+      the answers a security review asks for under
+      <a href="/security">security</a>. Free for five developers, a trial for thirty days, and no
       call needed to buy.
     </p>
     <div class="ctas">

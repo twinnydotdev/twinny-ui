@@ -29,6 +29,25 @@ setInterval(
   10 * 60 * 1000
 )
 
+const HOSTNAMES = (env.TURNSTILE_HOSTNAMES || 'twinny.dev,www.twinny.dev').split(',').map((h) => h.trim())
+
+// Cloudflare Turnstile, checked server-side. Without TURNSTILE_SECRET the check is skipped (logged).
+async function human(token: unknown, ip: string): Promise<boolean> {
+  if (!env.TURNSTILE_SECRET) return true
+  if (typeof token !== 'string' || !token || token.length > 2048) return false
+  try {
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip }),
+      signal: AbortSignal.timeout(10000)
+    })
+    const v = (await r.json()) as { success?: boolean; action?: string; hostname?: string }
+    return r.ok && v.success === true && v.action === 'trial' && HOSTNAMES.includes(v.hostname ?? '')
+  } catch {
+    return false
+  }
+}
+
 const str = (v: unknown) => (typeof v === 'string' ? v : '').replace(/\s+/g, ' ').trim()
 
 function log(...parts: unknown[]) {
@@ -81,8 +100,19 @@ export const POST: RequestHandler = async ({ request, getClientAddress }) => {
     return answer(200, true, { emailed: true })
   }
 
+  if (!env.TURNSTILE_SECRET) log('turnstile off: TURNSTILE_SECRET not set')
+  if (!(await human(data['cf-turnstile-response'], ip))) {
+    log('403 turnstile')
+    return fail(403, 'The robot check did not pass. Reload the page and try again.')
+  }
+
   const email = str(data.email)
   const org = str(data.org)
+  // The 2026-10 signup bot always sends this org; drop it quietly.
+  if (org.toLowerCase() === 'test company') {
+    log('200 dropped', 'bot-org')
+    return answer(200, true, { emailed: true })
+  }
   if (!EMAIL_RE.test(email) || email.length > LIMITS.email || /[,;<>]/.test(email))
     return fail(400, 'That email address does not look right.')
   if (org.length < 2 || org.length > LIMITS.org)

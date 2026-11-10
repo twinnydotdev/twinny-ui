@@ -9,12 +9,21 @@
 
 ## Design
 
-The site follows the twinny extension sidebar and the twinny-server admin page: dark ground
-(`#0d1012`), one green accent (`#23d18b`), Geist for headings and body, IBM Plex Mono for labels, buttons, code and
-every UI mock, hairline borders, 3px corners, no shadows, no gradients except a faint
-radial glow. All tokens live in `src/app.css`; do not introduce new colours in components.
+Monochrome and anonymous (redesigned 2026-11-08): near-black ground (`#0a0a0a`), off-white ink,
+greys, hairlines, square corners. No colour except `--signal` green for a single status mark (e.g.
+"sent."), no shadows, no gradients, no glow, no pointer effects, no animated headlines or
+underlines. `--accent` is off-white, so primary buttons are white on black. All tokens live in
+`src/app.css`; do not introduce new colours in components.
 
-- Every section opens with a `.label` (uppercase, tracked, green tick) and a `.section-head`.
+- The home page (`src/routes/+page.svelte`) is one 760px monospace column that reads like a
+  plain document: headline, one paragraph, install link, a dot-leader spec list, then `# what it
+  does`, `# for a team`, `# pricing` (plain table + `Trial.svelte`) and `# contact`
+  (`Contact.svelte`). No cards, no grids of features, no seat slider. Keep the ids `features`,
+  `teams`, `pricing`, `trial` and `contact`: the APIs redirect to `/#trial` and `/#contact`, and
+  other pages link to them.
+- Header is one line (brand, pricing, docs, source, install); footer is two lines of small links.
+- Nothing names a person: no maintainer, photo, team or "one person" framing anywhere.
+- Inner pages (/vs, /with, /for, /from, /security) still use `.label` + `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in
   `src/app.html`; do not add other scripts or trackers.
@@ -35,8 +44,6 @@ radial glow. All tokens live in `src/app.css`; do not introduce new colours in c
   build time and shown rounded down ("220,000+"). The headline number is Marketplace installs
   plus Open VSX downloads (Open VSX reports nothing else); the Marketplace download count is
   kept in the file but not shown, as it counts updates. Do not type numbers into components.
-- The "in the open" block (`Maker.svelte`) names nobody: no maintainer name, no photo, no team,
-  no "one person" framing. It is the public record only: installs, stars, year, licence.
 - Prices, seat rules and the trial's size live in `src/lib/const.ts` (the trial must match
   `TRIAL_DAYS`/`TRIAL_SEATS` in ../twinny-licence). `/api/trial` forwards to the licence service
   with `LICENSE_TRIAL_URL` and `LICENSE_TRIAL_SECRET` from `.env`. Claims about the product must match the docs at

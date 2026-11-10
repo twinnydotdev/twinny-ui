@@ -1,6 +1,6 @@
 // Structured data, emitted as a string: Svelte reads the braces of inline JSON as expressions,
 // so a literal <script type="application/ld+json"> in a component renders empty.
-import { URL_SITE, URL_MARKETPLACE, PRICE_TEAM, FREE_SEATS, TRIAL_DAYS } from './const'
+import { URL_SITE, URL_MARKETPLACE, PRICE_TEAM, PRICE_PERSONAL, FREE_SEATS, TRIAL_DAYS } from './const'
 import { INSTALLS_ALL, RATING, RATING_COUNT } from './stats'
 
 export const jsonLd = (data: unknown) =>
@@ -27,6 +27,13 @@ export const softwareApplication = () => ({
       price: '0',
       priceCurrency: 'USD',
       description: `Free for individuals and teams of up to ${FREE_SEATS}.`
+    },
+    {
+      '@type': 'Offer',
+      name: 'Personal',
+      price: String(PRICE_PERSONAL),
+      priceCurrency: 'USD',
+      description: 'Once, for good: policy, plugins and recording for one person on one gateway.'
     },
     {
       '@type': 'Offer',
@@ -88,7 +95,7 @@ export const HOME_FAQ: [string, string][] = [
   ],
   [
     'What does a team seat cost?',
-    `$${PRICE_TEAM} per seat per month beyond the free ${FREE_SEATS}, billed yearly. A seat is an active key on your gateway; revoke a key and the seat is free again. A ${TRIAL_DAYS}-day trial with every feature is issued by email, no card.`
+    `$${PRICE_TEAM} per seat per month beyond the free ${FREE_SEATS}, billed yearly. A seat is an active key on your gateway; revoke a key and the seat is free again. A ${TRIAL_DAYS}-day trial with every feature is issued by email, no card. Working alone? Personal is $${PRICE_PERSONAL} once, for good.`
   ],
   [
     'Does twinny work with no internet access?',

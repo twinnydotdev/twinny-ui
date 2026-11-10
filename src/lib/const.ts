@@ -26,9 +26,14 @@ export const MAINTAINED_SINCE = 2023
 // service (twinny-license serve) turns the payment into a token on its claim page.
 // Enterprise is invoice or purchase order, so it goes through the contact form (#contact).
 export const URL_BUY_TEAM = 'https://buy.stripe.com/cNi6oGfQj6aG8Xs3oF7Zu03'
+// Personal is a one-off Payment Link; the licence service issues the free seats with every
+// feature until 2099 (LICENSE_STRIPE_PERSONAL_PRODUCT_IDS in twinny-licence).
+export const URL_BUY_PERSONAL = 'https://buy.stripe.com/3cI5kCbA32Yu4Hc5wN7Zu07'
 
 // Pricing, per seat per month, billed yearly.
 export const PRICE_TEAM = 15
+// Personal: once, not per month.
+export const PRICE_PERSONAL = 29
 export const PRICE_ENTERPRISE = 25
 export const FREE_SEATS = 5
 export const ENTERPRISE_MIN_SEATS = 50

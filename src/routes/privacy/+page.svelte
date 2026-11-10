@@ -42,9 +42,9 @@
     </p>
     <h2>buying a licence</h2>
     <p>
-      Checkout runs on Stripe. We keep a record of each licence issued: organisation
-      name, seat count, expiry and the email the token was sent to. Nothing about your gateway or
-      its use is ever sent to us.
+      Checkout runs on Stripe. We keep a record of each licence issued: organisation name, seat
+      count, expiry and the email the token was sent to. Nothing about your gateway or its use is
+      ever sent to us.
     </p>
     <h2>this website</h2>
     <p>

@@ -1,7 +1,7 @@
 /*
- * twinny.dev — one token layer, shared with the extension's sidebar and the
- * gateway's admin page. The look is the shape of things: monospace, hairlines,
- * square corners, no shadows. Colour is spent on one green.
+ * twinny.dev — one token layer. Monochrome: near-black ground, off-white ink,
+ * hairlines, square corners, no shadows, no gradients, no glow. Monospace for
+ * everything on the home page; Geist only for long-form headings elsewhere.
  */
 @import '@fontsource-variable/geist';
 @import '@fontsource/ibm-plex-mono/400.css';
@@ -11,19 +11,21 @@
 
 :root {
   color-scheme: dark;
-  --bg: #0d1012;
-  --bg-2: #0a0c0e;
-  --panel: #131719;
-  --panel-2: #171c1f;
-  --line: #1f2629;
-  --line-2: #2a3236;
-  --ink: #d7dee2;
-  --ink-2: #8b979d;
-  --ink-3: #5b666b;
-  --accent: #23d18b;
-  --accent-ink: #0b1f16;
-  --accent-soft: rgba(35, 209, 139, 0.14);
-  --accent-line: rgba(35, 209, 139, 0.45);
+  --bg: #0a0a0a;
+  --bg-2: #070707;
+  --panel: #101010;
+  --panel-2: #151515;
+  --line: #1c1c1c;
+  --line-2: #2b2b2b;
+  --ink: #e6e6e1;
+  --ink-2: #9b9b95;
+  --ink-3: #64645f;
+  --accent: #e6e6e1;
+  --accent-ink: #0a0a0a;
+  --accent-soft: rgba(255, 255, 255, 0.07);
+  --accent-line: rgba(255, 255, 255, 0.32);
+  /* the one colour left: a status dot */
+  --signal: #23d18b;
   --bad: #e5484d;
   --warn: #c98500;
   --s1: #3987e5;
@@ -45,7 +47,7 @@
 
   --w: 1180px;
   --gutter: 24px;
-  --r: 3px;
+  --r: 0;
 }
 
 *,
@@ -179,7 +181,7 @@ button {
   content: '';
   width: 18px;
   height: 1px;
-  background: var(--accent);
+  background: var(--ink-3);
 }
 .label.bare::before {
   display: none;
@@ -222,8 +224,8 @@ button {
   font-weight: 600;
 }
 .btn.primary:hover {
-  background: #33e09a;
-  border-color: #33e09a;
+  background: #fff;
+  border-color: #fff;
   color: var(--accent-ink);
 }
 .btn.ghost {
@@ -252,8 +254,7 @@ button {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: var(--signal);
 }
 
 .panel {

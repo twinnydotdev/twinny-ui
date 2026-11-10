@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { reveal } from '$lib/reveal'
   import { TRIAL_DAYS, TRIAL_SEATS, URL_DOCS_LICENSING } from '$lib/const'
 
   type State = 'idle' | 'sending' | 'sent' | 'error'
@@ -8,8 +7,19 @@
   let error = $state('')
   let pageUrl = $state('')
   let opened = 0
+  let widget: HTMLDivElement
+  let widgetId: string | undefined
+  const SITE_KEY = '0x4AAAAAAF509ROLomQc-Xtp'
   onMount(() => {
     opened = Date.now()
+    const w = window as any
+    const render = () => (widgetId = w.turnstile.render(widget, { sitekey: SITE_KEY, action: 'trial' }))
+    if (w.turnstile) return void render()
+    w.onTurnstileLoad = render
+    const s = document.createElement('script')
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad'
+    s.async = true
+    document.head.append(s)
   })
 
   async function submit(e: SubmitEvent) {
@@ -38,52 +48,50 @@
       phase = 'error'
       error = 'The trial was not issued. Try again in a minute.'
     }
+    // Tokens are single-use: fresh one for any retry.
+    if (widgetId !== undefined) (window as any).turnstile?.reset(widgetId)
   }
 </script>
 
-<div class="trial panel" id="trial" use:reveal={240}>
-  <div class="intro">
-    <span class="label">{TRIAL_DAYS}-day trial</span>
-    <h3>Try Team before buying. No card.</h3>
-    <p>
-      A token by email: {TRIAL_SEATS} seats, policy, recording and plugins, for {TRIAL_DAYS} days. Paste
-      it into the admin page. When it ends the gateway goes back to the free plan; nothing is deleted,
-      and seats bought later carry on from there. One trial per address.
-      <a href={URL_DOCS_LICENSING} target="_blank" rel="noopener noreferrer">How licensing works</a
-      >.
-    </p>
-  </div>
+<div class="trial" id="trial">
+  <p class="intro">
+    <span class="k">{TRIAL_DAYS}-day trial, no card.</span> A Team token by email: {TRIAL_SEATS} seats,
+    policy, recording and plugins. When it ends the gateway goes back to free; nothing is deleted. One
+    per address.
+    <a href={URL_DOCS_LICENSING} target="_blank" rel="noopener noreferrer">licensing</a>
+  </p>
   <form method="post" action="/api/trial" onsubmit={submit}>
     <label>
-      <span>work email</span>
+      work email
       <input name="email" type="email" required maxlength="254" autocomplete="email" />
     </label>
     <label>
-      <span>team or organisation</span>
+      team or organisation
       <input name="org" type="text" required maxlength="120" autocomplete="organization" />
     </label>
     <label class="hp" aria-hidden="true">
-      <span>website</span>
+      website
       <input name="website" type="text" tabindex="-1" autocomplete="off" />
     </label>
-    <div class="foot">
-      <button class="btn primary" type="submit" disabled={phase === 'sending'}>
+    <div class="full" bind:this={widget}></div>
+    <div class="full foot">
+      <button class="btn" type="submit" disabled={phase === 'sending'}>
         {phase === 'sending' ? 'issuing…' : 'send me a trial token'}
       </button>
       <p class="status" aria-live="polite">
         {#if phase === 'sent'}
-          <span class="ok">✓ issued.</span>
+          <span class="ok">issued.</span>
           {#if pageUrl}
             Your token is on <a href={pageUrl} target="_blank" rel="noopener noreferrer"
               >your licence page</a
             >.
           {:else}
-            The token is in your inbox, with the install line. Check spam if it is not.
+            The token is in your inbox. Check spam if it is not.
           {/if}
         {:else if phase === 'error'}
           {error}
         {:else}
-          The address is kept on the licence only, as its contact. No list, no follow-up.
+          The address is kept on the licence only. No list, no follow-up.
         {/if}
       </p>
     </div>
@@ -91,99 +99,72 @@
 </div>
 
 <style>
-  .trial {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 28px 48px;
-    margin-top: 28px;
-    padding: 28px;
-  }
-  .intro h3 {
-    margin-top: 14px;
-    font-size: clamp(22px, 2.4vw, 28px);
-    letter-spacing: -0.03em;
-  }
-  .intro p {
-    margin-top: 12px;
-    color: var(--ink-2);
-    font-size: var(--fs-sm);
-    line-height: 1.6;
-  }
   form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 20px;
-    align-content: start;
+    gap: 16px 20px;
     font-family: var(--mono);
   }
   label {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     min-width: 0;
-  }
-  label span {
     color: var(--ink-3);
     font-size: var(--fs-xs);
-    letter-spacing: var(--track);
-    text-transform: uppercase;
+  }
+  .full {
+    grid-column: 1 / -1;
   }
   input {
     width: 100%;
-    min-width: 0;
-    padding: 0 12px;
-    height: 44px;
-    border: 1px solid var(--line-2);
-    border-radius: var(--r);
-    background: var(--bg);
+    padding: 9px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-2);
+    border-radius: 0;
     color: var(--ink);
     font: inherit;
-    font-size: var(--fs-sm);
-    transition: border-color 0.12s ease;
-  }
-  input:hover {
-    border-color: var(--ink-3);
+    font-size: 14px;
   }
   input:focus {
     outline: none;
-    border-color: var(--accent);
+    border-bottom-color: var(--ink);
   }
   .hp {
     position: absolute;
     left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
   }
   .foot {
-    grid-column: 1 / -1;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 12px 20px;
+    margin-top: 8px;
   }
   .status {
-    margin: 0;
     color: var(--ink-3);
     font-size: var(--fs-xs);
-    line-height: 1.5;
   }
   .ok {
-    color: var(--accent);
-  }
-  .btn[disabled] {
-    opacity: 0.6;
-    cursor: default;
-  }
-  @media (max-width: 800px) {
-    .trial {
-      grid-template-columns: minmax(0, 1fr);
-      padding: 20px 16px;
-    }
+    color: var(--signal);
   }
   @media (max-width: 640px) {
     form {
       grid-template-columns: minmax(0, 1fr);
     }
+  }
+  .trial {
+    margin-top: 40px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    scroll-margin-top: 16px;
+  }
+  .intro {
+    margin-bottom: 20px;
+    color: var(--ink-2);
+  }
+  .k {
+    color: var(--ink);
   }
 </style>
