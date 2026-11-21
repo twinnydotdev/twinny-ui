@@ -22,7 +22,7 @@ underlines. `--accent` is off-white, so primary buttons are white on black. All 
   `teams`, `pricing`, `trial` and `contact`: the APIs redirect to `/#trial` and `/#contact`, and
   other pages link to them.
 - Header is one line (brand, pricing, docs, source, install); footer is two lines of small links.
-- Nothing names a person: no maintainer, photo, team or "one person" framing anywhere.
+- Nothing names a person: no maintainer name, photo or team. The support section may say "me".
 - Inner pages (/vs, /with, /for, /from, /security) still use `.label` + `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in

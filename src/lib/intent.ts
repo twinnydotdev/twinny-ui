@@ -252,8 +252,8 @@ export const INTENTS: Intent[] = [
         'Keep prompts and replies on the gateway for review, audit and training data. Off by default, disclosed to every developer, deleted after a retention period you set.'
       ],
       [
-        'Procurement-shaped billing',
-        `$${PRICE_TEAM} a seat by card, or an invoice or purchase order from ${50} seats with a named contact. One organisation licence covers any number of gateways.`
+        'Simple billing',
+        `$${PRICE_TEAM} a seat a month by card, billed yearly, for seats beyond the free ${FREE_SEATS}.`
       ]
     ],
     faq: [

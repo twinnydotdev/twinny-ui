@@ -1,6 +1,6 @@
 <script lang="ts">
   import '../app.css'
-  import { URL_DOCS, URL_GITHUB, URL_MARKETPLACE, URL_SITE } from '$lib/const'
+  import { URL_DOCS, URL_GITHUB, URL_LOGOBRAWL, URL_MARKETPLACE, URL_SITE } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { page } from '$app/state'
 
@@ -47,7 +47,7 @@
       <span>twinny</span>
     </a>
     <nav aria-label="Main">
-      <a href="/#pricing">pricing</a>
+      <a href="/#pricing">support</a>
       <a href={URL_DOCS} target="_blank" rel="noopener noreferrer">docs</a>
       <a href={URL_GITHUB} target="_blank" rel="noopener noreferrer">source</a>
       <a class="install" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer">install</a
@@ -69,6 +69,12 @@
       ><span class="sep">·</span><a href="/#contact">contact</a><span class="sep">·</span><a
         href="/privacy">privacy</a
       ><span class="sep">·</span><span class="dim">MIT · no account · no telemetry</span>
+    </p>
+    <p>
+      <a class="brawl" href={URL_LOGOBRAWL} target="_blank" rel="noopener noreferrer">
+        <img src="/logobrawl.png" alt="" width="20" height="20" loading="lazy" />
+        twinny is fighting on Logo Brawl
+      </a>
     </p>
   </div>
 </footer>
@@ -138,6 +144,12 @@
   }
   .foot a {
     color: var(--ink-3);
+  }
+  .brawl {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 24px;
   }
   .sep {
     margin-inline: 8px;

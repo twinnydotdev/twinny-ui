@@ -17,6 +17,7 @@ export const URL_GITHUB_SERVER =
   'https://github.com/twinnydotdev/twinny/tree/main/packages/twinny-server'
 export const URL_DISCUSSIONS = 'https://github.com/twinnydotdev/twinny/discussions'
 export const URL_X = 'https://x.com/twinnydotdev'
+export const URL_LOGOBRAWL = 'https://logobrawl.com/f/2214'
 export const COMPANY = 'twinny'
 
 // The "in the open" block: no names, no photos, no team; just the public record.
@@ -24,7 +25,6 @@ export const MAINTAINED_SINCE = 2023
 
 // Checkout. The Team link is a Stripe Payment Link (yearly, quantity is seats); the licence
 // service (twinny-license serve) turns the payment into a token on its claim page.
-// Enterprise is invoice or purchase order, so it goes through the contact form (#contact).
 export const URL_BUY_TEAM = 'https://buy.stripe.com/cNi6oGfQj6aG8Xs3oF7Zu03'
 // Personal is a one-off Payment Link; the licence service issues the free seats with every
 // feature until 2099 (LICENSE_STRIPE_PERSONAL_PRODUCT_IDS in twinny-licence).
@@ -34,9 +34,7 @@ export const URL_BUY_PERSONAL = 'https://buy.stripe.com/3cI5kCbA32Yu4Hc5wN7Zu07'
 export const PRICE_TEAM = 15
 // Personal: once, not per month.
 export const PRICE_PERSONAL = 29
-export const PRICE_ENTERPRISE = 25
 export const FREE_SEATS = 5
-export const ENTERPRISE_MIN_SEATS = 50
 
 // The free trial: a Team token for a month, issued by the licence service through /api/trial.
 // Must match TRIAL_DAYS and TRIAL_SEATS in twinny-licence.

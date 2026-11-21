@@ -1,4 +1,4 @@
-// The enterprise enquiry form. One JSON (or form-encoded) POST, validated here, sent on
+// The contact form. One JSON (or form-encoded) POST, validated here, sent on
 // through the Resend API to CONTACT_TO with the sender as reply-to. Nothing is stored; the
 // log carries status words only. Needs RESEND_API_KEY, CONTACT_TO and CONTACT_FROM.
 import { json, redirect } from '@sveltejs/kit'

@@ -38,34 +38,19 @@
   }
 </script>
 
-<p class="intro">
-  Enterprise, invoices, a call, or anything else. A reply within one business day, to the address
-  you give.
-</p>
+<p class="intro">Questions, bugs, or anything else. The reply comes to the address you give.</p>
 <form method="post" action="/api/contact" onsubmit={submit}>
   <label>
     name
     <input name="name" type="text" required maxlength="100" autocomplete="name" />
   </label>
   <label>
-    work email
+    email
     <input name="email" type="email" required maxlength="254" autocomplete="email" />
-  </label>
-  <label>
-    organisation
-    <input name="org" type="text" maxlength="120" autocomplete="organization" />
-  </label>
-  <label>
-    developers
-    <input name="seats" type="number" min="1" max="100000" inputmode="numeric" />
   </label>
   <label class="full">
     message
     <textarea name="message" rows="4" required minlength="10" maxlength="4000"></textarea>
-  </label>
-  <label class="full check">
-    <input name="call" type="checkbox" value="yes" />
-    I would like a call
   </label>
   <label class="hp" aria-hidden="true">
     website
@@ -124,16 +109,6 @@
   textarea:focus {
     outline: none;
     border-bottom-color: var(--ink);
-  }
-  .check {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    font-size: var(--fs-sm);
-  }
-  .check input {
-    width: auto;
-    accent-color: var(--ink);
   }
   .hp {
     position: absolute;

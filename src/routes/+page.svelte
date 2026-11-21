@@ -13,9 +13,7 @@
     URL_BUY_PERSONAL,
     PRICE_TEAM,
     PRICE_PERSONAL,
-    PRICE_ENTERPRISE,
     FREE_SEATS,
-    ENTERPRISE_MIN_SEATS,
     TRIAL_DAYS
   } from '$lib/const'
   import { jsonLd, softwareApplication, faqPage, HOME_FAQ } from '$lib/seo'
@@ -135,7 +133,16 @@
   </section>
 
   <section id="pricing">
-    <h2>pricing</h2>
+    <h2>support twinny</h2>
+    <p>
+      The extension is free and MIT. If it saves you time, a licence is the best way to support me
+      and keep twinny going.
+    </p>
+    <p class="go">
+      <a class="btn primary" href={URL_BUY_PERSONAL} target="_blank" rel="noopener noreferrer"
+        >support twinny, ${PRICE_PERSONAL} once</a
+      >
+    </p>
     <table>
       <tbody>
         <tr>
@@ -148,8 +155,8 @@
           <th scope="row">personal</th>
           <td class="num">${PRICE_PERSONAL}</td>
           <td>
-            once, for good. One person, one key on all your machines: policy, plugins,
-            recording, every future update.
+            once, for good. One person, one key on all your machines: policy, plugins, recording,
+            every future update.
           </td>
           <td><a href={URL_BUY_PERSONAL} target="_blank" rel="noopener noreferrer">buy</a></td>
         </tr>
@@ -164,15 +171,6 @@
             <a href={URL_BUY_TEAM} target="_blank" rel="noopener noreferrer">buy</a>
             <a href="#trial">{TRIAL_DAYS}-day trial</a>
           </td>
-        </tr>
-        <tr>
-          <th scope="row">enterprise</th>
-          <td class="num">${PRICE_ENTERPRISE}</td>
-          <td>
-            per seat a month, from {ENTERPRISE_MIN_SEATS} seats. One licence for every gateway, a named
-            contact, invoice or purchase order.
-          </td>
-          <td><a href="#contact">contact</a></td>
         </tr>
       </tbody>
     </table>
@@ -312,6 +310,7 @@
   }
   table {
     width: 100%;
+    margin-top: 36px;
     border-collapse: collapse;
   }
   th,
