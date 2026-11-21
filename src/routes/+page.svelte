@@ -116,6 +116,10 @@
 </div>
 
 <style>
+  /* The header and footer line up with the column on this page only. */
+  :global(body:has(.doc) :is(.top, .foot) .wrap) {
+    max-width: 620px;
+  }
   .doc {
     max-width: 620px;
     font-size: 17px;

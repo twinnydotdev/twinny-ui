@@ -57,8 +57,8 @@
 
 <div class="trial" id="trial">
   <p class="intro">
-    <span class="k">Try it free for {TRIAL_DAYS} days, no card.</span> We'll email you a Team token
-    with {TRIAL_SEATS} seats. When it ends you're back on free and nothing is deleted. One per address.
+    <span class="k">Try it free for {TRIAL_DAYS} days, no card.</span> A Team token by email, with {TRIAL_SEATS}
+    seats. When it ends you're back on free and nothing is deleted. One per address.
   </p>
   <form method="post" action="/api/trial" onsubmit={submit}>
     <label>
@@ -76,7 +76,7 @@
     <div class="full" bind:this={widget}></div>
     <div class="full foot">
       <button class="btn" type="submit" disabled={phase === 'sending'}>
-        {phase === 'sending' ? 'Sending…' : 'Send my trial'}
+        {phase === 'sending' ? 'Sending…' : 'Start trial'}
       </button>
       <p class="status" aria-live="polite">
         {#if phase === 'sent'}
@@ -110,7 +110,7 @@
     flex-direction: column;
     gap: 6px;
     min-width: 0;
-    color: var(--ink-3);
+    color: var(--ink-2);
     font-size: var(--fs-xs);
   }
   .full {
@@ -143,7 +143,7 @@
     margin-top: 8px;
   }
   .status {
-    color: var(--ink-3);
+    color: var(--ink-2);
     font-size: var(--fs-xs);
   }
   .ok {

@@ -84,7 +84,7 @@
     flex-direction: column;
     gap: 6px;
     min-width: 0;
-    color: var(--ink-3);
+    color: var(--ink-2);
     font-size: var(--fs-xs);
   }
   .full {
@@ -122,7 +122,7 @@
     margin-top: 8px;
   }
   .status {
-    color: var(--ink-3);
+    color: var(--ink-2);
     font-size: var(--fs-xs);
   }
   .ok {
