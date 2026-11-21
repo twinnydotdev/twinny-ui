@@ -38,7 +38,7 @@
   }
 </script>
 
-<p class="intro">Questions, bugs, or anything else. The reply comes to the address you give.</p>
+<p class="intro">Questions, bugs or anything else.</p>
 <form method="post" action="/api/contact" onsubmit={submit}>
   <label>
     name
@@ -58,11 +58,11 @@
   </label>
   <div class="full foot">
     <button class="btn primary" type="submit" disabled={phase === 'sending'}>
-      {phase === 'sending' ? 'sending…' : 'send'}
+      {phase === 'sending' ? 'Sending…' : 'Send'}
     </button>
     <p class="status" aria-live="polite">
       {#if phase === 'sent'}
-        <span class="ok">sent.</span> The reply comes to the address you gave.
+        <span class="ok">Sent.</span> The reply will come to the address you gave.
       {:else if phase === 'error'}
         {error}
       {:else}

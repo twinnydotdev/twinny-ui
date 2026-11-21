@@ -15,19 +15,20 @@ greys, hairlines, square corners. No colour except `--signal` green for a single
 underlines. `--accent` is off-white, so primary buttons are white on black. All tokens live in
 `src/app.css`; do not introduce new colours in components.
 
-- The home page (`src/routes/+page.svelte`) is one 760px monospace column that reads like a
-  plain document: headline, one paragraph, install link, a dot-leader spec list, then `# what it
-  does`, `# for a team`, `# pricing` (plain table + `Trial.svelte`) and `# contact`
-  (`Contact.svelte`). No cards, no grids of features, no seat slider. Keep the ids `features`,
-  `teams`, `pricing`, `trial` and `contact`: the APIs redirect to `/#trial` and `/#contact`, and
-  other pages link to them.
+- The home page (`src/routes/+page.svelte`) is one 620px Geist column that reads like a short
+  note: headline, one paragraph, install link, then `What's inside`, `Support twinny`
+  (`#pricing`, the Personal licence is the one primary button below the hero), `For teams`
+  (Team price + `Trial.svelte`) and `Contact` (`Contact.svelte`). No cards, tables or feature
+  grids. Keep the ids `features`, `teams`, `pricing`, `trial` and `contact`: the APIs redirect to
+  `/#trial` and `/#contact`, and other pages link to them.
 - Header is one line (brand, pricing, docs, source, install); footer is two lines of small links.
-- Nothing names a person: no maintainer name, photo or team. The support section may say "me".
+- Nothing names a person: no maintainer name, photo or team, and no "I" or "me" in the copy.
 - Inner pages (/vs, /with, /for, /from, /security) still use `.label` + `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
 - Fonts are self-hosted via `@fontsource`. The only third-party requests are the Google tag in
   `src/app.html` and the Logo Brawl badge image in the footer; do not add other scripts or trackers.
-- Copy is short, dry, specific and vendor-neutral in the visible home-page copy: no model or
+- Home-page copy is friendly, plain and second person, never pleading or first person; short, specific
+  and vendor-neutral in the visible home-page copy: no model or
   runtime names there. Runtime names are allowed in the home page's meta description and
   structured data (people search for them), on `/with/<runtime>` and `/for/<situation>` pages
   built from `src/lib/intent.ts` (facts from the docs' provider pages), on `/from/<tool>`

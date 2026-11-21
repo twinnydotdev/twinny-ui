@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { TRIAL_DAYS, TRIAL_SEATS, URL_DOCS_LICENSING } from '$lib/const'
+  import { TRIAL_DAYS, TRIAL_SEATS } from '$lib/const'
 
   type State = 'idle' | 'sending' | 'sent' | 'error'
   let phase = $state<State>('idle')
@@ -13,11 +13,13 @@
   onMount(() => {
     opened = Date.now()
     const w = window as any
-    const render = () => (widgetId = w.turnstile.render(widget, { sitekey: SITE_KEY, action: 'trial' }))
+    const render = () =>
+      (widgetId = w.turnstile.render(widget, { sitekey: SITE_KEY, action: 'trial' }))
     if (w.turnstile) return void render()
     w.onTurnstileLoad = render
     const s = document.createElement('script')
-    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad'
+    s.src =
+      'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad'
     s.async = true
     document.head.append(s)
   })
@@ -55,10 +57,8 @@
 
 <div class="trial" id="trial">
   <p class="intro">
-    <span class="k">{TRIAL_DAYS}-day trial, no card.</span> A Team token by email: {TRIAL_SEATS} seats,
-    policy, recording and plugins. When it ends the gateway goes back to free; nothing is deleted. One
-    per address.
-    <a href={URL_DOCS_LICENSING} target="_blank" rel="noopener noreferrer">licensing</a>
+    <span class="k">Try it free for {TRIAL_DAYS} days, no card.</span> We'll email you a Team token
+    with {TRIAL_SEATS} seats. When it ends you're back on free and nothing is deleted. One per address.
   </p>
   <form method="post" action="/api/trial" onsubmit={submit}>
     <label>
@@ -76,7 +76,7 @@
     <div class="full" bind:this={widget}></div>
     <div class="full foot">
       <button class="btn" type="submit" disabled={phase === 'sending'}>
-        {phase === 'sending' ? 'issuing…' : 'send me a trial token'}
+        {phase === 'sending' ? 'Sending…' : 'Send my trial'}
       </button>
       <p class="status" aria-live="polite">
         {#if phase === 'sent'}
@@ -91,7 +91,7 @@
         {:else if phase === 'error'}
           {error}
         {:else}
-          The address is kept on the licence only. No list, no follow-up.
+          Your address stays on the licence. No mailing list, no follow-ups.
         {/if}
       </p>
     </div>
@@ -156,8 +156,6 @@
   }
   .trial {
     margin-top: 40px;
-    padding: 24px;
-    border: 1px solid var(--line);
     scroll-margin-top: 16px;
   }
   .intro {
