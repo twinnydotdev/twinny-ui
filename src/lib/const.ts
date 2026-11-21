@@ -18,6 +18,7 @@ export const URL_GITHUB_SERVER =
 export const URL_DISCUSSIONS = 'https://github.com/twinnydotdev/twinny/discussions'
 export const URL_X = 'https://x.com/twinnydotdev'
 export const URL_LOGOBRAWL = 'https://logobrawl.com/f/2214'
+export const URL_LOGOBRAWL_BADGE = 'https://logobrawl.com/api/arena/badge/2214.svg'
 export const COMPANY = 'twinny'
 
 // The "in the open" block: no names, no photos, no team; just the public record.

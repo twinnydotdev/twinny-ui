@@ -1,6 +1,13 @@
 <script lang="ts">
   import '../app.css'
-  import { URL_DOCS, URL_GITHUB, URL_LOGOBRAWL, URL_MARKETPLACE, URL_SITE } from '$lib/const'
+  import {
+    URL_DOCS,
+    URL_GITHUB,
+    URL_LOGOBRAWL,
+    URL_LOGOBRAWL_BADGE,
+    URL_MARKETPLACE,
+    URL_SITE
+  } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { page } from '$app/state'
 
@@ -72,8 +79,14 @@
     </p>
     <p>
       <a class="brawl" href={URL_LOGOBRAWL} target="_blank" rel="noopener noreferrer">
-        <img src="/logobrawl.png" alt="" width="20" height="20" loading="lazy" />
-        twinny is fighting on Logo Brawl
+        <img
+          src={URL_LOGOBRAWL_BADGE}
+          alt="twinny in Logo Brawl"
+          width="247"
+          height="56"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        />
       </a>
     </p>
   </div>
@@ -146,10 +159,14 @@
     color: var(--ink-3);
   }
   .brawl {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 24px;
+    display: inline-block;
+    margin-top: 12px;
+  }
+  .brawl img {
+    display: block;
+    max-width: 100%;
+    height: 56px;
+    width: auto;
   }
   .sep {
     margin-inline: 8px;

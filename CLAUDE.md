@@ -25,8 +25,8 @@ underlines. `--accent` is off-white, so primary buttons are white on black. All 
 - Nothing names a person: no maintainer name, photo or team. The support section may say "me".
 - Inner pages (/vs, /with, /for, /from, /security) still use `.label` + `.section-head`.
 - Grids use `minmax(0, 1fr)` tracks so long monospace lines never widen a column on phones.
-- Fonts are self-hosted via `@fontsource`. The only third-party request is the Google tag in
-  `src/app.html`; do not add other scripts or trackers.
+- Fonts are self-hosted via `@fontsource`. The only third-party requests are the Google tag in
+  `src/app.html` and the Logo Brawl badge image in the footer; do not add other scripts or trackers.
 - Copy is short, dry, specific and vendor-neutral in the visible home-page copy: no model or
   runtime names there. Runtime names are allowed in the home page's meta description and
   structured data (people search for them), on `/with/<runtime>` and `/for/<situation>` pages
