@@ -1,7 +1,7 @@
 // The comparison pages under /vs. The only place on the site that names another product.
 // Every vendor fact here was read from the vendor's own pricing page on the date below; when
 // one changes, change it here and the date with it. Prices are list prices, per user, per month.
-import { PRICE_TEAM, FREE_SEATS } from './const'
+import { PRICE_TEAM, PRICE_PERSONAL, FREE_SEATS } from './const'
 
 export const CHECKED = 'September 2026'
 
@@ -18,6 +18,10 @@ export interface Rival {
   /** Fair play: when the other product is the better choice. */
   pickThem: string[]
   pickUs: string[]
+  /** Questions people search, answered on the page and in FAQPage data. */
+  faq?: [string, string][]
+  /** [href, anchor]: related pages, linked under the closing section. */
+  related?: [string, string][]
 }
 
 const TWINNY_PRICE = `Free for ${FREE_SEATS} seats on a gateway; $${PRICE_TEAM} per extra seat, billed yearly.`
@@ -31,7 +35,7 @@ export const RIVALS: Rival[] = [
     description:
       'GitHub Copilot sends code to GitHub to be completed. twinny does the same job in VS Code against a model server on your own machine or network, open source and free for five developers.',
     intro:
-      'Copilot is a hosted service: the editor sends your code to GitHub, and GitHub sends it on to the model. That is fine for most teams and impossible for some. twinny is the same set of features in VS Code against a model you run, so nothing leaves the building.',
+      'GitHub does not offer a self-hosted Copilot. It is a hosted service: the editor sends your code to GitHub, and GitHub sends it on to the model. That is fine for most teams and impossible for some. twinny is the same set of features in VS Code against a model you run, so nothing leaves the building.',
     rows: [
       [
         'Where your code goes',
@@ -59,7 +63,27 @@ export const RIVALS: Rival[] = [
       'Code must not leave the network, or the network has no internet.',
       'You already have GPUs, or a private inference endpoint, and want them used.',
       'You want to read the source of the thing that reads your source.'
-    ]
+    ],
+    // Enterprise Server note read on docs.github.com/en/copilot/get-started/plans, 2026-11-26.
+    faq: [
+      [
+        'Is there a self-hosted GitHub Copilot?',
+        "No. GitHub's own plans page says Copilot is not currently available for GitHub Enterprise Server, and Copilot runs on GitHub's service. A self-hosted setup pairs an editor extension with a model server you run: twinny in VS Code with Ollama, llama.cpp, LM Studio or any OpenAI-compatible server, on a laptop or a machine on your network."
+      ],
+      [
+        'Which GitHub Copilot competitors run on your own network?',
+        'Tabnine can be deployed on your own infrastructure on its enterprise tier. Cursor is a separate editor with hosted models. twinny is an open-source VS Code extension that only talks to the model server you configure.'
+      ],
+      [
+        'Is twinny a free Copilot alternative?',
+        `Yes. The extension is MIT licensed, with no account and nothing to pay. A shared team gateway is free for ${FREE_SEATS} developers; bigger teams pay $${PRICE_TEAM} per extra seat a month, billed yearly, and one person can buy Personal for $${PRICE_PERSONAL} once.`
+      ],
+      [
+        'Does it work without internet?',
+        'Yes, with a local model server. Completion, chat and the workspace index all run on your machine, and the team gateway checks its licence offline.'
+      ]
+    ],
+    related: [['/for/air-gapped', 'an AI coding assistant for air-gapped networks']]
   },
   {
     slug: 'cursor',
@@ -96,7 +120,8 @@ export const RIVALS: Rival[] = [
       'Switching editors is not on the table, or extensions and settings must stay as they are.',
       'Code must not leave the network, or you have your own inference to use.',
       'You want to see what is sent, and to whom, in the source.'
-    ]
+    ],
+    related: [['/vs/github-copilot', 'GitHub Copilot competitors that run on your network']]
   },
   {
     slug: 'tabnine',
@@ -141,6 +166,7 @@ export const RIVALS: Rival[] = [
       'You want on-prem at a price a team lead can approve without procurement.',
       'You already run a model server and want the editor side to just use it.',
       'You want to read the code that handles your code.'
-    ]
+    ],
+    related: [['/vs/github-copilot', 'a self-hosted Copilot alternative']]
   }
 ]

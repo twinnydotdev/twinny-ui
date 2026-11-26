@@ -3,12 +3,16 @@
   import { CHECKED } from '$lib/compare'
   import { URL_MARKETPLACE, URL_DEMO, URL_SITE, URL_DOCS } from '$lib/const'
   import { reveal } from '$lib/reveal'
-  import { jsonLd, breadcrumbs } from '$lib/seo'
+  import { jsonLd, breadcrumbs, faqPage } from '$lib/seo'
 
   let { rival }: { rival: Rival } = $props()
 </script>
 
 <svelte:head>
+  {#if rival.faq}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -- our own build-time content -->
+    {@html jsonLd(faqPage(rival.faq))}
+  {/if}
   <title>{rival.title}</title>
   <meta name="description" content={rival.description} />
   <meta property="og:title" content={rival.title} />
@@ -80,6 +84,20 @@
   </div>
 </section>
 
+{#if rival.faq}
+  <section class="section">
+    <div class="wrap">
+      <span class="label">questions</span>
+      <dl class="faq" use:reveal={0}>
+        {#each rival.faq as [q, a]}
+          <dt>{q}</dt>
+          <dd>{a}</dd>
+        {/each}
+      </dl>
+    </div>
+  </section>
+{/if}
+
 <section class="section">
   <div class="wrap">
     <span class="label">the same job, on your network</span>
@@ -91,6 +109,9 @@
       <a href="/security">security</a>. Free for five developers, a trial for thirty days, and no
       call needed to buy.
     </p>
+    {#each rival.related ?? [] as [href, anchor]}
+      <p class="fine">See also: <a {href}>{anchor}</a>.</p>
+    {/each}
     <div class="ctas">
       <a class="btn primary" href={URL_MARKETPLACE} target="_blank" rel="noopener noreferrer"
         >install for VS Code</a
@@ -174,6 +195,21 @@
     font-family: var(--mono);
     line-height: 1.6;
     max-width: 90ch;
+  }
+  .faq {
+    margin: 24px 0 0;
+    max-width: 72ch;
+  }
+  dt {
+    margin-top: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  dd {
+    margin: 8px 0 0;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.6;
   }
   .two {
     display: grid;
