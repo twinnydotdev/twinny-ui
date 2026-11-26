@@ -83,9 +83,9 @@ export const INTENTS: Intent[] = [
     kind: 'with',
     slug: 'llama-cpp',
     phrase: 'VS Code with llama.cpp',
-    title: 'twinny: VS Code code completion and chat with llama.cpp',
+    title: 'llama.cpp in VS Code: autocomplete and chat | twinny',
     description:
-      'Use llama-server from llama.cpp for autocomplete, chat, inline edit and code review in VS Code. Your GGUF, your context size, your GPU offload. Open source, free.',
+      'Connect VS Code to llama.cpp (llama-server) for local autocomplete, chat, inline edit and code review. Your GGUF, your flags. Free and open source.',
     h1: 'VS Code, straight onto llama-server.',
     intro:
       'llama.cpp is the engine behind most local servers. Running its own llama-server gives you full control of the model file, context size, GPU offload and threads, with the least overhead. twinny talks to it directly: one server per model, on whatever ports you choose.',
