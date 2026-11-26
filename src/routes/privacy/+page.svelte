@@ -51,9 +51,7 @@
       Static pages. Fonts are served from this domain. The site uses Google Analytics to count
       visits; nothing you type into twinny or your gateway ever reaches it. The server keeps
       ordinary access logs for a short time to keep the site up. The contact form sends what you
-      type as one email to us through Resend, a mail API; the site keeps no copy. The badge in the
-      footer is an image loaded from logobrawl.com, so that server sees your IP address when it
-      loads.
+      type as one email to us through Resend, a mail API; the site keeps no copy.
     </p>
     <p class="muted">
       Questions: the

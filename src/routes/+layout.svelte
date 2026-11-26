@@ -3,8 +3,6 @@
   import {
     URL_DOCS,
     URL_GITHUB,
-    URL_LOGOBRAWL,
-    URL_LOGOBRAWL_BADGE,
     URL_MARKETPLACE,
     URL_SITE
   } from '$lib/const'
@@ -77,18 +75,6 @@
         href="/privacy">privacy</a
       ><span class="sep">·</span><span class="dim">MIT · no account · no telemetry</span>
     </p>
-    <p>
-      <a class="brawl" href={URL_LOGOBRAWL} target="_blank" rel="noopener noreferrer">
-        <img
-          src={URL_LOGOBRAWL_BADGE}
-          alt="twinny in Logo Brawl"
-          width="247"
-          height="56"
-          loading="lazy"
-          referrerpolicy="no-referrer"
-        />
-      </a>
-    </p>
   </div>
 </footer>
 
@@ -157,16 +143,6 @@
   }
   .foot a {
     color: var(--ink-3);
-  }
-  .brawl {
-    display: inline-block;
-    margin-top: 12px;
-  }
-  .brawl img {
-    display: block;
-    max-width: 100%;
-    height: 56px;
-    width: auto;
   }
   .sep {
     margin-inline: 8px;
