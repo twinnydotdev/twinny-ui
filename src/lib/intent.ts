@@ -4,7 +4,7 @@
 // own repository and site on 2026-10-15: github.com/RooCodeInc/Roo-Code (archived 15 May 2026,
 // "shut down on May 15th"), github.com/continuedev/continue (read-only, final 2.0.0 removed
 // usage tracking and sign-in, Apache 2.0) and continue.dev ("Continue was acquired by Cursor").
-import { URL_DOCS, PRICE_TEAM, FREE_SEATS, TRIAL_DAYS } from './const'
+import { URL_DOCS, PRICE_TEAM, PRICE_PERSONAL, FREE_SEATS, TRIAL_DAYS } from './const'
 
 export interface Intent {
   /** URL: /with/<slug> for a runtime, /for/<slug> for a situation, /from/<slug> for a move. */
@@ -374,6 +374,61 @@ export const INTENTS: Intent[] = [
     ],
     doc: 'features/agent-mode/',
     docLabel: 'Agent mode in the docs'
+  },
+  {
+    // Facts from ../twinny-docs/src/content/docs/teams/plugins.md (auto-review, auto-post, triage).
+    kind: 'for',
+    slug: 'code-review-agents',
+    phrase: 'self-hosted AI code review agents',
+    title: 'Self-hosted AI code review agents for your PRs | twinny',
+    description:
+      'Background agents that review pull requests and triage issues on your own GPU, inside your network. GitHub, GitLab, Gitea and Bitbucket, with an audit log.',
+    h1: 'Agents that review your pull requests, on your hardware.',
+    intro:
+      'The twinny gateway runs on the machine with your models and works through your repositories in the background. It reviews new and updated pull requests, can post the review back to the pull request, and suggests labels, duplicates and a first reply for new issues. Prompts go to your model server and nowhere else, and every review is kept on the gateway with the model, the time and who asked.',
+    steps: [
+      'Start twinny-server on the machine with the models (npx twinny-server quickstart) and install a licence token. The pull-request plugins are a licence feature.',
+      'Turn on the GitHub, GitLab, Gitea or Bitbucket plugin and add your repositories, with a token or a GitHub App. GitHub Enterprise Server and self-managed GitLab work by setting the host URL.',
+      'Tick auto-review on a repository, and auto-post if reviews should land on the pull request. New and updated pulls are reviewed one at a time, newest first, never drafts.'
+    ],
+    points: [
+      [
+        'Your network, your models',
+        "Reviews go to one of the gateway's chat aliases: Ollama, llama.cpp, vLLM or any OpenAI-compatible server you run. Nothing is sent to twinny."
+      ],
+      [
+        'Never in the way',
+        'Background reviews run only while no developer request is running, so completions and chats are not slowed down. Their usage shows under its own name on the Usage page.'
+      ],
+      [
+        'Issue triage',
+        'Suggested labels, a likely duplicate, a priority and a first reply, applied with a click or suggested in the background by auto-triage.'
+      ],
+      [
+        'Written down',
+        'Each review carries the model and the time, and one the output cap cut off is marked cut short. Every admin change goes to a hash-chained audit log.'
+      ]
+    ],
+    faq: [
+      [
+        'Is this like a cloud AI code reviewer?',
+        'It does the same job, a model reading a pull request and leaving a review, but on a server you run, with a model you chose, and the diff never leaves your network.'
+      ],
+      [
+        'Which models work?',
+        'Any chat model your server runs. The prompt is kept small for local models: up to 24k characters of description and diff, and at most 4,000 tokens back.'
+      ],
+      [
+        'What does it cost?',
+        `The gateway is free for ${FREE_SEATS} developers. The pull-request plugins need a licence: Personal is $${PRICE_PERSONAL} once, Team is $${PRICE_TEAM} per seat per month beyond the free ${FREE_SEATS}, billed yearly.`
+      ],
+      [
+        'What comes next?',
+        'Agents that open draft pull requests: a fix for a failing CI run, dependency updates, tests for uncovered code. Each change is a draft for a person to merge, and recorded in the audit log. Early access is below.'
+      ]
+    ],
+    doc: 'teams/plugins/',
+    docLabel: 'Plugins in the docs'
   }
 ]
 

@@ -1,6 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
+  // tag marks the enquiry's source in the email (e.g. an early-access list).
+  let { intro = 'Questions, bugs or anything else.', tag = '' }: { intro?: string; tag?: string } =
+    $props()
+
   type State = 'idle' | 'sending' | 'sent' | 'error'
   let phase = $state<State>('idle')
   let error = $state('')
@@ -15,6 +19,7 @@
     const form = e.currentTarget as HTMLFormElement
     const data = Object.fromEntries(new FormData(form)) as Record<string, string>
     data.elapsed = String(Date.now() - opened)
+    if (tag) data.message = `[${tag}] ${data.message}`
     phase = 'sending'
     error = ''
     try {
@@ -38,7 +43,7 @@
   }
 </script>
 
-<p class="intro">Questions, bugs or anything else.</p>
+<p class="intro">{intro}</p>
 <form method="post" action="/api/contact" onsubmit={submit}>
   <label>
     name

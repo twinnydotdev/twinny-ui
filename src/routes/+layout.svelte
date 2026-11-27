@@ -1,11 +1,6 @@
 <script lang="ts">
   import '../app.css'
-  import {
-    URL_DOCS,
-    URL_GITHUB,
-    URL_MARKETPLACE,
-    URL_SITE
-  } from '$lib/const'
+  import { URL_DOCS, URL_GITHUB, URL_MARKETPLACE, URL_SITE } from '$lib/const'
   import Mark from '$lib/components/Mark.svelte'
   import { page } from '$app/state'
 
@@ -23,6 +18,7 @@
     ['/with/lm-studio', 'lm studio'],
     ['/for/air-gapped', 'air-gapped'],
     ['/for/regulated-teams', 'regulated teams'],
+    ['/for/code-review-agents', 'review agents'],
     ['/from/continue', 'from continue'],
     ['/from/roo-code', 'from roo code']
   ]
