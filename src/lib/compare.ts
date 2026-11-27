@@ -172,6 +172,16 @@ export const RIVALS: Rival[] = [
       'You already run a model server and want the editor side to just use it.',
       'You want to read the code that handles your code.'
     ],
+    faq: [
+      [
+        'Are there self-hosted or on-prem options for agentic AI coding?',
+        'Yes. Tabnine offers its own deployment, air-gapped if needed, on its enterprise tier. twinny is a VS Code extension with an agent mode: the chat model reads, searches and edits files and runs commands, showing every step, against the model server you run. Commands ask before they run unless you allow them.'
+      ],
+      [
+        'What is the best code assistant for teams that cannot use the cloud?',
+        `One that only talks to a model server on your network. Tabnine does this on its enterprise tier. twinny does it for everyone: an open-source VS Code extension plus twinny-server, a team gateway with keys, usage and policy, free for ${FREE_SEATS} developers and $${PRICE_TEAM} a seat after that.`
+      ]
+    ],
     related: [['/vs/github-copilot', 'a self-hosted Copilot alternative']]
   },
   // Read on 2026-11-27: windsurf.com/pricing and /enterprise redirect to devin.ai/pricing and
