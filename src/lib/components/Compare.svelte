@@ -61,8 +61,9 @@
       {/each}
     </div>
     <p class="fine">
-      {rival.name} facts and prices are from its own pricing page, read in {CHECKED}. They change;
-      the page will be corrected when they do. twinny prices are per seat per month, billed yearly.
+      {rival.name} facts and prices are from its own pricing page, read in {rival.checked ??
+        CHECKED}. They change; the page will be corrected when they do. twinny prices are per seat
+      per month, billed yearly.
     </p>
   </div>
 </section>

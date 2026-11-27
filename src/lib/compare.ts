@@ -22,6 +22,8 @@ export interface Rival {
   faq?: [string, string][]
   /** [href, anchor]: related pages, linked under the closing section. */
   related?: [string, string][]
+  /** When this rival's facts were read, if not CHECKED. */
+  checked?: string
 }
 
 const TWINNY_PRICE = `Free for ${FREE_SEATS} seats on a gateway; $${PRICE_TEAM} per extra seat, billed yearly.`
@@ -121,7 +123,10 @@ export const RIVALS: Rival[] = [
       'Code must not leave the network, or you have your own inference to use.',
       'You want to see what is sent, and to whom, in the source.'
     ],
-    related: [['/vs/github-copilot', 'GitHub Copilot competitors that run on your network']]
+    related: [
+      ['/vs/github-copilot', 'GitHub Copilot competitors that run on your network'],
+      ['/vs/windsurf', 'a Windsurf alternative that stays in VS Code']
+    ]
   },
   {
     slug: 'tabnine',
@@ -168,5 +173,70 @@ export const RIVALS: Rival[] = [
       'You want to read the code that handles your code.'
     ],
     related: [['/vs/github-copilot', 'a self-hosted Copilot alternative']]
+  },
+  // Read on 2026-11-27: windsurf.com/pricing and /enterprise redirect to devin.ai/pricing and
+  // devin.ai/enterprise; docs.devin.ai/desktop/getting-started (package now devin-desktop, Devin
+  // account login), docs.devin.ai/desktop/recommended-plugins (a fork of VS Code) and
+  // docs.devin.ai/windsurf/plugins/getting-started (JetBrains plugin in maintenance mode).
+  // Team is listed as $80 per month for up to 100 users, not per user.
+  {
+    slug: 'windsurf',
+    name: 'Windsurf',
+    phrase: 'a Windsurf alternative that runs on your own models',
+    checked: 'November 2026',
+    title: 'Windsurf alternative: twinny, local AI coding in VS Code',
+    description:
+      'Windsurf is now Devin Desktop, a hosted VS Code fork behind a Devin account. twinny is an open-source VS Code extension against a model server you run.',
+    intro:
+      'Windsurf is now Devin Desktop: windsurf.com redirects to devin.ai, and the editor is a VS Code fork that needs a Devin account and runs on hosted models. twinny is an open-source extension for the VS Code you already have, and it only talks to the model server you point it at, on your laptop or your network. Pick it when code must stay inside, or when you would rather keep your editor.',
+    rows: [
+      [
+        'Where your code goes',
+        "Devin's hosted service; a VPC or dedicated deployment on Enterprise",
+        'Your own model server, on a laptop or in your data centre'
+      ],
+      [
+        'Who runs the model',
+        'Devin, from the frontier providers it lists',
+        'You, on any OpenAI-compatible server'
+      ],
+      [
+        'Local models',
+        'Not listed on its pricing or enterprise pages',
+        'Ollama, llama.cpp, LM Studio and others'
+      ],
+      ['Works with no internet', 'Not listed on its pricing or enterprise pages', 'Yes'],
+      [
+        'Editor',
+        'Devin Desktop, its own VS Code fork; the JetBrains plugin is in maintenance mode',
+        'An extension for VS Code'
+      ],
+      ['Source', 'Closed', 'Open, MIT'],
+      ['Account required', 'Devin account', 'None'],
+      [
+        'Team administration',
+        "Devin's admin controls; SSO and SCIM on Enterprise",
+        'twinny-server: keys, usage, policy and an admin page on your network'
+      ],
+      [
+        'List price per month',
+        'Pro $20, Max $200, Team $80 for up to 100 users, Enterprise on request',
+        TWINNY_PRICE
+      ]
+    ],
+    pickThem: [
+      'You want hosted frontier models and cloud agents, and code leaving the machine is fine.',
+      'You already use Devin and want the editor and the agents under one account.'
+    ],
+    pickUs: [
+      'Code must stay on the machine or the network, with or without internet.',
+      'You want to keep VS Code, its Marketplace and your settings, not move to a fork.',
+      'You already run Ollama, llama.cpp or a GPU box and want the editor to use it.'
+    ],
+    related: [
+      ['/vs/tabnine', 'on-prem deployment for an agentic coding tool'],
+      ['/with/ollama', 'the VS Code extension for Ollama'],
+      ['/vs/cursor', 'how twinny compares with Cursor, the other VS Code fork']
+    ]
   }
 ]

@@ -17,6 +17,7 @@
     ['/vs/github-copilot', 'vs copilot'],
     ['/vs/cursor', 'vs cursor'],
     ['/vs/tabnine', 'vs tabnine'],
+    ['/vs/windsurf', 'vs windsurf'],
     ['/with/ollama', 'ollama'],
     ['/with/llama-cpp', 'llama.cpp'],
     ['/with/lm-studio', 'lm studio'],
